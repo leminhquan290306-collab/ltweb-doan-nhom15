@@ -1,44 +1,109 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Giới thiệu Nguyễn Phạm Tiến Dũng - Quà Tặng Thông Minh</title>
-    <meta name="description"
-          content="Trang giới thiệu thành viên Nguyễn Phạm Tiến Dũng của nhóm thực hiện website Quà Tặng Thông Minh.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Trang giới thiệu cá nhân của Nguyễn Phạm Tiến Dũng - Thành viên nhóm 15">
+  <title>Giới thiệu cá nhân - Nguyễn Phạm Tiến Dũng</title>
 </head>
-
 <body>
 
-    <header>
-        <h1>Nguyễn Phạm Tiến Dũng</h1>
-        <p>Thành viên nhóm thực hiện website Quà Tặng Thông Minh.</p>
-    </header>
+  <!-- Header chung -->
+  <header>
+    <p><strong>Website Đồ Án Nhóm 15 - Khoa Toán – Tin</strong></p>
+  </header>
 
-    <main>
+  <!-- Menu điều hướng 2 chiều quay về các trang của nhóm gốc -->
+  <nav>
+    <ul>
+      <li><a href="../../index.html">Trang chủ nhóm</a></li>
+      <li><a href="../../danh-sach.html">Danh sách</a></li>
+      <li><a href="../../chi-tiet.html">Chi tiết</a></li>
+      <li><a href="../../gioithieu.html">Giới thiệu nhóm</a></li>
+      <li><a href="../../lien-he.html">Liên hệ</a></li>
+    </ul>
+  </nav>
 
-        <section>
-            <h2>Thông tin thành viên</h2>
+  <!-- Nội dung chính -->
+  <main>
+    <h1>Trang Giới Thiệu Cá Nhân</h1>
 
-            <p>Họ và tên: Nguyễn Phạm Tiến Dũng</p>
-            <p>Vai trò: Thành viên nhóm</p>
-        </section>
+    <!-- Section: Giới thiệu bản thân -->
+    <section>
+      <h2>Giới thiệu bản thân</h2>
+      
+      <!-- Ảnh dung.jpg nằm cùng thư mục với gioithieu.html -->
+      <figure>
+        <!-- SỬA DÒNG 27 THÀNH DÒNG NÀY: -->
+         <img src="dung.jpg" alt="Ảnh chân dung của Nguyễn Phạm Tiến Dũng" width="200">
+        <figcaption>Chân dung thành viên Nguyễn Phạm Tiến Dũng</figcaption>
+      </figure>
 
-        <p>
-            <a href="../../gioi-thieu.html">
-                Quay lại trang giới thiệu nhóm
-            </a>
-        </p>
+      <p><strong>Họ và tên:</strong> Nguyễn Phạm Tiến Dũng</p>
+      <p><strong>Lớp:</strong> 24CNTT2</p>
+      <p><strong>Vai trò trong nhóm:</strong> Thành viên - Phụ trách xây dựng giao diện cá nhân và hoàn thiện mã nguồn đồ án.</p>
+    </section>
 
-    </main>
+    <!-- Article: Dự án & Sở thích -->
+    <article>
+      <h2>Dự án & Sở thích</h2>
+      
+      <h3>1. Đóng góp trong đồ án nhóm</h3>
+      <p>Xây dựng cấu trúc bộ khung HTML5 đạt chuẩn W3C Validator, tạo liên kết điều hướng hai chiều và đóng góp báo cáo bài tập nhóm số 2.</p>
 
-    <footer>
-        <p>
-            &copy; 2026 Quà Tặng Thông Minh.
-            Website đồ án môn Lập trình Web.
-        </p>
-    </footer>
+      <h3>2. Danh sách kỹ năng (ul)</h3>
+      <ul>
+        <li>Lập trình Web: HTML5, CSS3 cơ bản</li>
+        <li>Sử dụng Linux Terminal & Bash Scripting</li>
+        <li>Quản lý mã nguồn với Git & GitHub</li>
+        <li>Tư duy giải quyết vấn đề và làm việc nhóm</li>
+      </ul>
+
+      <h3>3. Sở thích cá nhân</h3>
+      <ul>
+        <li>Rèn luyện thể thao và tập gym</li>
+        <li>Chơi game</li>
+        <li>Xem Phim AI</li>
+      </ul>
+    </article>
+
+    <!-- Section: Bảng thời khóa biểu tuần (Có caption, thead, th scope chuẩn a11y) -->
+    <section>
+      <h2>Thời khóa biểu cá nhân tuần này</h2>
+      <table>
+        <caption>Bảng Thời Khóa Biểu Tuần</caption>
+        <thead>
+          <tr>
+            <th scope="col">Thứ</th>
+            <th scope="col">Buổi sáng</th>
+            <th scope="col">Buổi chiều</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Thứ 2</th>
+            <td>Thiết kế và Lập trình web</td>
+            <td>Tự học HTML5 / CSS</td>
+          </tr>
+          <tr>
+            <th scope="row">Thứ 4</th>
+            <td>Cấu trúc dữ liệu & Giải thuật</td>
+            <td>Tập gym</td>
+          </tr>
+          <tr>
+            <th scope="row">Thứ 6</th>
+            <td>Hệ điều hành</td>
+            <td>Họp nhóm đồ án</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Nguyễn Phạm Tiến Dũng - Nhóm 15 - Khoa Toán – Tin</p>
+  </footer>
 
 </body>
 </html>
