@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Liên hệ và tư vấn - Quà Tặng Thông Minh</title>
+    <meta name="description"
+          content="Biểu mẫu liên hệ và đăng ký tư vấn quà tặng theo người nhận, dịp tặng, ngân sách và sở thích.">
+</head>
+
+<body>
+
+    <header>
+        <h1>Liên hệ và tư vấn quà tặng</h1>
+        <p>
+            Cung cấp một số thông tin để nhận được gợi ý quà tặng phù hợp.
+        </p>
+    </header>
+
+    <nav aria-label="Điều hướng chính">
+        <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="danh-sach.html">Danh sách</a></li>
+            <li><a href="chi-tiet.html">Chi tiết</a></li>
+            <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
+            <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <section>
+            <h2>Đăng ký tư vấn</h2>
+
+            <form action="#" method="post">
+
+                <fieldset>
+                    <legend>Thông tin liên hệ</legend>
+
+                    <p>
+                        <label for="ho-ten">Họ và tên:</label><br>
+                        <input
+                            type="text"
+                            id="ho-ten"
+                            name="ho-ten"
+                            pattern="[A-Za-zÀ-ỹĐđ\s]{2,50}"
+                            required>
+                    </p>
+
+                    <p>
+                        <label for="email">Email:</label><br>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required>
+                    </p>
+
+                    <p>
+                        <label for="so-dien-thoai">Số điện thoại:</label><br>
+                        <input
+                            type="tel"
+                            id="so-dien-thoai"
+                            name="so-dien-thoai"
+                            pattern="[0-9]{10}"
+                            required>
+                    </p>
+
+                    <p>
+                        <label for="nguoi-nhan">Người nhận quà:</label><br>
+                        <select id="nguoi-nhan" name="nguoi-nhan" required>
+                            <option value="">-- Chọn người nhận --</option>
+                            <option value="ban-be">Bạn bè</option>
+                            <option value="nguoi-yeu">Người yêu</option>
+                            <option value="gia-dinh">Gia đình</option>
+                            <option value="dong-nghiep">Đồng nghiệp</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="dip-tang">Dịp tặng:</label><br>
+                        <select id="dip-tang" name="dip-tang" required>
+                            <option value="">-- Chọn dịp tặng --</option>
+                            <option value="sinh-nhat">Sinh nhật</option>
+                            <option value="ky-niem">Kỷ niệm</option>
+                            <option value="le">Ngày lễ</option>
+                            <option value="khac">Dịp khác</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="ngan-sach">Ngân sách dự kiến (VNĐ):</label><br>
+                        <input
+                            type="number"
+                            id="ngan-sach"
+                            name="ngan-sach"
+                            min="50000"
+                            max="10000000"
+                            step="50000"
+                            required>
+                    </p>
+
+                    <p>
+                        <label for="ngay-can-qua">Ngày cần quà:</label><br>
+                        <input
+                            type="date"
+                            id="ngay-can-qua"
+                            name="ngay-can-qua"
+                            required>
+                    </p>
+
+                    <p>
+                        <label for="so-thich">Sở thích hoặc yêu cầu:</label><br>
+                        <textarea
+                            id="so-thich"
+                            name="so-thich"
+                            rows="5"
+                            minlength="10"
+                            required></textarea>
+                    </p>
+
+                    <p>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="dong-y"
+                                required>
+                            Tôi đồng ý cung cấp thông tin để được tư vấn.
+                        </label>
+                    </p>
+
+                </fieldset>
+
+                <p>
+                    <button type="submit">Gửi yêu cầu tư vấn</button>
+                    <button type="reset">Nhập lại</button>
+                </p>
+
+            </form>
+        </section>
+
+        <section>
+            <h2>Lưu ý</h2>
+
+            <p>
+                Thông tin bạn cung cấp giúp website hiểu rõ hơn về người nhận,
+                dịp tặng và ngân sách để đưa ra gợi ý phù hợp.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            &copy; 2026 Quà Tặng Thông Minh.
+            Website đồ án môn Lập trình Web.
+        </p>
+    </footer>
+
+</body>
+</html>
