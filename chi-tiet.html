@@ -8,17 +8,23 @@
 
     <meta name="description"
           content="Thông tin chi tiết về hộp quà bánh kẹo, gồm hình ảnh, đặc điểm, thông số và gợi ý sử dụng.">
+
+    <link rel="stylesheet" href="css/01-bien.css">
+    <link rel="stylesheet" href="css/02-chuan-hoa.css">
+    <link rel="stylesheet" href="css/03-bo-cuc.css">
+    <link rel="stylesheet" href="css/04-thanh-phan.css">
+    <link rel="stylesheet" href="css/05-tien-ich.css">
 </head>
 
-<body>
+<body class="trang">
 
     <header>
         <h1>Chi tiết sản phẩm quà tặng</h1>
         <p>Thông tin về một sản phẩm quà tặng tiêu biểu.</p>
     </header>
 
-    <nav>
-        <ul>
+    <nav aria-label="Điều hướng chính">
+        <ul class="menu-list">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách</a></li>
             <li><a href="chi-tiet.html">Chi tiết</a></li>
@@ -27,16 +33,20 @@
         </ul>
     </nav>
 
-    <main>
+    <main class="noi-dung-chi-tiet">
 
-        <article>
+        <article class="chi-tiet-chinh">
 
             <h2>Hộp quà bánh kẹo</h2>
 
             <figure>
                 <img src="images/hop-qua.jpg"
                      alt="Hộp quà bánh kẹo được trang trí đẹp mắt"
-                     width="400">
+                     width="400"
+                     height="300"
+                     class="anh-responsive"
+                     loading="lazy">
+
                 <figcaption>
                     Hộp quà bánh kẹo phù hợp làm quà tặng trong nhiều dịp.
                 </figcaption>
@@ -102,10 +112,11 @@
                 <h3>Video giới thiệu</h3>
 
                 <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    title="Video giới thiệu sản phẩm quà tặng"
+                    class="video-san-pham"
+                    src="https://www.youtube.com/embed/zPvyxtH9Jng?si=30NuLSK9DiQjYRgE"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
                     allowfullscreen>
                 </iframe>
             </section>
@@ -123,15 +134,19 @@
 
         </article>
 
-        <section>
-            <h2>Khám phá thêm</h2>
+        <section class="card chi-tiet-phu">
+            <h2 class="card__title">Khám phá thêm</h2>
 
             <p>
-                <a href="danh-sach.html">Quay lại danh sách sản phẩm</a>
+                <a class="btn btn--chinh" href="danh-sach.html">
+                    Quay lại danh sách sản phẩm
+                </a>
             </p>
 
             <p>
-                <a href="lien-he.html">Liên hệ để được tư vấn quà tặng</a>
+                <a class="btn btn--phu" href="lien-he.html">
+                    Liên hệ để được tư vấn quà tặng
+                </a>
             </p>
         </section>
 

@@ -8,17 +8,23 @@
 
     <meta name="description"
           content="Danh sách các sản phẩm quà tặng với thông tin về tên sản phẩm, danh mục, giá và đối tượng phù hợp.">
+
+    <link rel="stylesheet" href="css/01-bien.css">
+    <link rel="stylesheet" href="css/02-chuan-hoa.css">
+    <link rel="stylesheet" href="css/03-bo-cuc.css">
+    <link rel="stylesheet" href="css/04-thanh-phan.css">
+    <link rel="stylesheet" href="css/05-tien-ich.css">
 </head>
 
-<body>
+<body class="trang">
 
     <header>
         <h1>Danh sách quà tặng</h1>
         <p>Tham khảo các sản phẩm phù hợp với nhiều nhu cầu tặng quà.</p>
     </header>
 
-    <nav>
-        <ul>
+    <nav aria-label="Điều hướng chính">
+        <ul class="menu-list">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách</a></li>
             <li><a href="chi-tiet.html">Chi tiết</a></li>
@@ -29,10 +35,10 @@
 
     <main>
 
-        <section>
+        <section class="danh-sach-san-pham">
             <h2>Danh sách sản phẩm</h2>
 
-            <table>
+            <table class="bang-san-pham">
                 <caption>Danh sách một số sản phẩm quà tặng</caption>
 
                 <thead>
@@ -89,8 +95,8 @@
             </table>
         </section>
 
-        <section>
-            <h2>Khám phá sản phẩm</h2>
+        <section class="card">
+            <h2 class="card__title">Khám phá sản phẩm</h2>
 
             <p>
                 Danh sách trên cung cấp những sản phẩm quà tặng phổ biến,
@@ -98,11 +104,15 @@
             </p>
 
             <p>
-                <a href="chi-tiet.html">Xem chi tiết sản phẩm tiêu biểu</a>
+                <a class="btn btn--chinh" href="chi-tiet.html">
+                    Xem chi tiết sản phẩm tiêu biểu
+                </a>
             </p>
 
             <p>
-                <a href="lien-he.html">Đi đến trang liên hệ</a>
+                <a class="btn btn--phu" href="lien-he.html">
+                    Đi đến trang liên hệ
+                </a>
             </p>
         </section>
 

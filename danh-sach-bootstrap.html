@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Danh sách quà tặng - Bootstrap | Quà Tặng Thông Minh</title>
+
+    <meta name="description"
+          content="Danh sách các gợi ý quà tặng thông minh được trình bày bằng Bootstrap 5.">
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- CSS tùy biến của nhóm -->
+    <link rel="stylesheet" href="css/bootstrap-custom.css">
+
+    <style>
+        /* Hiển thị đầy đủ 6 ảnh, không bị cắt */
+        .card-img-top {
+            display: block;
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background-color: #ffffff;
+        }
+
+        @media (max-width: 359px) {
+            .card-img-top {
+                width: 100%;
+                height: 180px;
+                object-fit: contain;
+                background-color: #ffffff;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- COMPONENT 1: NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="index.html">
+                Quà Tặng Thông Minh
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuBootstrap"
+                aria-controls="menuBootstrap"
+                aria-expanded="false"
+                aria-label="Mở menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuBootstrap">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            Trang chủ
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="danh-sach-bootstrap.html">
+                            Danh sách
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="chi-tiet.html">
+                            Chi tiết
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gioi-thieu.html">
+                            Về chúng tôi
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="lien-he.html">
+                            Liên hệ
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <main class="container py-4">
+
+        <!-- TIÊU ĐỀ -->
+        <div class="text-center mb-4">
+
+            <h1 class="text-primary fw-bold">
+                Danh sách quà tặng
+            </h1>
+
+            <p class="text-secondary">
+                Một số gợi ý quà tặng phù hợp với nhiều đối tượng và dịp khác nhau.
+            </p>
+
+        </div>
+
+
+        <!-- COMPONENT 2: ALERT -->
+        <div class="alert alert-info" role="alert">
+            Hãy lựa chọn món quà dựa trên người nhận, dịp tặng và ngân sách của bạn.
+        </div>
+
+
+        <!-- COMPONENT 3: CARD -->
+        <section aria-labelledby="danh-sach-qua">
+
+            <h2 id="danh-sach-qua" class="mb-3">
+                Các gợi ý nổi bật
+            </h2>
+
+            <div class="row g-4">
+
+
+                <!-- CARD 1: HỘP QUÀ BÁNH KẸO -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/hop-qua-banh-keo.jpg"
+                            class="card-img-top"
+                            alt="Hộp quà bánh kẹo"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Hộp quà bánh kẹo
+                            </h3>
+
+                            <p class="card-text">
+                                Phù hợp để tặng bạn bè, người thân trong các dịp
+                                sinh nhật, lễ hoặc gặp gỡ.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- CARD 2: QUÀ NGƯỜI THÂN -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/qua-nguoi-than.jpg"
+                            class="card-img-top"
+                            alt="Hộp quà dành cho người thân"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Quà tặng người thân
+                            </h3>
+
+                            <p class="card-text">
+                                Những món quà đơn giản, ý nghĩa dành cho cha mẹ,
+                                anh chị em và người thân.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- CARD 3: QUÀ BẠN BÈ -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/qua-ban-be.jpg"
+                            class="card-img-top"
+                            alt="Hộp quà dành cho bạn bè"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Quà tặng bạn bè
+                            </h3>
+
+                            <p class="card-text">
+                                Gợi ý quà tặng phù hợp để thể hiện sự quan tâm
+                                và gắn kết với bạn bè.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- CARD 4: QUÀ SINH NHẬT -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/qua-sinh-nhat.jpg"
+                            class="card-img-top"
+                            alt="Quà tặng sinh nhật"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Quà sinh nhật
+                            </h3>
+
+                            <p class="card-text">
+                                Một số lựa chọn quà tặng đơn giản cho dịp
+                                sinh nhật.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- CARD 5: QUÀ DỊP LỄ -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/qua-dip-le.jpg"
+                            class="card-img-top"
+                            alt="Quà tặng dịp lễ"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Quà tặng dịp lễ
+                            </h3>
+
+                            <p class="card-text">
+                                Các gợi ý quà tặng phù hợp cho những ngày lễ
+                                và sự kiện đặc biệt.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- CARD 6: QUÀ THEO NGÂN SÁCH -->
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <article class="card h-100 shadow-sm">
+
+                        <img
+                            src="images/qua-ngan-sach.jpg"
+                            class="card-img-top"
+                            alt="Quà tặng theo ngân sách"
+                            width="400"
+                            height="300"
+                            loading="lazy">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title">
+                                Quà theo ngân sách
+                            </h3>
+
+                            <p class="card-text">
+                                Có thể lựa chọn quà tặng dựa trên mức ngân sách
+                                dự kiến.
+                            </p>
+
+                            <a
+                                href="chi-tiet.html"
+                                class="btn btn-primary mt-auto">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COMPONENT 4: TABLE -->
+        <section class="mt-5" aria-labelledby="bang-tham-khao">
+
+            <h2 id="bang-tham-khao" class="mb-3">
+                Bảng tham khảo
+            </h2>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+
+                    <caption class="caption-top">
+                        Gợi ý lựa chọn quà tặng
+                    </caption>
+
+                    <thead class="table-primary">
+
+                        <tr>
+                            <th scope="col">Đối tượng</th>
+                            <th scope="col">Dịp tặng</th>
+                            <th scope="col">Ngân sách</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Bạn bè</td>
+                            <td>Sinh nhật</td>
+                            <td>100.000 - 300.000 VNĐ</td>
+                        </tr>
+
+                        <tr>
+                            <td>Người thân</td>
+                            <td>Lễ, kỷ niệm</td>
+                            <td>300.000 - 700.000 VNĐ</td>
+                        </tr>
+
+                        <tr>
+                            <td>Đồng nghiệp</td>
+                            <td>Chúc mừng</td>
+                            <td>100.000 - 500.000 VNĐ</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- NÚT LIÊN HỆ -->
+        <section class="text-center mt-5">
+
+            <h2 class="mb-3">
+                Cần tư vấn thêm?
+            </h2>
+
+            <a
+                href="lien-he.html"
+                class="btn btn-primary btn-lg">
+                Liên hệ tư vấn
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-4">
+
+        <p class="mb-1">
+            © 2026 Quà Tặng Thông Minh
+        </p>
+
+        <p class="mb-0">
+            Website đồ án nhóm 15.
+        </p>
+
+    </footer>
+
+
+    <!-- Bootstrap JavaScript -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>

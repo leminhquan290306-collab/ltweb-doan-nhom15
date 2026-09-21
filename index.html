@@ -8,28 +8,34 @@
 
     <meta name="description"
           content="Website tư vấn và mua sắm quà tặng thông minh, giúp người dùng tìm món quà phù hợp với người nhận, dịp tặng và ngân sách.">
+
+    <link rel="stylesheet" href="css/01-bien.css">
+    <link rel="stylesheet" href="css/02-chuan-hoa.css">
+    <link rel="stylesheet" href="css/03-bo-cuc.css">
+    <link rel="stylesheet" href="css/04-thanh-phan.css">
+    <link rel="stylesheet" href="css/05-tien-ich.css">
 </head>
 
-<body>
+<body class="trang">
 
     <header>
         <h1>Quà Tặng Thông Minh</h1>
         <p>Gợi ý món quà phù hợp cho những người bạn yêu thương</p>
     </header>
 
-   <nav aria-label="Điều hướng chính">
-    <ul>
-        <li><a href="index.html">Trang chủ</a></li>
-        <li><a href="danh-sach.html">Danh sách</a></li>
-        <li><a href="chi-tiet.html">Chi tiết</a></li>
-        <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
-        <li><a href="lien-he.html">Liên hệ</a></li>
-    </ul>
-</nav>
+    <nav aria-label="Điều hướng chính">
+        <ul class="menu-list">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="danh-sach.html">Danh sách</a></li>
+            <li><a href="chi-tiet.html">Chi tiết</a></li>
+            <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
+            <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+    </nav>
 
     <main>
 
-        <section>
+        <section class="hero">
             <h2>Tìm món quà phù hợp</h2>
 
             <p>
@@ -44,8 +50,8 @@
             </p>
         </section>
 
-        <section>
-            <h2>Những khó khăn khi chọn quà</h2>
+        <section class="card">
+            <h2 class="card__title">Những khó khăn khi chọn quà</h2>
 
             <ul>
                 <li>Không biết món quà nào phù hợp với người nhận.</li>
@@ -55,8 +61,8 @@
             </ul>
         </section>
 
-        <section>
-            <h2>Quy trình lựa chọn quà</h2>
+        <section class="card">
+            <h2 class="card__title">Quy trình lựa chọn quà</h2>
 
             <ol>
                 <li>Nhập thông tin về người nhận và dịp tặng.</li>
@@ -65,8 +71,8 @@
             </ol>
         </section>
 
-        <section>
-            <h2>Các nhóm quà phổ biến</h2>
+        <section class="card">
+            <h2 class="card__title">Các nhóm quà phổ biến</h2>
 
             <ul>
                 <li>Quà sinh nhật</li>
@@ -77,20 +83,26 @@
             </ul>
         </section>
 
-        <section>
-            <h2>Khám phá website</h2>
+        <section class="card">
+            <h2 class="card__title">Khám phá website</h2>
 
             <figure>
                 <img src="images/hop-qua.jpg"
                      alt="Hộp quà được chuẩn bị để tặng"
-                     width="400">
+                     width="400"
+                     height="300"
+                     class="anh-responsive"
+                     loading="lazy">
+
                 <figcaption>
                     Gợi ý quà tặng được lựa chọn theo nhu cầu của người dùng.
                 </figcaption>
             </figure>
 
             <p>
-                <a href="lien-he.html">Bắt đầu liên hệ</a>
+                <a class="btn btn--chinh" href="lien-he.html">
+                    Bắt đầu liên hệ
+                </a>
             </p>
         </section>
 

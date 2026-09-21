@@ -1,0 +1,96 @@
+/* =========================================
+   CSS TÙY BIẾN CHO BOOTSTRAP
+   Website: Quà Tặng Thông Minh
+   ========================================= */
+
+:root {
+    --bs-primary: #7a284b;
+    --bs-primary-rgb: 122, 40, 75;
+    --bs-link-color: #7a284b;
+    --bs-link-hover-color: #48162c;
+
+    --bs-btn-bg: #7a284b;
+    --bs-btn-border-color: #7a284b;
+    --bs-btn-hover-bg: #5f1f3a;
+    --bs-btn-hover-border-color: #5f1f3a;
+    --bs-btn-active-bg: #48162c;
+    --bs-btn-active-border-color: #48162c;
+}
+
+body {
+    background-color: #fffaf7;
+    color: #222222;
+}
+
+/* Màu chính cho thanh điều hướng */
+.navbar.bg-primary {
+    background-color: #7a284b;
+}
+
+/* Màu tiêu đề */
+.text-primary {
+    color: #7a284b;
+}
+
+/* Nút chính */
+.btn-primary {
+    background-color: #7a284b;
+    border-color: #7a284b;
+}
+
+.btn-primary:hover {
+    background-color: #5f1f3a;
+    border-color: #5f1f3a;
+}
+
+.btn-primary:active {
+    background-color: #48162c;
+    border-color: #48162c;
+}
+
+.btn-primary:focus-visible {
+    outline: 3px solid #f4b942;
+    outline-offset: 2px;
+}
+
+/* Focus cho menu */
+.navbar-dark .navbar-nav .nav-link:focus-visible {
+    outline: 3px solid #f4b942;
+    outline-offset: 2px;
+}
+
+/* Card */
+.card {
+    border-radius: 12px;
+}
+
+/* Ảnh sản phẩm - hiển thị đầy đủ, không bị cắt */
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background-color: #ffffff;
+}
+
+/* Hiệu ứng card */
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Màn hình rất nhỏ */
+@media (max-width: 359px) {
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        background-color: #ffffff;
+    }
+}

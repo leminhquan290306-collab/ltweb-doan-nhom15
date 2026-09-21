@@ -1,0 +1,259 @@
+/* =========================================
+   03 - BỐ CỤC
+   ========================================= */
+
+/* =========================================
+   KHUNG TRANG - MOBILE FIRST
+   ========================================= */
+
+.trang {
+    min-height: 100vh;
+    display: grid;
+    grid-template-areas:
+        "dau"
+        "menu"
+        "chinh"
+        "chan";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+}
+
+/* Gán khu vực cho các phần chính */
+.trang > header {
+    grid-area: dau;
+}
+
+.trang > nav {
+    grid-area: menu;
+}
+
+.trang > main {
+    grid-area: chinh;
+}
+
+.trang > footer {
+    grid-area: chan;
+}
+
+/* Nội dung chính */
+.trang > main {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* =========================================
+   MENU
+   ========================================= */
+
+.menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    list-style: none;
+}
+
+/* =========================================
+   CÁC SECTION
+   ========================================= */
+
+.trang > main > section {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* Hero */
+.hero {
+    width: 100%;
+}
+
+/* Card */
+.card {
+    width: 100%;
+}
+
+/* =========================================
+   LƯỚI SẢN PHẨM / CARD
+   ========================================= */
+
+.luoi-san-pham {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.luoi-the {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+/* =========================================
+   NHÓM NÚT
+   ========================================= */
+
+.nhom-nut {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* =========================================
+   TRANG CHI TIẾT
+   ========================================= */
+
+/* Mobile: nội dung xếp thành 1 cột */
+.noi-dung-chi-tiet {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Tránh phần tử con làm tràn ngang */
+.chi-tiet-chinh,
+.chi-tiet-phu {
+    min-width: 0;
+}
+
+/* Hình ảnh trong trang chi tiết */
+.chi-tiet-chinh img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Video responsive */
+.video-san-pham {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+}
+
+/* =========================================
+   DANH SÁCH THÀNH VIÊN
+   ========================================= */
+
+.danh-sach-thanh-vien {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* =========================================
+   THÔNG TIN LIÊN HỆ
+   ========================================= */
+
+.thong-tin-lien-he {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+
+/* =========================================
+   BREAKPOINT 1 - TỪ 768PX
+   ========================================= */
+
+@media (min-width: 768px) {
+
+    .trang {
+        grid-template-areas:
+            "dau dau"
+            "menu menu"
+            "chinh chinh"
+            "chan chan";
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .trang > main {
+        padding: 2rem;
+    }
+
+    .menu-list {
+        gap: 1rem;
+    }
+
+    /* Các section thông thường xếp thành 2 cột */
+    .trang > main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Hero chiếm toàn bộ chiều rộng */
+    .trang > main > .hero {
+        grid-column: 1 / -1;
+    }
+
+    /* Section cuối chiếm toàn bộ chiều rộng */
+    .trang > main > section:last-child {
+        grid-column: 1 / -1;
+    }
+
+    /* =====================================
+       CHI TIẾT: 2 CỘT TRÊN DESKTOP
+       ===================================== */
+
+    .trang > main.noi-dung-chi-tiet {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 1.5rem;
+    }
+
+    .chi-tiet-chinh {
+        min-width: 0;
+    }
+
+    .chi-tiet-phu {
+        min-width: 0;
+    }
+}
+
+
+/* =========================================
+   BREAKPOINT 2 - TỪ 1024PX
+   ========================================= */
+
+@media (min-width: 1024px) {
+
+    .trang > main {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+        padding: 2.5rem;
+    }
+
+    /* Hero chiếm toàn bộ chiều rộng */
+    .trang > main > .hero {
+        grid-column: 1 / -1;
+    }
+
+    /* Section cuối chiếm toàn bộ chiều rộng */
+    .trang > main > section:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .menu-list {
+        justify-content: center;
+    }
+
+    .danh-sach-thanh-vien {
+        gap: 1.5rem;
+    }
+
+    /* =====================================
+       CHI TIẾT: CỘT PHỤ RỘNG HƠN
+       ===================================== */
+
+    .trang > main.noi-dung-chi-tiet {
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 2rem;
+    }
+}

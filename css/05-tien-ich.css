@@ -1,0 +1,94 @@
+/* =========================================
+   05 - TIỆN ÍCH
+   ========================================= */
+
+/* Ảnh responsive */
+.anh-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ảnh trong trang chi tiết */
+.chi-tiet-chinh figure {
+    margin: 1rem 0;
+}
+
+.chi-tiet-chinh figure img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+/* Video responsive */
+.video-san-pham {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+}
+
+/* Nội dung đọc dài */
+.noi-dung-doc {
+    width: 100%;
+    max-width: 65ch;
+}
+
+/* Khoảng cách */
+.khoang-cach-nho {
+    margin-bottom: 0.75rem;
+}
+
+.khoang-cach-vua {
+    margin-bottom: 1.5rem;
+}
+
+.khoang-cach-lon {
+    margin-bottom: 2rem;
+}
+
+/* Ẩn nội dung trực quan nhưng vẫn hỗ trợ trình đọc màn hình */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Không cho nội dung dài làm tràn màn hình */
+main,
+section,
+article,
+aside,
+figure,
+table {
+    max-width: 100%;
+}
+
+/* Nội dung có thể xuống dòng */
+p,
+li,
+td,
+th {
+    overflow-wrap: anywhere;
+}
+
+/* Giảm chuyển động nếu người dùng yêu cầu */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto;
+        transition-duration: 0.01ms;
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+    }
+}

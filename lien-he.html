@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Liên hệ và tư vấn - Quà Tặng Thông Minh</title>
+
     <meta name="description"
           content="Biểu mẫu liên hệ và đăng ký tư vấn quà tặng theo người nhận, dịp tặng, ngân sách và sở thích.">
+
+    <link rel="stylesheet" href="css/01-bien.css">
+    <link rel="stylesheet" href="css/02-chuan-hoa.css">
+    <link rel="stylesheet" href="css/03-bo-cuc.css">
+    <link rel="stylesheet" href="css/04-thanh-phan.css">
+    <link rel="stylesheet" href="css/05-tien-ich.css">
 </head>
 
-<body>
+<body class="trang">
 
     <header>
         <h1>Liên hệ và tư vấn quà tặng</h1>
@@ -19,7 +26,7 @@
     </header>
 
     <nav aria-label="Điều hướng chính">
-        <ul>
+        <ul class="menu-list">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách</a></li>
             <li><a href="chi-tiet.html">Chi tiết</a></li>
@@ -30,7 +37,7 @@
 
     <main>
 
-        <section>
+        <section class="form-lien-he">
             <h2>Đăng ký tư vấn</h2>
 
             <form action="#" method="post">
@@ -38,8 +45,8 @@
                 <fieldset>
                     <legend>Thông tin liên hệ</legend>
 
-                    <p>
-                        <label for="ho-ten">Họ và tên:</label><br>
+                    <p class="form-nhom">
+                        <label for="ho-ten">Họ và tên:</label>
                         <input
                             type="text"
                             id="ho-ten"
@@ -48,8 +55,8 @@
                             required>
                     </p>
 
-                    <p>
-                        <label for="email">Email:</label><br>
+                    <p class="form-nhom">
+                        <label for="email">Email:</label>
                         <input
                             type="email"
                             id="email"
@@ -57,8 +64,8 @@
                             required>
                     </p>
 
-                    <p>
-                        <label for="so-dien-thoai">Số điện thoại:</label><br>
+                    <p class="form-nhom">
+                        <label for="so-dien-thoai">Số điện thoại:</label>
                         <input
                             type="tel"
                             id="so-dien-thoai"
@@ -67,8 +74,8 @@
                             required>
                     </p>
 
-                    <p>
-                        <label for="nguoi-nhan">Người nhận quà:</label><br>
+                    <p class="form-nhom">
+                        <label for="nguoi-nhan">Người nhận quà:</label>
                         <select id="nguoi-nhan" name="nguoi-nhan" required>
                             <option value="">-- Chọn người nhận --</option>
                             <option value="ban-be">Bạn bè</option>
@@ -78,8 +85,8 @@
                         </select>
                     </p>
 
-                    <p>
-                        <label for="dip-tang">Dịp tặng:</label><br>
+                    <p class="form-nhom">
+                        <label for="dip-tang">Dịp tặng:</label>
                         <select id="dip-tang" name="dip-tang" required>
                             <option value="">-- Chọn dịp tặng --</option>
                             <option value="sinh-nhat">Sinh nhật</option>
@@ -89,8 +96,8 @@
                         </select>
                     </p>
 
-                    <p>
-                        <label for="ngan-sach">Ngân sách dự kiến (VNĐ):</label><br>
+                    <p class="form-nhom">
+                        <label for="ngan-sach">Ngân sách dự kiến (VNĐ):</label>
                         <input
                             type="number"
                             id="ngan-sach"
@@ -101,8 +108,8 @@
                             required>
                     </p>
 
-                    <p>
-                        <label for="ngay-can-qua">Ngày cần quà:</label><br>
+                    <p class="form-nhom">
+                        <label for="ngay-can-qua">Ngày cần quà:</label>
                         <input
                             type="date"
                             id="ngay-can-qua"
@@ -110,8 +117,8 @@
                             required>
                     </p>
 
-                    <p>
-                        <label for="so-thich">Sở thích hoặc yêu cầu:</label><br>
+                    <p class="form-nhom">
+                        <label for="so-thich">Sở thích hoặc yêu cầu:</label>
                         <textarea
                             id="so-thich"
                             name="so-thich"
@@ -120,7 +127,7 @@
                             required></textarea>
                     </p>
 
-                    <p>
+                    <p class="form-checkbox">
                         <label>
                             <input
                                 type="checkbox"
@@ -132,21 +139,28 @@
 
                 </fieldset>
 
-                <p>
-                    <button type="submit">Gửi yêu cầu tư vấn</button>
-                    <button type="reset">Nhập lại</button>
-                </p>
+                <div class="nhom-nut">
+                    <button type="submit" class="btn btn--chinh">
+                        Gửi yêu cầu tư vấn
+                    </button>
+
+                    <button type="reset" class="btn btn--phu">
+                        Nhập lại
+                    </button>
+                </div>
 
             </form>
         </section>
 
-        <section>
-            <h2>Lưu ý</h2>
+        <section class="card thong-tin-lien-he">
+            <div>
+                <h2 class="card__title">Lưu ý</h2>
 
-            <p>
-                Thông tin bạn cung cấp giúp website hiểu rõ hơn về người nhận,
-                dịp tặng và ngân sách để đưa ra gợi ý phù hợp.
-            </p>
+                <p>
+                    Thông tin bạn cung cấp giúp website hiểu rõ hơn về người nhận,
+                    dịp tặng và ngân sách để đưa ra gợi ý phù hợp.
+                </p>
+            </div>
         </section>
 
     </main>

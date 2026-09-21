@@ -1,0 +1,329 @@
+/* ==============================
+   04 - THÀNH PHẦN
+   Website: Quà Tặng Thông Minh
+   ============================== */
+
+/* Header */
+header {
+    background-color: var(--mau-chinh);
+    color: var(--mau-trang);
+    padding: var(--khoang-cach-3) var(--khoang-cach-2);
+}
+
+header h1 {
+    margin-bottom: var(--khoang-cach-1);
+}
+
+/* Thanh điều hướng */
+nav {
+    background-color: var(--mau-trang);
+    border-bottom: 1px solid #dddddd;
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: var(--khoang-cach-1);
+    list-style: none;
+}
+
+nav a {
+    display: block;
+    padding: 10px 14px;
+    color: var(--mau-chu);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--bo-goc);
+    transition: background-color var(--chuyen-dong),
+                color var(--chuyen-dong);
+}
+
+nav a:hover {
+    color: var(--mau-trang);
+    background-color: var(--mau-chinh);
+}
+
+nav a:active {
+    background-color: var(--mau-hover);
+}
+
+nav a:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+}
+
+/* Hero */
+.hero {
+    padding: var(--khoang-cach-4);
+    margin-bottom: var(--khoang-cach-4);
+    background-color: var(--mau-trang);
+    border-radius: var(--bo-goc-lon);
+    box-shadow: var(--bong);
+}
+
+.hero h1,
+.hero h2 {
+    color: var(--mau-chinh);
+}
+
+/* Card */
+.card {
+    overflow: hidden;
+    background-color: var(--mau-trang);
+    border: 1px solid #dddddd;
+    border-radius: var(--bo-goc-lon);
+    box-shadow: var(--bong);
+    transition: transform var(--chuyen-dong),
+                box-shadow var(--chuyen-dong);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card__body {
+    padding: var(--khoang-cach-2);
+}
+
+.card__title {
+    margin-bottom: var(--khoang-cach-1);
+    color: var(--mau-chinh);
+}
+
+.card__text {
+    margin-bottom: var(--khoang-cach-2);
+    color: var(--mau-chu-phu);
+}
+
+/* Nút */
+.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    border-radius: var(--bo-goc);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--chuyen-dong),
+                color var(--chuyen-dong),
+                border-color var(--chuyen-dong);
+}
+
+.btn--chinh {
+    color: var(--mau-trang);
+    background-color: var(--mau-chinh);
+}
+
+.btn--chinh:hover {
+    color: var(--mau-trang);
+    background-color: var(--mau-hover);
+}
+
+.btn--chinh:active {
+    background-color: #48162c;
+}
+
+.btn--chinh:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+}
+
+/* Nút phụ */
+.btn--phu {
+    color: var(--mau-chu);
+    background-color: var(--mau-phu);
+}
+
+.btn--phu:hover {
+    color: var(--mau-chu);
+    background-color: #e2a72f;
+}
+
+.btn--phu:active {
+    background-color: #c89225;
+}
+
+.btn--phu:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+}
+
+/* Form cũ */
+.form-group {
+    margin-bottom: var(--khoang-cach-2);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #777777;
+    border-radius: var(--bo-goc);
+    background-color: var(--mau-trang);
+}
+
+.form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+    border-color: var(--mau-chinh);
+}
+
+/* =========================================
+   FORM LIÊN HỆ
+   ========================================= */
+
+.form-lien-he {
+    width: 100%;
+    max-width: 800px;
+}
+
+.form-lien-he form {
+    width: 100%;
+}
+
+.form-lien-he fieldset {
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid #d8c2ca;
+    border-radius: var(--bo-goc-lon);
+    background-color: var(--mau-trang);
+}
+
+.form-lien-he legend {
+    padding: 0 0.5rem;
+    color: var(--mau-chinh);
+    font-weight: 700;
+}
+
+.form-nhom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.form-nhom label {
+    font-weight: 600;
+}
+
+.form-nhom input,
+.form-nhom select,
+.form-nhom textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #777777;
+    border-radius: var(--bo-goc);
+    background-color: var(--mau-trang);
+    color: var(--mau-chu);
+    font: inherit;
+}
+
+.form-nhom textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-nhom input:focus-visible,
+.form-nhom select:focus-visible,
+.form-nhom textarea:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+    border-color: var(--mau-chinh);
+}
+
+.form-checkbox {
+    margin-top: 1rem;
+}
+
+.form-checkbox input {
+    margin-right: 0.4rem;
+}
+
+.form-checkbox input:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+}
+
+.form-lien-he .nhom-nut {
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .form-lien-he fieldset {
+        padding: 1.5rem;
+    }
+}
+
+/* Bảng */
+table {
+    width: 100%;
+    background-color: var(--mau-trang);
+}
+
+th,
+td {
+    padding: 10px 12px;
+    border: 1px solid #cccccc;
+    text-align: left;
+}
+
+th {
+    color: var(--mau-trang);
+    background-color: var(--mau-chinh);
+}
+
+/* Aside */
+aside {
+    padding: var(--khoang-cach-2);
+}
+
+aside h2,
+aside h3 {
+    color: var(--mau-chinh);
+}
+
+/* Footer */
+footer {
+    margin-top: var(--khoang-cach-4);
+    padding: var(--khoang-cach-3);
+    color: var(--mau-trang);
+    background-color: #2b1b22;
+    text-align: center;
+}
+
+footer a {
+    color: var(--mau-trang);
+}
+
+footer a:hover {
+    color: var(--mau-phu);
+}
+
+footer a:focus-visible {
+    outline: 3px solid var(--mau-phu);
+    outline-offset: 2px;
+}
