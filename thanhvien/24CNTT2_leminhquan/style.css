@@ -1,0 +1,338 @@
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e3a8a;
+    --background: #f1f5f9;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --border: #cbd5e1;
+    --accent: #dbeafe;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    max-width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--background);
+    overflow-x: hidden;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+
+header {
+    background: var(--primary-dark);
+    color: #ffffff;
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+header h2 {
+    margin: 0 0 0.5rem;
+}
+
+header p {
+    margin: 0;
+}
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+nav {
+    background: var(--primary);
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+}
+
+nav li {
+    max-width: 100%;
+}
+
+nav a {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+nav a:hover,
+nav a:focus-visible {
+    background: #ffffff;
+    color: var(--primary-dark);
+}
+
+a:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+/* =========================
+   MAIN
+   ========================= */
+
+main {
+    display: grid;
+    gap: 1.25rem;
+    width: min(1100px, calc(100% - 2rem));
+    max-width: 100%;
+    margin: 2rem auto;
+}
+
+main > h1 {
+    margin: 0;
+    text-align: center;
+    color: var(--primary-dark);
+    overflow-wrap: anywhere;
+}
+
+main section,
+main article {
+    min-width: 0;
+    max-width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+main h2 {
+    color: var(--primary-dark);
+    margin-top: 0;
+    overflow-wrap: anywhere;
+}
+
+main h3 {
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   PROFILE
+   ========================= */
+
+.profile {
+    min-width: 0;
+}
+
+.profile figure {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.profile img {
+    display: block;
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 0.75rem;
+    border-radius: 10px;
+}
+
+.profile figcaption {
+    max-width: 100%;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   SKILLS
+   ========================= */
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-left: 1.25rem;
+    max-width: 100%;
+}
+
+.skills li {
+    max-width: 100%;
+    background: var(--accent);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   TABLE
+   ========================= */
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+}
+
+caption {
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    text-align: left;
+}
+
+th,
+td {
+    border: 1px solid var(--border);
+    padding: 0.75rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+th {
+    background: var(--accent);
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+    background: var(--primary-dark);
+    color: #ffffff;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+}
+
+footer p {
+    margin: 0.5rem 0;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover,
+footer a:focus-visible {
+    text-decoration: underline;
+}
+
+/* =========================
+   DESKTOP / TABLET
+   ========================= */
+
+@media (min-width: 768px) {
+    main {
+        width: min(1100px, calc(100% - 4rem));
+    }
+
+    .profile {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 1rem 2rem;
+        align-items: center;
+    }
+
+    .profile h2 {
+        grid-column: 1 / -1;
+    }
+
+    .profile figure {
+        grid-row: 2 / span 4;
+        margin: 0;
+    }
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 767px) {
+    main {
+        display: grid;
+        width: calc(100% - 1rem);
+        max-width: calc(100% - 1rem);
+        margin: 1rem auto;
+    }
+
+    main section,
+    main article {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    nav ul {
+        justify-content: flex-start;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    nav a {
+        padding: 0.5rem 0.65rem;
+    }
+
+    .profile {
+        display: block;
+    }
+
+    .profile figure {
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem 0;
+    }
+
+    .profile img {
+        width: 200px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .skills {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-left: 1.25rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        overflow-wrap: anywhere;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+        overflow-wrap: anywhere;
+    }
+
+    h3 {
+        font-size: 1.15rem;
+    }
+
+    p {
+        overflow-wrap: anywhere;
+    }
+
+    footer {
+        width: 100%;
+    }
+}

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Trang giới thiệu cá nhân của Lê Minh Quân, lớp 24CNTT2.">
     <title>Giới thiệu Lê Minh Quân</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -26,7 +26,7 @@
 
     <h1>Giới thiệu Lê Minh Quân</h1>
 
-    <section>
+    <section class="profile">
         <h2>Giới thiệu bản thân</h2>
 
         <figure>
@@ -65,7 +65,7 @@
     <section>
         <h2>Kỹ năng</h2>
 
-        <ul>
+        <ul class="skills">
             <li>HTML5</li>
             <li>CSS cơ bản</li>
             <li>Python</li>
@@ -77,40 +77,42 @@
     <section>
         <h2>Thời khóa biểu tuần</h2>
 
-        <table>
-            <caption>Thời khóa biểu học tập trong tuần</caption>
+        <div class="table-wrapper">
+            <table>
+                <caption>Thời khóa biểu học tập trong tuần</caption>
 
-            <thead>
-                <tr>
-                    <th scope="col">Thời gian</th>
-                    <th scope="col">Thứ 2</th>
-                    <th scope="col">Thứ 3</th>
-                    <th scope="col">Thứ 4</th>
-                    <th scope="col">Thứ 5</th>
-                    <th scope="col">Thứ 6</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th scope="col">Thời gian</th>
+                        <th scope="col">Thứ 2</th>
+                        <th scope="col">Thứ 3</th>
+                        <th scope="col">Thứ 4</th>
+                        <th scope="col">Thứ 5</th>
+                        <th scope="col">Thứ 6</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr>
-                    <th scope="row">Sáng</th>
-                    <td>Lập trình</td>
-                    <td>Mạng máy tính</td>
-                    <td>Cơ sở dữ liệu</td>
-                    <td>Lập trình Web</td>
-                    <td>Tự học</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th scope="row">Sáng</th>
+                        <td>Lập trình</td>
+                        <td>Mạng máy tính</td>
+                        <td>Cơ sở dữ liệu</td>
+                        <td>Lập trình Web</td>
+                        <td>Tự học</td>
+                    </tr>
 
-                <tr>
-                    <th scope="row">Chiều</th>
-                    <td>Tự học</td>
-                    <td>Lập trình Web</td>
-                    <td>Tự học</td>
-                    <td>Làm bài nhóm</td>
-                    <td>Ôn tập</td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr>
+                        <th scope="row">Chiều</th>
+                        <td>Tự học</td>
+                        <td>Lập trình Web</td>
+                        <td>Tự học</td>
+                        <td>Làm bài nhóm</td>
+                        <td>Ôn tập</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 
 </main>
