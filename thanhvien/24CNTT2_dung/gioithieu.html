@@ -5,105 +5,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Trang giới thiệu cá nhân của Nguyễn Phạm Tiến Dũng - Thành viên nhóm 15">
   <title>Giới thiệu cá nhân - Nguyễn Phạm Tiến Dũng</title>
+  <!-- Nhúng tệp CSS đúng cấu trúc thư mục -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Header chung -->
-  <header>
-    <p><strong>Website Đồ Án Nhóm 15 - Khoa Toán – Tin</strong></p>
-  </header>
+  <div class="trang-ca-nhan">
+    <!-- Header chung -->
+    <header class="khoi-dau">
+      <div class="thong-tin-chinh">
+        <p><strong>Website Đồ Án Nhóm 15 - Khoa Toán – Tin</strong></p>
+      </div>
+    </header>
 
-  <!-- Menu điều hướng 2 chiều quay về các trang của nhóm gốc -->
-  <nav>
-    <ul>
-      <li><a href="../../index.html">Trang chủ nhóm</a></li>
-      <li><a href="../../danh-sach.html">Danh sách</a></li>
-      <li><a href="../../chi-tiet.html">Chi tiết</a></li>
-      <li><a href="../../gioi-thieu.html">Giới thiệu nhóm</a></li>
-      <li><a href="../../lien-he.html">Liên hệ</a></li>
-    </ul>
-  </nav>
-
-  <!-- Nội dung chính -->
-  <main>
-    <h1>Trang Giới Thiệu Cá Nhân</h1>
-
-    <!-- Section: Giới thiệu bản thân -->
-    <section>
-      <h2>Giới thiệu bản thân</h2>
-      
-      <!-- Ảnh dung.jpg nằm cùng thư mục với gioithieu.html -->
-      <figure>
-        <!-- SỬA DÒNG 27 THÀNH DÒNG NÀY: -->
-         <img src="dung_anh.jpg" alt="Ảnh chân dung của Nguyễn Phạm Tiến Dũng" width="200">
-        <figcaption>Chân dung thành viên Nguyễn Phạm Tiến Dũng</figcaption>
-      </figure>
-
-      <p><strong>Họ và tên:</strong> Nguyễn Phạm Tiến Dũng</p>
-      <p><strong>Lớp:</strong> 24CNTT2</p>
-      <p><strong>Vai trò trong nhóm:</strong> Thành viên - Phụ trách xây dựng giao diện cá nhân và hoàn thiện mã nguồn đồ án.</p>
-    </section>
-
-    <!-- Article: Dự án & Sở thích -->
-    <article>
-      <h2>Dự án & Sở thích</h2>
-      
-      <h3>1. Đóng góp trong đồ án nhóm</h3>
-      <p>Xây dựng cấu trúc bộ khung HTML5 đạt chuẩn W3C Validator, tạo liên kết điều hướng hai chiều và đóng góp báo cáo bài tập nhóm số 2.</p>
-
-      <h3>2. Danh sách kỹ năng (ul)</h3>
-      <ul>
-        <li>Lập trình Web: HTML5, CSS3 cơ bản</li>
-        <li>Sử dụng Linux Terminal & Bash Scripting</li>
-        <li>Quản lý mã nguồn với Git & GitHub</li>
-        <li>Tư duy giải quyết vấn đề và làm việc nhóm</li>
+    <!-- Menu điều hướng 2 chiều quay về các trang nhóm -->
+    <nav aria-label="Điều hướng trang nhóm">
+      <ul style="display: flex; gap: 12px; list-style: none; padding: 0; flex-wrap: wrap;">
+        <li><a class="nut-ve-trang-chu" href="../../index.html">Trang chủ nhóm</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../danh-sach.html">Danh sách</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../chi-tiet.html">Chi tiết</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../gioi-thieu.html">Giới thiệu nhóm</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../lien-he.html">Liên hệ</a></li>
       </ul>
+    </nav>
 
-      <h3>3. Sở thích cá nhân</h3>
-      <ul>
-        <li>Rèn luyện thể thao và tập gym</li>
-        <li>Chơi game</li>
-        <li>Xem Phim AI</li>
-      </ul>
-    </article>
+    <!-- Nội dung chính -->
+    <main>
+      <h1>Trang Giới Thiệu Cá Nhân</h1>
 
-    <!-- Section: Bảng thời khóa biểu tuần (Có caption, thead, th scope chuẩn a11y) -->
-    <section>
-      <h2>Thời khóa biểu cá nhân tuần này</h2>
-      <table>
-        <caption>Bảng Thời Khóa Biểu Tuần</caption>
-        <thead>
-          <tr>
-            <th scope="col">Thứ</th>
-            <th scope="col">Buổi sáng</th>
-            <th scope="col">Buổi chiều</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Thứ 2</th>
-            <td>Thiết kế và Lập trình web</td>
-            <td>Tự học HTML5 / CSS</td>
-          </tr>
-          <tr>
-            <th scope="row">Thứ 4</th>
-            <td>Cấu trúc dữ liệu & Giải thuật</td>
-            <td>Tập gym</td>
-          </tr>
-          <tr>
-            <th scope="row">Thứ 6</th>
-            <td>Hệ điều hành</td>
-            <td>Họp nhóm đồ án</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
+      <!-- Section: Giới thiệu bản thân -->
+      <section class="khoi-dau" style="margin-bottom: 20px;">
+        <img class="anh-chan-dung" src="dung_anh.jpg" alt="Ảnh chân dung của Nguyễn Phạm Tiến Dũng">
+        <div class="thong-tin-chinh">
+          <p><strong>Họ và tên:</strong> Nguyễn Phạm Tiến Dũng</p>
+          <p><strong>Lớp:</strong> 24CNTT2</p>
+          <p><strong>Vai trò trong nhóm:</strong> Thành viên - Phụ trách xây dựng giao diện cá nhân và hoàn thiện mã nguồn đồ án.</p>
+        </div>
+      </section>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2026 Nguyễn Phạm Tiến Dũng - Nhóm 15 - Khoa Toán – Tin</p>
-  </footer>
+      <!-- Article: Dự án & Sở thích -->
+      <article class="muc-noi-dung" style="margin-bottom: 20px;">
+        <h2>Dự án & Sở thích</h2>
+        
+        <h3>1. Đóng góp trong đồ án nhóm</h3>
+        <p>Xây dựng cấu trúc bộ khung HTML5 đạt chuẩn W3C Validator, tạo liên kết điều hướng hai chiều và đóng góp báo cáo bài tập nhóm số 2.</p>
+
+        <h3>2. Danh sách kỹ năng</h3>
+        <div class="danh-sach-ky-nang">
+          <div class="the-ky-nang">
+            <h3>Lập trình Web</h3>
+            <p>HTML5, CSS3 cơ bản</p>
+          </div>
+          <div class="the-ky-nang">
+            <h3>Hệ thống & Scripting</h3>
+            <p>Linux Terminal & Bash Scripting</p>
+          </div>
+          <div class="the-ky-nang">
+            <h3>Quản lý mã nguồn</h3>
+            <p>Git & GitHub</p>
+          </div>
+          <div class="the-ky-nang">
+            <h3>Kỹ năng mềm</h3>
+            <p>Tư duy giải quyết vấn đề, Làm việc nhóm</p>
+          </div>
+        </div>
+
+        <h3>3. Sở thích cá nhân</h3>
+        <ul>
+          <li>Rèn luyện thể thao và tập gym</li>
+          <li>Chơi game</li>
+          <li>Xem Phim AI</li>
+        </ul>
+      </article>
+
+      <!-- Section: Bảng thời khóa biểu tuần -->
+      <section class="muc-noi-dung">
+        <h2>Thời khóa biểu cá nhân tuần này</h2>
+        
+        <!-- Bọc bảng trong khung để hỗ trợ cuộn ngang trên điện thoại 360px -->
+        <div class="khung-chua-bang" tabindex="0" aria-label="Bảng thời khóa biểu cá nhân">
+          <table>
+            <caption>Bảng Thời Khóa Biểu Tuần</caption>
+            <thead>
+              <tr>
+                <th scope="col">Thứ</th>
+                <th scope="col">Buổi sáng</th>
+                <th scope="col">Buổi chiều</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Thứ 2</th>
+                <td>Thiết kế và Lập trình web</td>
+                <td>Tự học HTML5 / CSS</td>
+              </tr>
+              <tr>
+                <th scope="row">Thứ 4</th>
+                <td>Cấu trúc dữ liệu & Giải thuật</td>
+                <td>Tập gym</td>
+              </tr>
+              <tr>
+                <th scope="row">Thứ 6</th>
+                <td>Hệ điều hành</td>
+                <td>Họp nhóm đồ án</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="chan-trang">
+      <p>&copy; 2026 Nguyễn Phạm Tiến Dũng - Nhóm 15 - Khoa Toán – Tin</p>
+    </footer>
+  </div>
 
 </body>
 </html>

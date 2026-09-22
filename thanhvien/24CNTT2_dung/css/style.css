@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   1. KHAI BÁO BIẾN CSS & TỐI ƯU TOÀN TRANG
+   ========================================================================== */
+:root {
+  --mau-chinh: #123b6d;
+  --mau-nhan: #ffc72c;
+  --mau-chu: #222222;
+  --mau-nen: #eef5fc;
+  --mau-trang: #ffffff;
+  --mau-vien: #d1dbe5;
+  --khoang-cach: 16px;
+  --bo-goc: 10px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--mau-chu);
+  background-color: var(--mau-nen);
+}
+
+.trang-ca-nhan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--khoang-cach);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--khoang-cach);
+}
+
+/* ==========================================================================
+   2. HEADER, NAV & INTERACTION (A11Y)
+   ========================================================================== */
+.khoi-dau {
+  background-color: var(--mau-trang);
+  padding: calc(var(--khoang-cach) * 1.5);
+  border-radius: var(--bo-goc);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--khoang-cach);
+}
+
+.anh-chan-dung {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--mau-nhan);
+}
+
+.chuc-danh {
+  color: #4a4a4a;
+  font-weight: 600;
+  margin-top: -8px;
+}
+
+.nut-ve-trang-chu {
+  display: inline-block;
+  padding: 10px 18px;
+  background-color: var(--mau-chinh);
+  color: var(--mau-trang);
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.nut-ve-trang-chu:hover {
+  background-color: #0d284c;
+  opacity: 0.9;
+}
+
+a:focus-visible, button:focus-visible, .khung-chua-bang:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   3. MỤC NỘI DUNG & GRID KỸ NĂNG
+   ========================================================================== */
+.muc-noi-dung {
+  background-color: var(--mau-trang);
+  padding: calc(var(--khoang-cach) * 1.5);
+  border-radius: var(--bo-goc);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.muc-noi-dung h2 {
+  color: var(--mau-chinh);
+  border-bottom: 3px solid var(--mau-nhan);
+  padding-bottom: 6px;
+  margin-top: 0;
+}
+
+.danh-sach-ky-nang {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--khoang-cach);
+}
+
+.the-ky-nang {
+  border: 1px solid var(--mau-vien);
+  padding: var(--khoang-cach);
+  border-radius: var(--bo-goc);
+  background-color: #fafafa;
+}
+
+.the-ky-nang h3 {
+  margin-top: 0;
+  color: var(--mau-chinh);
+}
+
+/* ==========================================================================
+   4. BẢNG THỜI KHÓA BIỂU RESPONSIVE
+   ========================================================================== */
+.khung-chua-bang {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--mau-vien);
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 480px;
+}
+
+caption {
+  caption-side: bottom;
+  font-size: 0.85rem;
+  color: #555555;
+  padding: 8px;
+  text-align: left;
+}
+
+th, td {
+  padding: 10px 12px;
+  border: 1px solid var(--mau-vien);
+  text-align: center;
+}
+
+th {
+  background-color: var(--mau-chinh);
+  color: var(--mau-trang);
+}
+
+/* ==========================================================================
+   5. MEDIA QUERY RESPONSIVE
+   ========================================================================== */
+@media (min-width: 768px) {
+  .khoi-dau {
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  .anh-chan-dung {
+    width: 130px;
+    height: 130px;
+  }
+  
+  .thong-tin-chinh {
+    flex: 1;
+  }
+}
+
+.chan-trang {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #555555;
+  padding: var(--khoang-cach) 0;
+}
