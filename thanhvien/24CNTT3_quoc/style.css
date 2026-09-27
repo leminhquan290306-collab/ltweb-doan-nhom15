@@ -322,3 +322,42 @@ footer.chan-trang {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* ==========================================================================
+   14. GIAO DIỆN TỐI
+   ========================================================================== */
+
+body.giao-dien-toi {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.giao-dien-toi .trang-ca-nhan {
+  background-color: #2b2b2b;
+}
+
+body.giao-dien-toi .muc-noi-dung,
+body.giao-dien-toi .khoi-dau {
+  background-color: #333333;
+  color: #f1f1f1;
+}
+
+body.giao-dien-toi h1,
+body.giao-dien-toi h2,
+body.giao-dien-toi h3,
+body.giao-dien-toi p,
+body.giao-dien-toi li {
+  color: #f1f1f1;
+}
+
+body.giao-dien-toi .the-ky-nang {
+  background-color: #404040;
+}
+
+#nut-giao-dien,
+.bo-loc-ky-nang button {
+  padding: 8px 14px;
+  margin: 8px 4px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
