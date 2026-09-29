@@ -264,7 +264,86 @@ footer.chan-trang {
 }
 
 /* ==========================================================================
-   12. RESPONSIVE - MÀN HÌNH NHỎ
+   12. PHẦN C - THU GỌN / MỞ RỘNG NỘI DUNG
+   ========================================================================== */
+
+.nut-accordion {
+  display: inline-block;
+  margin: 12px 0 16px;
+  padding: 8px 14px;
+  border: 1px solid var(--mau-chinh);
+  border-radius: 6px;
+  background-color: var(--mau-chinh);
+  color: var(--mau-trang);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.nut-accordion:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.nut-accordion:active {
+  transform: translateY(0);
+}
+
+.nut-accordion:focus-visible {
+  outline: 2px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+.khung-noi-dung-accordion {
+  width: 100%;
+}
+
+.khung-noi-dung-accordion[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   13. PHẦN C - NÚT LÊN ĐẦU TRANG
+   ========================================================================== */
+
+#nut-len-dau {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  padding: 10px 14px;
+  border: 1px solid var(--mau-chinh);
+  border-radius: 8px;
+  background-color: var(--mau-chinh);
+  color: var(--mau-trang);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+#nut-len-dau:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+#nut-len-dau:active {
+  transform: translateY(0);
+}
+
+#nut-len-dau:focus-visible {
+  outline: 2px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+#nut-len-dau[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   14. RESPONSIVE - MÀN HÌNH NHỎ
    ========================================================================== */
 
 @media (max-width: 600px) {
@@ -305,10 +384,22 @@ footer.chan-trang {
   .nut-ve-trang-chu {
     padding: 8px 12px;
   }
+
+  .nut-accordion {
+    width: 100%;
+    text-align: center;
+  }
+
+  #nut-len-dau {
+    right: 12px;
+    bottom: 12px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 /* ==========================================================================
-   13. RESPONSIVE - MÀN HÌNH LỚN
+   15. RESPONSIVE - MÀN HÌNH LỚN
    ========================================================================== */
 
 @media (min-width: 768px) {
