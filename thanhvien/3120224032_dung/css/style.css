@@ -158,7 +158,72 @@ th {
 }
 
 /* ==========================================================================
-   5. MEDIA QUERY RESPONSIVE
+   5. BỔ SUNG: ĐỊNH KIỂU CHO 2 TƯƠNG TÁC JAVASCRIPT (PHẦN C)
+   ========================================================================== */
+
+/* --- TƯƠNG TÁC 1: Đồng hồ đếm ngược ngày thi --- */
+.countdown-timer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.time-box {
+  background-color: var(--mau-nen);
+  padding: 12px;
+  border-radius: var(--bo-goc);
+  min-width: 65px;
+  text-align: center;
+  border: 1px solid var(--mau-vien);
+}
+
+.time-box span {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--mau-chinh);
+}
+
+.time-box label {
+  font-size: 0.75rem;
+  color: #555555;
+}
+
+.countdown-status {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 12px;
+  color: var(--mau-chinh);
+}
+
+/* --- TƯƠNG TÁC 2: Nút Sao chép Email --- */
+.btn-copy {
+  background-color: var(--mau-chinh);
+  color: var(--mau-trang);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-copy:hover {
+  background-color: #0d284c;
+}
+
+.toast-message {
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   6. MEDIA QUERY RESPONSIVE (TỐI ƯU CẢ MÀN HÌNH NHỎ 360PX)
    ========================================================================== */
 @media (min-width: 768px) {
   .khoi-dau {
@@ -173,6 +238,24 @@ th {
   
   .thong-tin-chinh {
     flex: 1;
+  }
+}
+
+@media (max-width: 360px) {
+  .countdown-timer {
+    gap: 6px;
+  }
+  .time-box {
+    min-width: 48px;
+    padding: 6px;
+  }
+  .time-box span {
+    font-size: 1.1rem;
+  }
+  .btn-copy {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
   }
 }
 

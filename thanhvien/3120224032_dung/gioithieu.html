@@ -33,8 +33,9 @@
     <main>
       <h1>Trang Giới Thiệu Cá Nhân</h1>
 
-      <!-- Section: Giới thiệu bản thân -->
+    <!-- Section: Giới thiệu bản thân (Đã sửa thêm h2 ẩn hoặc dùng div) -->
       <section class="khoi-dau" style="margin-bottom: 20px;">
+        <h2 class="sr-only" style="display: none;">Thông tin cá nhân</h2>
         <img class="anh-chan-dung" src="dung_anh.jpg" alt="Ảnh chân dung của Nguyễn Phạm Tiến Dũng">
         <div class="thong-tin-chinh">
           <p><strong>Họ và tên:</strong> Nguyễn Phạm Tiến Dũng</p>
@@ -80,11 +81,11 @@
       </article>
 
       <!-- Section: Bảng thời khóa biểu tuần -->
-      <section class="muc-noi-dung">
+      <section class="muc-noi-dung" style="margin-bottom: 20px;">
         <h2>Thời khóa biểu cá nhân tuần này</h2>
         
-        <!-- Bọc bảng trong khung để hỗ trợ cuộn ngang trên điện thoại 360px -->
-        <div class="khung-chua-bang" tabindex="0" aria-label="Bảng thời khóa biểu cá nhân">
+<!-- Sửa: Thêm role="region" để hợp lệ W3C khi dùng aria-label -->
+        <div class="khung-chua-bang" tabindex="0" role="region" aria-label="Bảng thời khóa biểu cá nhân">
           <table>
             <caption>Bảng Thời Khóa Biểu Tuần</caption>
             <thead>
@@ -114,6 +115,28 @@
           </table>
         </div>
       </section>
+
+      <!-- ================= TƯƠNG TÁC 1: ĐẾM NGƯỢC NGÀY THI ================= -->
+      <section class="muc-noi-dung" style="margin-bottom: 20px;">
+        <h2>⏳ Đếm ngược đến Ngày thi Cuối kỳ</h2>
+        <div id="countdown-display" class="countdown-timer" aria-live="polite">
+          <div class="time-box"><span id="cd-days">00</span><label>Ngày</label></div>
+          <div class="time-box"><span id="cd-hours">00</span><label>Giờ</label></div>
+          <div class="time-box"><span id="cd-minutes">00</span><label>Phút</label></div>
+          <div class="time-box"><span id="cd-seconds">00</span><label>Giây</label></div>
+        </div>
+        <p id="countdown-status" class="countdown-status"></p>
+      </section>
+
+      <!-- ================= TƯƠNG TÁC 2: SAO CHÉP EMAIL ================= -->
+      <section class="muc-noi-dung">
+        <h2>Thông tin liên hệ</h2>
+        <p>
+          Email: <strong id="my-email">dungshity@gmail.com</strong>
+          <button id="btn-copy-email" type="button" class="btn-copy">📋 Sao chép Email</button>
+        </p>
+        <span id="copy-status" class="toast-message" aria-live="polite"></span>
+      </section>
     </main>
 
     <!-- Footer -->
@@ -122,5 +145,7 @@
     </footer>
   </div>
 
+  <!-- Nạp tệp JS cá nhân -->
+  <script src="js/canhan.js" defer></script>
 </body>
 </html>
