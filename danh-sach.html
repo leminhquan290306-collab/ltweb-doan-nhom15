@@ -20,83 +20,170 @@
 
     <header>
         <h1>Danh sách quà tặng</h1>
-        <p>Tham khảo các sản phẩm phù hợp với nhiều nhu cầu tặng quà.</p>
+
+        <p>
+            Tham khảo các sản phẩm phù hợp với nhiều nhu cầu tặng quà.
+        </p>
+
+        <p>
+            Yêu thích:
+            <strong data-so-luong-yeu-thich>0</strong>
+        </p>
     </header>
 
     <nav aria-label="Điều hướng chính">
-        <ul class="menu-list">
-            <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="danh-sach.html">Danh sách</a></li>
-            <li><a href="chi-tiet.html">Chi tiết</a></li>
-            <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
-            <li><a href="lien-he.html">Liên hệ</a></li>
+
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            Menu
+        </button>
+
+        <ul class="menu-list" id="menu-chinh">
+            <li>
+                <a href="index.html">Trang chủ</a>
+            </li>
+
+            <li>
+                <a href="danh-sach.html">Danh sách</a>
+            </li>
+
+            <li>
+                <a href="chi-tiet.html">Chi tiết</a>
+            </li>
+
+            <li>
+                <a href="gioi-thieu.html">Về chúng tôi</a>
+            </li>
+
+            <li>
+                <a href="lien-he.html">Liên hệ</a>
+            </li>
         </ul>
+
     </nav>
 
     <main>
 
         <section class="danh-sach-san-pham">
+
             <h2>Danh sách sản phẩm</h2>
 
-            <table class="bang-san-pham">
-                <caption>Danh sách một số sản phẩm quà tặng</caption>
+            <div class="bo-loc-san-pham">
 
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Tên sản phẩm</th>
-                        <th scope="col">Danh mục</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Đối tượng phù hợp</th>
-                    </tr>
-                </thead>
+                <p>
+                    <label for="tim-kiem">
+                        Tìm kiếm sản phẩm:
+                    </label>
 
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Hộp quà bánh kẹo</td>
-                        <td>Quà sinh nhật</td>
-                        <td>250.000 VNĐ</td>
-                        <td>Bạn bè</td>
-                    </tr>
+                    <input
+                        type="search"
+                        id="tim-kiem"
+                        name="tim-kiem"
+                        placeholder="Nhập tên sản phẩm...">
+                </p>
 
-                    <tr>
-                        <td>2</td>
-                        <td>Cốc giữ nhiệt</td>
-                        <td>Đồ dùng cá nhân</td>
-                        <td>350.000 VNĐ</td>
-                        <td>Đồng nghiệp</td>
-                    </tr>
+                <p>
+                    <label for="loc-danh-muc">
+                        Lọc theo danh mục:
+                    </label>
 
-                    <tr>
-                        <td>3</td>
-                        <td>Sổ tay cao cấp</td>
-                        <td>Văn phòng phẩm</td>
-                        <td>180.000 VNĐ</td>
-                        <td>Bạn bè, đồng nghiệp</td>
-                    </tr>
+                    <select
+                        id="loc-danh-muc"
+                        name="loc-danh-muc">
 
-                    <tr>
-                        <td>4</td>
-                        <td>Hoa và thiệp</td>
-                        <td>Quà kỷ niệm</td>
-                        <td>300.000 VNĐ</td>
-                        <td>Người yêu, gia đình</td>
-                    </tr>
+                        <option value="">
+                            Tất cả danh mục
+                        </option>
 
-                    <tr>
-                        <td>5</td>
-                        <td>Đèn ngủ trang trí</td>
-                        <td>Đồ trang trí</td>
-                        <td>450.000 VNĐ</td>
-                        <td>Gia đình, bạn bè</td>
-                    </tr>
-                </tbody>
-            </table>
+                        <option value="banh-keo">
+                            Bánh kẹo
+                        </option>
+
+                        <option value="sinh-nhat">
+                            Sinh nhật
+                        </option>
+
+                        <option value="ban-be">
+                            Bạn bè
+                        </option>
+
+                        <option value="dip-le">
+                            Dịp lễ
+                        </option>
+
+                        <option value="cao-cap">
+                            Cao cấp
+                        </option>
+
+                        <option value="gia-dinh">
+                            Gia đình
+                        </option>
+
+                    </select>
+                </p>
+
+                <p>
+                    <label for="sap-xep">
+                        Sắp xếp:
+                    </label>
+
+                    <select
+                        id="sap-xep"
+                        name="sap-xep">
+
+                        <option value="">
+                            Mặc định
+                        </option>
+
+                        <option value="gia-tang">
+                            Giá tăng dần
+                        </option>
+
+                        <option value="gia-giam">
+                            Giá giảm dần
+                        </option>
+
+                        <option value="ten-tang">
+                            Tên A-Z
+                        </option>
+
+                        <option value="ten-giam">
+                            Tên Z-A
+                        </option>
+
+                    </select>
+                </p>
+
+            </div>
+
+            <p
+                id="thong-bao-danh-sach"
+                aria-live="polite">
+                Đang tải danh sách sản phẩm...
+            </p>
+
+            <div
+                id="danh-sach-dong"
+                class="luoi-san-pham">
+            </div>
+
+            <noscript>
+                <p>
+                    JavaScript đang tắt. Vui lòng bật JavaScript để
+                    sử dụng chức năng tìm kiếm, lọc và sắp xếp sản phẩm.
+                </p>
+            </noscript>
+
         </section>
 
         <section class="card">
-            <h2 class="card__title">Khám phá sản phẩm</h2>
+
+            <h2 class="card__title">
+                Khám phá sản phẩm
+            </h2>
 
             <p>
                 Danh sách trên cung cấp những sản phẩm quà tặng phổ biến,
@@ -104,23 +191,45 @@
             </p>
 
             <p>
-                <a class="btn btn--chinh" href="chi-tiet.html">
+                <a
+                    class="btn btn--chinh"
+                    href="chi-tiet.html">
                     Xem chi tiết sản phẩm tiêu biểu
                 </a>
             </p>
 
             <p>
-                <a class="btn btn--phu" href="lien-he.html">
+                <a
+                    class="btn btn--phu"
+                    href="lien-he.html">
                     Đi đến trang liên hệ
                 </a>
             </p>
+
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; 2026 Quà Tặng Thông Minh. Nhóm 15.</p>
+        <p>
+            &copy; 2026 Quà Tặng Thông Minh. Nhóm 15.
+        </p>
     </footer>
+
+    <script
+        type="module"
+        src="js/main.js">
+    </script>
+
+    <script
+        type="module"
+        src="js/trang-danh-sach.js">
+    </script>
+
+    <script
+        type="module"
+        src="js/yeu-thich.js">
+    </script>
 
 </body>
 </html>

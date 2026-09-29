@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "ten": "Hộp quà bánh kẹo",
+    "danhMuc": "banh-keo",
+    "gia": 150000,
+    "soLuong": 20,
+    "moTa": "Hộp quà gồm nhiều loại bánh kẹo phù hợp làm quà tặng.",
+    "hinhAnh": "images/hop-qua-banh-keo.jpg"
+  },
+  {
+    "id": 2,
+    "ten": "Hộp quà sinh nhật",
+    "danhMuc": "sinh-nhat",
+    "gia": 250000,
+    "soLuong": 15,
+    "moTa": "Hộp quà sinh nhật được trang trí đẹp mắt.",
+    "hinhAnh": "images/hop-qua.jpg"
+  },
+  {
+    "id": 3,
+    "ten": "Quà tặng bạn bè",
+    "danhMuc": "ban-be",
+    "gia": 180000,
+    "soLuong": 25,
+    "moTa": "Món quà phù hợp dành tặng bạn bè trong những dịp đặc biệt.",
+    "hinhAnh": "images/qua-ban-be.jpg"
+  },
+  {
+    "id": 4,
+    "ten": "Quà tặng dịp lễ",
+    "danhMuc": "dip-le",
+    "gia": 300000,
+    "soLuong": 12,
+    "moTa": "Quà tặng phù hợp cho các dịp lễ và ngày kỷ niệm.",
+    "hinhAnh": "images/qua-dip-le.jpg"
+  },
+  {
+    "id": 5,
+    "ten": "Hộp quà cao cấp",
+    "danhMuc": "cao-cap",
+    "gia": 500000,
+    "soLuong": 8,
+    "moTa": "Hộp quà cao cấp dành cho những dịp quan trọng.",
+    "hinhAnh": "images/hop-qua.jpg"
+  },
+  {
+    "id": 6,
+    "ten": "Hộp quà ngọt ngào",
+    "danhMuc": "banh-keo",
+    "gia": 220000,
+    "soLuong": 18,
+    "moTa": "Hộp quà với các món bánh kẹo ngọt ngào.",
+    "hinhAnh": "images/hop-qua-banh-keo.jpg"
+  },
+  {
+    "id": 7,
+    "ten": "Quà sinh nhật bạn thân",
+    "danhMuc": "sinh-nhat",
+    "gia": 280000,
+    "soLuong": 10,
+    "moTa": "Món quà ý nghĩa dành tặng bạn thân trong ngày sinh nhật.",
+    "hinhAnh": "images/qua-ban-be.jpg"
+  },
+  {
+    "id": 8,
+    "ten": "Quà lễ tình bạn",
+    "danhMuc": "ban-be",
+    "gia": 190000,
+    "soLuong": 16,
+    "moTa": "Quà tặng thể hiện tình cảm dành cho bạn bè.",
+    "hinhAnh": "images/qua-ban-be.jpg"
+  },
+  {
+    "id": 9,
+    "ten": "Giỏ quà ngày lễ",
+    "danhMuc": "dip-le",
+    "gia": 350000,
+    "soLuong": 9,
+    "moTa": "Giỏ quà phù hợp tặng trong các ngày lễ.",
+    "hinhAnh": "images/qua-dip-le.jpg"
+  },
+  {
+    "id": 10,
+    "ten": "Hộp quà gia đình",
+    "danhMuc": "gia-dinh",
+    "gia": 400000,
+    "soLuong": 14,
+    "moTa": "Hộp quà dành tặng người thân và gia đình.",
+    "hinhAnh": "images/hop-qua.jpg"
+  },
+  {
+    "id": 11,
+    "ten": "Hộp quà bánh ngọt",
+    "danhMuc": "banh-keo",
+    "gia": 170000,
+    "soLuong": 22,
+    "moTa": "Hộp bánh ngọt thích hợp làm quà tặng.",
+    "hinhAnh": "images/hop-qua-banh-keo.jpg"
+  },
+  {
+    "id": 12,
+    "ten": "Quà đặc biệt",
+    "danhMuc": "cao-cap",
+    "gia": 600000,
+    "soLuong": 6,
+    "moTa": "Món quà đặc biệt dành cho những người quan trọng.",
+    "hinhAnh": "images/qua-dip-le.jpg"
+  }
+]

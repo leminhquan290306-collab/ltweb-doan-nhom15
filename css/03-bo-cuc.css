@@ -1,10 +1,10 @@
 /* =========================================
-   03 - BỐ CỤC
-   ========================================= */
+03 - BỐ CỤC
+========================================= */
 
 /* =========================================
-   KHUNG TRANG - MOBILE FIRST
-   ========================================= */
+KHUNG TRANG - MOBILE FIRST
+========================================= */
 
 .trang {
     min-height: 100vh;
@@ -19,6 +19,7 @@
 }
 
 /* Gán khu vực cho các phần chính */
+
 .trang > header {
     grid-area: dau;
 }
@@ -27,25 +28,28 @@
     grid-area: menu;
 }
 
+/* Nội dung chính */
+
 .trang > main {
     grid-area: chinh;
-}
-
-.trang > footer {
-    grid-area: chan;
-}
-
-/* Nội dung chính */
-.trang > main {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
 }
 
+.trang > footer {
+    grid-area: chan;
+}
+
 /* =========================================
-   MENU
-   ========================================= */
+MENU
+========================================= */
+
+/*
+ * Khi JavaScript tắt:
+ * menu vẫn hiển thị bình thường.
+ */
 
 .menu-list {
     display: flex;
@@ -58,9 +62,17 @@
     list-style: none;
 }
 
+/*
+ * Nút menu chỉ xuất hiện khi JavaScript được bật.
+ */
+
+.nut-menu {
+    display: none;
+}
+
 /* =========================================
-   CÁC SECTION
-   ========================================= */
+CÁC SECTION
+========================================= */
 
 .trang > main > section {
     width: 100%;
@@ -68,18 +80,20 @@
 }
 
 /* Hero */
+
 .hero {
     width: 100%;
 }
 
 /* Card */
+
 .card {
     width: 100%;
 }
 
 /* =========================================
-   LƯỚI SẢN PHẨM / CARD
-   ========================================= */
+LƯỚI SẢN PHẨM / CARD
+========================================= */
 
 .luoi-san-pham {
     display: grid;
@@ -94,8 +108,8 @@
 }
 
 /* =========================================
-   NHÓM NÚT
-   ========================================= */
+NHÓM NÚT
+========================================= */
 
 .nhom-nut {
     display: flex;
@@ -105,10 +119,11 @@
 }
 
 /* =========================================
-   TRANG CHI TIẾT
-   ========================================= */
+TRANG CHI TIẾT
+========================================= */
 
 /* Mobile: nội dung xếp thành 1 cột */
+
 .noi-dung-chi-tiet {
     display: grid;
     grid-template-columns: 1fr;
@@ -116,18 +131,21 @@
 }
 
 /* Tránh phần tử con làm tràn ngang */
+
 .chi-tiet-chinh,
 .chi-tiet-phu {
     min-width: 0;
 }
 
 /* Hình ảnh trong trang chi tiết */
+
 .chi-tiet-chinh img {
     max-width: 100%;
     height: auto;
 }
 
 /* Video responsive */
+
 .video-san-pham {
     display: block;
     width: 100%;
@@ -138,8 +156,8 @@
 }
 
 /* =========================================
-   DANH SÁCH THÀNH VIÊN
-   ========================================= */
+DANH SÁCH THÀNH VIÊN
+========================================= */
 
 .danh-sach-thanh-vien {
     display: flex;
@@ -148,8 +166,8 @@
 }
 
 /* =========================================
-   THÔNG TIN LIÊN HỆ
-   ========================================= */
+THÔNG TIN LIÊN HỆ
+========================================= */
 
 .thong-tin-lien-he {
     display: flex;
@@ -157,10 +175,55 @@
     gap: 1rem;
 }
 
+/* =========================================
+MENU MOBILE KHI CÓ JAVASCRIPT
+========================================= */
+
+@media (max-width: 767px) {
+
+    /*
+     * Khi JS hoạt động, hiện nút Menu.
+     */
+
+    .js .nut-menu {
+        display: inline-block;
+        margin: 0.5rem 1rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+
+    /*
+     * Khi JS hoạt động, menu mobile mặc định đóng.
+     */
+
+    .js .menu-list {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    /*
+     * Khi nhấn nút Menu, JavaScript thêm class "mo".
+     */
+
+    .js .menu-list.mo {
+        display: flex;
+    }
+
+    /*
+     * Link menu dễ bấm trên màn hình nhỏ.
+     */
+
+    .js .menu-list a {
+        display: block;
+        padding: 0.75rem 1rem;
+    }
+}
 
 /* =========================================
-   BREAKPOINT 1 - TỪ 768PX
-   ========================================= */
+BREAKPOINT 1 - TỪ 768PX
+========================================= */
 
 @media (min-width: 768px) {
 
@@ -181,7 +244,20 @@
         gap: 1rem;
     }
 
+    /*
+     * Trên màn hình lớn, nút Menu không cần thiết.
+     */
+
+    .nut-menu {
+        display: none;
+    }
+
+    .menu-list {
+        display: flex;
+    }
+
     /* Các section thông thường xếp thành 2 cột */
+
     .trang > main {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -189,11 +265,19 @@
     }
 
     /* Hero chiếm toàn bộ chiều rộng */
+
     .trang > main > .hero {
         grid-column: 1 / -1;
     }
 
+    /* Section danh sách sản phẩm chiếm toàn bộ chiều rộng */
+
+    .trang > main > .danh-sach-san-pham {
+        grid-column: 1 / -1;
+    }
+
     /* Section cuối chiếm toàn bộ chiều rộng */
+
     .trang > main > section:last-child {
         grid-column: 1 / -1;
     }
@@ -217,10 +301,9 @@
     }
 }
 
-
 /* =========================================
-   BREAKPOINT 2 - TỪ 1024PX
-   ========================================= */
+BREAKPOINT 2 - TỪ 1024PX
+========================================= */
 
 @media (min-width: 1024px) {
 
@@ -231,11 +314,19 @@
     }
 
     /* Hero chiếm toàn bộ chiều rộng */
+
     .trang > main > .hero {
         grid-column: 1 / -1;
     }
 
+    /* Section danh sách sản phẩm chiếm toàn bộ chiều rộng */
+
+    .trang > main > .danh-sach-san-pham {
+        grid-column: 1 / -1;
+    }
+
     /* Section cuối chiếm toàn bộ chiều rộng */
+
     .trang > main > section:last-child {
         grid-column: 1 / -1;
     }
@@ -256,4 +347,12 @@
         grid-template-columns: minmax(0, 1fr) 300px;
         gap: 2rem;
     }
+}
+
+/* =========================================
+DANH SÁCH SẢN PHẨM - ĐẢM BẢO TOÀN CHIỀU RỘNG
+========================================= */
+
+.trang > main > .danh-sach-san-pham {
+    min-width: 0;
 }

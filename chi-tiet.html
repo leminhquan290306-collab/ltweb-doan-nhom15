@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Chi tiết hộp quà bánh kẹo - Quà Tặng Thông Minh</title>
+    <title>Chi tiết sản phẩm - Quà Tặng Thông Minh</title>
 
     <meta name="description"
-          content="Thông tin chi tiết về hộp quà bánh kẹo, gồm hình ảnh, đặc điểm, thông số và gợi ý sử dụng.">
+          content="Thông tin chi tiết về sản phẩm quà tặng, gồm hình ảnh, đặc điểm, thông số và gợi ý sử dụng.">
 
     <link rel="stylesheet" href="css/01-bien.css">
     <link rel="stylesheet" href="css/02-chuan-hoa.css">
@@ -20,141 +20,249 @@
 
     <header>
         <h1>Chi tiết sản phẩm quà tặng</h1>
-        <p>Thông tin về một sản phẩm quà tặng tiêu biểu.</p>
+
+        <p>
+            Thông tin chi tiết về sản phẩm được chọn.
+        </p>
+
+        <p>
+            Yêu thích:
+            <strong data-so-luong-yeu-thich>0</strong>
+        </p>
     </header>
 
     <nav aria-label="Điều hướng chính">
-        <ul class="menu-list">
-            <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="danh-sach.html">Danh sách</a></li>
-            <li><a href="chi-tiet.html">Chi tiết</a></li>
-            <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
-            <li><a href="lien-he.html">Liên hệ</a></li>
+
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            Menu
+        </button>
+
+        <ul class="menu-list" id="menu-chinh">
+
+            <li>
+                <a href="index.html">
+                    Trang chủ
+                </a>
+            </li>
+
+            <li>
+                <a href="danh-sach.html">
+                    Danh sách
+                </a>
+            </li>
+
+            <li>
+                <a href="chi-tiet.html">
+                    Chi tiết
+                </a>
+            </li>
+
+            <li>
+                <a href="gioi-thieu.html">
+                    Về chúng tôi
+                </a>
+            </li>
+
+            <li>
+                <a href="lien-he.html">
+                    Liên hệ
+                </a>
+            </li>
+
         </ul>
+
     </nav>
 
     <main class="noi-dung-chi-tiet">
 
         <article class="chi-tiet-chinh">
 
-            <h2>Hộp quà bánh kẹo</h2>
+            <p id="thong-bao-chi-tiet" aria-live="polite">
+                Đang tải thông tin sản phẩm...
+            </p>
 
-            <figure>
-                <img src="images/hop-qua.jpg"
-                     alt="Hộp quà bánh kẹo được trang trí đẹp mắt"
-                     width="400"
-                     height="300"
-                     class="anh-responsive"
-                     loading="lazy">
+            <div id="noi-dung-san-pham">
 
-                <figcaption>
-                    Hộp quà bánh kẹo phù hợp làm quà tặng trong nhiều dịp.
-                </figcaption>
-            </figure>
+                <h2 id="ten-san-pham">
+                    Sản phẩm
+                </h2>
 
-            <section>
-                <h3>Giới thiệu sản phẩm</h3>
+                <button
+                    type="button"
+                    id="nut-yeu-thich-chi-tiet"
+                    data-hanh-dong-yeu-thich="them"
+                    data-id="">
+                    Thêm yêu thích
+                </button>
 
-                <p>
-                    Hộp quà bánh kẹo là lựa chọn phù hợp cho sinh nhật,
-                    lễ kỷ niệm và các dịp gặp gỡ bạn bè, người thân.
-                </p>
+                <figure>
 
-                <p>
-                    Sản phẩm có thiết kế nhỏ gọn, hình thức đẹp và có thể
-                    kết hợp cùng thiệp chúc mừng để tăng ý nghĩa món quà.
-                </p>
-            </section>
+                    <img
+                        id="hinh-san-pham"
+                        src="images/hop-qua.jpg"
+                        alt="Hình ảnh sản phẩm"
+                        width="400"
+                        height="300"
+                        class="anh-responsive">
 
-            <section>
-                <h3>Thông số sản phẩm</h3>
+                    <figcaption id="mo-ta-hinh">
+                        Hình ảnh sản phẩm quà tặng.
+                    </figcaption>
 
-                <table>
-                    <caption>Thông số kỹ thuật của hộp quà bánh kẹo</caption>
+                </figure>
 
-                    <thead>
-                        <tr>
-                            <th scope="col">Thông tin</th>
-                            <th scope="col">Chi tiết</th>
-                        </tr>
-                    </thead>
+                <section>
 
-                    <tbody>
-                        <tr>
-                            <th scope="row">Tên sản phẩm</th>
-                            <td>Hộp quà bánh kẹo</td>
-                        </tr>
+                    <h3>
+                        Giới thiệu sản phẩm
+                    </h3>
 
-                        <tr>
-                            <th scope="row">Danh mục</th>
-                            <td>Quà sinh nhật</td>
-                        </tr>
+                    <p id="mo-ta-san-pham">
+                        Đang tải mô tả sản phẩm...
+                    </p>
 
-                        <tr>
-                            <th scope="row">Giá tham khảo</th>
-                            <td>250.000 VNĐ</td>
-                        </tr>
+                </section>
 
-                        <tr>
-                            <th scope="row">Đối tượng</th>
-                            <td>Bạn bè, người thân</td>
-                        </tr>
+                <section>
 
-                        <tr>
-                            <th scope="row">Màu sắc</th>
-                            <td>Nhiều lựa chọn</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+                    <h3>
+                        Thông số sản phẩm
+                    </h3>
 
-            <section>
-                <h3>Video giới thiệu</h3>
+                    <table>
 
-                <iframe
-                    class="video-san-pham"
-                    src="https://www.youtube.com/embed/zPvyxtH9Jng?si=30NuLSK9DiQjYRgE"
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                </iframe>
-            </section>
+                        <caption>
+                            Thông tin chi tiết sản phẩm
+                        </caption>
 
-            <section>
-                <h3>Gợi ý sử dụng</h3>
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Thông tin
+                                </th>
 
-                <ul>
-                    <li>Tặng trong dịp sinh nhật.</li>
-                    <li>Tặng bạn bè hoặc người thân.</li>
-                    <li>Kết hợp với thiệp chúc mừng.</li>
-                    <li>Phù hợp với ngân sách khoảng 250.000 VNĐ.</li>
-                </ul>
-            </section>
+                                <th scope="col">
+                                    Chi tiết
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <th scope="row">
+                                    Tên sản phẩm
+                                </th>
+
+                                <td id="thong-so-ten"></td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">
+                                    Danh mục
+                                </th>
+
+                                <td id="thong-so-danh-muc"></td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">
+                                    Giá tham khảo
+                                </th>
+
+                                <td id="thong-so-gia"></td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">
+                                    Số lượng
+                                </th>
+
+                                <td id="thong-so-so-luong"></td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </section>
+
+                <section>
+
+                    <h3>
+                        Gợi ý sử dụng
+                    </h3>
+
+                    <ul>
+                        <li>
+                            Phù hợp làm quà tặng trong nhiều dịp.
+                        </li>
+
+                        <li>
+                            Có thể tặng bạn bè hoặc người thân.
+                        </li>
+
+                        <li>
+                            Có thể kết hợp với thiệp chúc mừng.
+                        </li>
+                    </ul>
+
+                </section>
+
+            </div>
 
         </article>
 
         <section class="card chi-tiet-phu">
-            <h2 class="card__title">Khám phá thêm</h2>
+
+            <h2 class="card__title">
+                Khám phá thêm
+            </h2>
 
             <p>
-                <a class="btn btn--chinh" href="danh-sach.html">
+                <a
+                    class="btn btn--chinh"
+                    href="danh-sach.html">
                     Quay lại danh sách sản phẩm
                 </a>
             </p>
 
             <p>
-                <a class="btn btn--phu" href="lien-he.html">
+                <a
+                    class="btn btn--phu"
+                    href="lien-he.html">
                     Liên hệ để được tư vấn quà tặng
                 </a>
             </p>
+
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; 2026 Quà Tặng Thông Minh. Nhóm 15.</p>
+        <p>
+            &copy; 2026 Quà Tặng Thông Minh. Nhóm 15.
+        </p>
     </footer>
+
+    <script
+        type="module"
+        src="js/main.js">
+    </script>
+
+    <script
+        type="module"
+        src="js/trang-chi-tiet.js">
+    </script>
+
+    <script
+        type="module"
+        src="js/yeu-thich.js">
+    </script>
 
 </body>
 </html>

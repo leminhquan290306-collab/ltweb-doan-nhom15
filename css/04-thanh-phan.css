@@ -4,6 +4,7 @@
    ============================== */
 
 /* Header */
+
 header {
     background-color: var(--mau-chinh);
     color: var(--mau-trang);
@@ -15,6 +16,7 @@ header h1 {
 }
 
 /* Thanh điều hướng */
+
 nav {
     background-color: var(--mau-trang);
     border-bottom: 1px solid #dddddd;
@@ -36,8 +38,9 @@ nav a {
     font-weight: 600;
     text-decoration: none;
     border-radius: var(--bo-goc);
-    transition: background-color var(--chuyen-dong),
-                color var(--chuyen-dong);
+    transition:
+        background-color var(--chuyen-dong),
+        color var(--chuyen-dong);
 }
 
 nav a:hover {
@@ -55,6 +58,7 @@ nav a:focus-visible {
 }
 
 /* Hero */
+
 .hero {
     padding: var(--khoang-cach-4);
     margin-bottom: var(--khoang-cach-4);
@@ -69,14 +73,16 @@ nav a:focus-visible {
 }
 
 /* Card */
+
 .card {
     overflow: hidden;
     background-color: var(--mau-trang);
     border: 1px solid #dddddd;
     border-radius: var(--bo-goc-lon);
     box-shadow: var(--bong);
-    transition: transform var(--chuyen-dong),
-                box-shadow var(--chuyen-dong);
+    transition:
+        transform var(--chuyen-dong),
+        box-shadow var(--chuyen-dong);
 }
 
 .card:hover {
@@ -105,6 +111,7 @@ nav a:focus-visible {
 }
 
 /* Nút */
+
 .btn {
     display: inline-block;
     padding: 10px 16px;
@@ -113,9 +120,10 @@ nav a:focus-visible {
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color var(--chuyen-dong),
-                color var(--chuyen-dong),
-                border-color var(--chuyen-dong);
+    transition:
+        background-color var(--chuyen-dong),
+        color var(--chuyen-dong),
+        border-color var(--chuyen-dong);
 }
 
 .btn--chinh {
@@ -138,6 +146,7 @@ nav a:focus-visible {
 }
 
 /* Nút phụ */
+
 .btn--phu {
     color: var(--mau-chu);
     background-color: var(--mau-phu);
@@ -158,6 +167,7 @@ nav a:focus-visible {
 }
 
 /* Form cũ */
+
 .form-group {
     margin-bottom: var(--khoang-cach-2);
 }
@@ -279,6 +289,7 @@ nav a:focus-visible {
 }
 
 /* Bảng */
+
 table {
     width: 100%;
     background-color: var(--mau-trang);
@@ -297,6 +308,7 @@ th {
 }
 
 /* Aside */
+
 aside {
     padding: var(--khoang-cach-2);
 }
@@ -307,6 +319,7 @@ aside h3 {
 }
 
 /* Footer */
+
 footer {
     margin-top: var(--khoang-cach-4);
     padding: var(--khoang-cach-3);
@@ -326,4 +339,118 @@ footer a:hover {
 footer a:focus-visible {
     outline: 3px solid var(--mau-phu);
     outline-offset: 2px;
+}
+
+/* =========================================
+   DANH SÁCH SẢN PHẨM ĐỘNG - PART B
+   ========================================= */
+
+.bo-loc-san-pham {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.bo-loc-san-pham p {
+    margin: 0;
+}
+
+.bo-loc-san-pham label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.bo-loc-san-pham input,
+.bo-loc-san-pham select {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    border: 1px solid #cccccc;
+    border-radius: var(--bo-goc);
+    font: inherit;
+}
+
+.luoi-san-pham {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.luoi-san-pham .card {
+    min-width: 0;
+    height: 100%;
+}
+
+.luoi-san-pham .card h3,
+.luoi-san-pham .card p,
+.luoi-san-pham .card a {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.luoi-san-pham .card h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.luoi-san-pham .card p {
+    margin-bottom: 0.5rem;
+}
+
+/* Khoảng cách giữa Xem chi tiết và nút Yêu thích */
+
+.luoi-san-pham .card a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.luoi-san-pham .card button {
+    display: block;
+    margin: 0 1rem 1rem;
+    padding: 10px 16px;
+    border: 2px solid var(--mau-chinh);
+    border-radius: var(--bo-goc);
+    color: var(--mau-chinh);
+    background-color: var(--mau-trang);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color var(--chuyen-dong),
+        color var(--chuyen-dong),
+        border-color var(--chuyen-dong);
+}
+
+.luoi-san-pham .card button:hover {
+    color: var(--mau-trang);
+    background-color: var(--mau-chinh);
+}
+
+.luoi-san-pham .card button:focus-visible {
+    outline: 3px solid var(--mau-focus);
+    outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+
+    .bo-loc-san-pham {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: end;
+    }
+
+    .luoi-san-pham {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (min-width: 1024px) {
+
+    .luoi-san-pham {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
 }
