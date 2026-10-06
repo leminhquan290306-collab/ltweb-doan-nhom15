@@ -1,75 +1,92 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
 
-    <title>Danh sách quà tặng - Quà Tặng Thông Minh</title>
+require_once __DIR__ . '/inc/config.php';
 
-    <meta name="description"
-          content="Danh sách các sản phẩm quà tặng với thông tin về tên sản phẩm, danh mục, giá và đối tượng phù hợp.">
+use App\Data\KhoSanPham;
 
-    <link rel="stylesheet" href="css/01-bien.css">
-    <link rel="stylesheet" href="css/02-chuan-hoa.css">
-    <link rel="stylesheet" href="css/03-bo-cuc.css">
-    <link rel="stylesheet" href="css/04-thanh-phan.css">
-    <link rel="stylesheet" href="css/05-tien-ich.css">
-</head>
+$tieuDeTrang = 'Danh sách quà tặng - Quà Tặng Thông Minh';
+$baseUrl = '';
 
-<body class="trang">
+$khoSanPham = new KhoSanPham();
 
-    <header>
-        <h1>Danh sách quà tặng</h1>
+$tuKhoa = trim((string) ($_GET['tim-kiem'] ?? ''));
+$danhMuc = trim((string) ($_GET['loc-danh-muc'] ?? ''));
+$sapXep = trim((string) ($_GET['sap-xep'] ?? ''));
 
-        <p>
-            Tham khảo các sản phẩm phù hợp với nhiều nhu cầu tặng quà.
-        </p>
+$sanPhams = $khoSanPham->layTatCa();
 
-        <p>
-            Yêu thích:
-            <strong data-so-luong-yeu-thich>0</strong>
-        </p>
-    </header>
+/*
+ * Tìm kiếm theo tên sản phẩm.
+ */
+if ($tuKhoa !== '') {
+    $tuKhoaTimKiem = mb_strtolower($tuKhoa, 'UTF-8');
 
-    <nav aria-label="Điều hướng chính">
+    $sanPhams = array_filter(
+        $sanPhams,
+        function ($sanPham) use ($tuKhoaTimKiem): bool {
+            return str_contains(
+                mb_strtolower($sanPham->getTen(), 'UTF-8'),
+                $tuKhoaTimKiem
+            );
+        }
+    );
+}
 
-        <button
-            class="nut-menu"
-            type="button"
-            aria-expanded="false"
-            aria-controls="menu-chinh">
-            Menu
-        </button>
+/*
+ * Lọc theo danh mục.
+ */
+if ($danhMuc !== '') {
+    $sanPhams = array_filter(
+        $sanPhams,
+        function ($sanPham) use ($danhMuc): bool {
+            return $sanPham->getDanhMuc() === $danhMuc;
+        }
+    );
+}
 
-        <ul class="menu-list" id="menu-chinh">
-            <li>
-                <a href="index.php">Trang chủ</a>
-            </li>
+/*
+ * Sắp xếp.
+ */
+switch ($sapXep) {
+    case 'gia-tang':
+        usort(
+            $sanPhams,
+            fn($a, $b) => $a->getGia() <=> $b->getGia()
+        );
+        break;
 
-            <li>
-                <a href="danh-sach.php">Danh sách</a>
-            </li>
+    case 'gia-giam':
+        usort(
+            $sanPhams,
+            fn($a, $b) => $b->getGia() <=> $a->getGia()
+        );
+        break;
 
-            <li>
-                <a href="chi-tiet.php">Chi tiết</a>
-            </li>
+    case 'ten-tang':
+        usort(
+            $sanPhams,
+            fn($a, $b) => strcasecmp($a->getTen(), $b->getTen())
+        );
+        break;
 
-            <li>
-                <a href="gioi-thieu.php">Về chúng tôi</a>
-            </li>
+    case 'ten-giam':
+        usort(
+            $sanPhams,
+            fn($a, $b) => strcasecmp($b->getTen(), $a->getTen())
+        );
+        break;
+}
 
-            <li>
-                <a href="lien-he.php">Liên hệ</a>
-            </li>
-        </ul>
+require_once __DIR__ . '/inc/header.php';
+?>
 
-    </nav>
+<main>
 
-    <main>
+    <section class="danh-sach-san-pham">
 
-        <section class="danh-sach-san-pham">
+        <h2>Danh sách sản phẩm</h2>
 
-            <h2>Danh sách sản phẩm</h2>
+        <form method="GET" action="danh-sach.php">
 
             <div class="bo-loc-san-pham">
 
@@ -82,6 +99,7 @@
                         type="search"
                         id="tim-kiem"
                         name="tim-kiem"
+                        value="<?= e($tuKhoa) ?>"
                         placeholder="Nhập tên sản phẩm...">
                 </p>
 
@@ -98,27 +116,39 @@
                             Tất cả danh mục
                         </option>
 
-                        <option value="banh-keo">
+                        <option
+                            value="banh-keo"
+                            <?= $danhMuc === 'banh-keo' ? 'selected' : '' ?>>
                             Bánh kẹo
                         </option>
 
-                        <option value="sinh-nhat">
+                        <option
+                            value="sinh-nhat"
+                            <?= $danhMuc === 'sinh-nhat' ? 'selected' : '' ?>>
                             Sinh nhật
                         </option>
 
-                        <option value="ban-be">
+                        <option
+                            value="ban-be"
+                            <?= $danhMuc === 'ban-be' ? 'selected' : '' ?>>
                             Bạn bè
                         </option>
 
-                        <option value="dip-le">
+                        <option
+                            value="dip-le"
+                            <?= $danhMuc === 'dip-le' ? 'selected' : '' ?>>
                             Dịp lễ
                         </option>
 
-                        <option value="cao-cap">
+                        <option
+                            value="cao-cap"
+                            <?= $danhMuc === 'cao-cap' ? 'selected' : '' ?>>
                             Cao cấp
                         </option>
 
-                        <option value="gia-dinh">
+                        <option
+                            value="gia-dinh"
+                            <?= $danhMuc === 'gia-dinh' ? 'selected' : '' ?>>
                             Gia đình
                         </option>
 
@@ -134,102 +164,166 @@
                         id="sap-xep"
                         name="sap-xep">
 
-                        <option value="">
+                        <option
+                            value=""
+                            <?= $sapXep === '' ? 'selected' : '' ?>>
                             Mặc định
                         </option>
 
-                        <option value="gia-tang">
+                        <option
+                            value="gia-tang"
+                            <?= $sapXep === 'gia-tang' ? 'selected' : '' ?>>
                             Giá tăng dần
                         </option>
 
-                        <option value="gia-giam">
+                        <option
+                            value="gia-giam"
+                            <?= $sapXep === 'gia-giam' ? 'selected' : '' ?>>
                             Giá giảm dần
                         </option>
 
-                        <option value="ten-tang">
+                        <option
+                            value="ten-tang"
+                            <?= $sapXep === 'ten-tang' ? 'selected' : '' ?>>
                             Tên A-Z
                         </option>
 
-                        <option value="ten-giam">
+                        <option
+                            value="ten-giam"
+                            <?= $sapXep === 'ten-giam' ? 'selected' : '' ?>>
                             Tên Z-A
                         </option>
 
                     </select>
                 </p>
 
+                <p>
+                    <button type="submit">
+                        Lọc sản phẩm
+                    </button>
+
+                    <a href="danh-sach.php">
+                        Xóa bộ lọc
+                    </a>
+                </p>
+
             </div>
 
-            <p
-                id="thong-bao-danh-sach"
-                aria-live="polite">
-                Đang tải danh sách sản phẩm...
+        </form>
+
+        <p aria-live="polite">
+            Tìm thấy
+            <strong><?= count($sanPhams) ?></strong>
+            sản phẩm.
+        </p>
+
+        <?php if ($sanPhams === []): ?>
+
+            <p>
+                Không tìm thấy sản phẩm phù hợp.
             </p>
+
+        <?php else: ?>
 
             <div
                 id="danh-sach-dong"
                 class="luoi-san-pham">
+
+                <?php foreach ($sanPhams as $sanPham): ?>
+
+                    <article class="card">
+
+                        <figure>
+
+                            <img
+                                src="<?= e($sanPham->getHinhAnh()) ?>"
+                                alt="<?= e($sanPham->getTen()) ?>"
+                                class="anh-responsive"
+                                loading="lazy">
+
+                        </figure>
+
+                        <h3 class="card__title">
+                            <?= e($sanPham->getTen()) ?>
+                        </h3>
+
+                        <p>
+                            Danh mục:
+                            <strong>
+                                <?= e($sanPham->getDanhMuc()) ?>
+                            </strong>
+                        </p>
+
+                        <p>
+                            Giá:
+                            <strong>
+                                <?= e(number_format($sanPham->getGia(), 0, ',', '.')) ?> đ
+                            </strong>
+                        </p>
+
+                        <p>
+                            Số lượng:
+                            <?= e($sanPham->getSoLuong()) ?>
+                        </p>
+
+                        <p>
+                            <?= e($sanPham->getMoTa()) ?>
+                        </p>
+
+                        <p>
+                            <a
+                                class="btn btn--chinh"
+                                href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
+                                Xem chi tiết
+                            </a>
+                        </p>
+
+                    </article>
+
+                <?php endforeach; ?>
+
             </div>
 
-            <noscript>
-                <p>
-                    JavaScript đang tắt. Vui lòng bật JavaScript để
-                    sử dụng chức năng tìm kiếm, lọc và sắp xếp sản phẩm.
-                </p>
-            </noscript>
+        <?php endif; ?>
 
-        </section>
-
-        <section class="card">
-
-            <h2 class="card__title">
-                Khám phá sản phẩm
-            </h2>
-
+        <noscript>
             <p>
-                Danh sách trên cung cấp những sản phẩm quà tặng phổ biến,
-                giúp người dùng tham khảo theo ngân sách và đối tượng nhận quà.
+                JavaScript đang tắt. Chức năng tìm kiếm, lọc và
+                sắp xếp vẫn hoạt động bằng PHP trên máy chủ.
             </p>
+        </noscript>
 
-            <p>
-                <a
-                    class="btn btn--chinh"
-                    href="chi-tiet.php">
-                    Xem chi tiết sản phẩm tiêu biểu
-                </a>
-            </p>
+    </section>
 
-            <p>
-                <a
-                    class="btn btn--phu"
-                    href="lien-he.php">
-                    Đi đến trang liên hệ
-                </a>
-            </p>
+    <section class="card">
 
-        </section>
+        <h2 class="card__title">
+            Khám phá sản phẩm
+        </h2>
 
-    </main>
-
-    <footer>
         <p>
-            &copy; 2026 Quà Tặng Thông Minh. Nhóm 15.
+            Danh sách trên cung cấp những sản phẩm quà tặng phổ biến,
+            giúp người dùng tham khảo theo ngân sách và đối tượng nhận quà.
         </p>
-    </footer>
 
-    <script
-        type="module"
-        src="js/main.js">
-    </script>
+        <p>
+            <a
+                class="btn btn--chinh"
+                href="chi-tiet.php">
+                Xem chi tiết sản phẩm tiêu biểu
+            </a>
+        </p>
 
-    <script
-        type="module"
-        src="js/trang-danh-sach.js">
-    </script>
+        <p>
+            <a
+                class="btn btn--phu"
+                href="lien-he.php">
+                Đi đến trang liên hệ
+            </a>
+        </p>
 
-    <script
-        type="module"
-        src="js/yeu-thich.js">
-    </script>
+    </section>
 
-</body>
-</html>
+</main>
+
+<?php require_once __DIR__ . '/inc/footer.php'; ?>

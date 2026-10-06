@@ -1,101 +1,131 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
 
-    <title>Chi tiết sản phẩm - Quà Tặng Thông Minh</title>
+require_once __DIR__ . '/inc/config.php';
 
-    <meta name="description"
-          content="Thông tin chi tiết về sản phẩm quà tặng, gồm hình ảnh, đặc điểm, thông số và gợi ý sử dụng.">
+use App\Data\KhoSanPham;
 
-    <link rel="stylesheet" href="css/01-bien.css">
-    <link rel="stylesheet" href="css/02-chuan-hoa.css">
-    <link rel="stylesheet" href="css/03-bo-cuc.css">
-    <link rel="stylesheet" href="css/04-thanh-phan.css">
-    <link rel="stylesheet" href="css/05-tien-ich.css">
-</head>
+$tieuDeTrang = 'Chi tiết sản phẩm - Quà Tặng Thông Minh';
+$baseUrl = '';
 
-<body class="trang">
+$khoSanPham = new KhoSanPham();
 
-    <header>
-        <h1>Chi tiết sản phẩm quà tặng</h1>
+/*
+ * Lấy ID sản phẩm từ URL.
+ */
+$id = filter_input(
+    INPUT_GET,
+    'id',
+    FILTER_VALIDATE_INT
+);
 
-        <p>
-            Thông tin chi tiết về sản phẩm được chọn.
-        </p>
+$sanPham = null;
 
-        <p>
-            Yêu thích:
-            <strong data-so-luong-yeu-thich>0</strong>
-        </p>
-    </header>
+if ($id !== false && $id !== null && $id > 0) {
+    $sanPham = $khoSanPham->timTheoId($id);
+}
 
-    <nav aria-label="Điều hướng chính">
+/*
+ * Ghi sản phẩm vừa xem vào cookie.
+ * Chỉ lưu tối đa 5 ID gần nhất.
+ */
+if ($sanPham !== null) {
+    $sanPhamId = (string) $sanPham->getId();
 
-        <button
-            class="nut-menu"
-            type="button"
-            aria-expanded="false"
-            aria-controls="menu-chinh">
-            Menu
-        </button>
+    $sanPhamDaXem = [];
 
-        <ul class="menu-list" id="menu-chinh">
+    if (isset($_COOKIE['san_pham_da_xem'])) {
+        $duLieuCookie = json_decode(
+            $_COOKIE['san_pham_da_xem'],
+            true
+        );
 
-            <li>
-                <a href="index.php">
-                    Trang chủ
+        if (is_array($duLieuCookie)) {
+            foreach ($duLieuCookie as $item) {
+                if (
+                    is_int($item)
+                    || (is_string($item) && ctype_digit($item))
+                ) {
+                    $sanPhamDaXem[] = (int) $item;
+                }
+            }
+        }
+    }
+
+    $sanPhamDaXem = array_values(
+        array_filter(
+            $sanPhamDaXem,
+            fn(int $item): bool => $item !== $sanPham->getId()
+        )
+    );
+
+    array_unshift(
+        $sanPhamDaXem,
+        $sanPham->getId()
+    );
+
+    $sanPhamDaXem = array_slice(
+        array_unique($sanPhamDaXem),
+        0,
+        5
+    );
+
+    setcookie(
+        'san_pham_da_xem',
+        json_encode($sanPhamDaXem),
+        [
+            'expires' => time() + (60 * 60 * 24 * 30),
+            'path' => '/',
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]
+    );
+}
+
+require_once __DIR__ . '/inc/header.php';
+?>
+
+<main class="noi-dung-chi-tiet">
+
+    <?php if ($sanPham === null): ?>
+
+        <section class="card">
+
+            <h2>Không tìm thấy sản phẩm</h2>
+
+            <p>
+                Sản phẩm bạn yêu cầu không tồn tại hoặc mã sản phẩm
+                không hợp lệ.
+            </p>
+
+            <p>
+                <a
+                    class="btn btn--chinh"
+                    href="danh-sach.php">
+                    Quay lại danh sách sản phẩm
                 </a>
-            </li>
+            </p>
 
-            <li>
-                <a href="danh-sach.php">
-                    Danh sách
-                </a>
-            </li>
+        </section>
 
-            <li>
-                <a href="chi-tiet.php">
-                    Chi tiết
-                </a>
-            </li>
-
-            <li>
-                <a href="gioi-thieu.php">
-                    Về chúng tôi
-                </a>
-            </li>
-
-            <li>
-                <a href="lien-he.php">
-                    Liên hệ
-                </a>
-            </li>
-
-        </ul>
-
-    </nav>
-
-    <main class="noi-dung-chi-tiet">
+    <?php else: ?>
 
         <article class="chi-tiet-chinh">
 
             <p id="thong-bao-chi-tiet" aria-live="polite">
-                Đang tải thông tin sản phẩm...
+                Đang hiển thị thông tin sản phẩm.
             </p>
 
             <div id="noi-dung-san-pham">
 
                 <h2 id="ten-san-pham">
-                    Sản phẩm
+                    <?= e($sanPham->getTen()) ?>
                 </h2>
 
                 <button
                     type="button"
                     id="nut-yeu-thich-chi-tiet"
                     data-hanh-dong-yeu-thich="them"
-                    data-id="">
+                    data-id="<?= e($sanPham->getId()) ?>">
                     Thêm yêu thích
                 </button>
 
@@ -103,14 +133,15 @@
 
                     <img
                         id="hinh-san-pham"
-                        src="images/hop-qua.jpg"
-                        alt="Hình ảnh sản phẩm"
+                        src="<?= e($sanPham->getHinhAnh()) ?>"
+                        alt="<?= e($sanPham->getTen()) ?>"
                         width="400"
                         height="300"
                         class="anh-responsive">
 
                     <figcaption id="mo-ta-hinh">
-                        Hình ảnh sản phẩm quà tặng.
+                        Hình ảnh sản phẩm:
+                        <?= e($sanPham->getTen()) ?>
                     </figcaption>
 
                 </figure>
@@ -122,7 +153,7 @@
                     </h3>
 
                     <p id="mo-ta-san-pham">
-                        Đang tải mô tả sản phẩm...
+                        <?= e($sanPham->getMoTa()) ?>
                     </p>
 
                 </section>
@@ -158,7 +189,9 @@
                                     Tên sản phẩm
                                 </th>
 
-                                <td id="thong-so-ten"></td>
+                                <td id="thong-so-ten">
+                                    <?= e($sanPham->getTen()) ?>
+                                </td>
                             </tr>
 
                             <tr>
@@ -166,7 +199,9 @@
                                     Danh mục
                                 </th>
 
-                                <td id="thong-so-danh-muc"></td>
+                                <td id="thong-so-danh-muc">
+                                    <?= e($sanPham->getDanhMuc()) ?>
+                                </td>
                             </tr>
 
                             <tr>
@@ -174,7 +209,14 @@
                                     Giá tham khảo
                                 </th>
 
-                                <td id="thong-so-gia"></td>
+                                <td id="thong-so-gia">
+                                    <?= e(number_format(
+                                        $sanPham->getGia(),
+                                        0,
+                                        ',',
+                                        '.'
+                                    )) ?> đ
+                                </td>
                             </tr>
 
                             <tr>
@@ -182,7 +224,9 @@
                                     Số lượng
                                 </th>
 
-                                <td id="thong-so-so-luong"></td>
+                                <td id="thong-so-so-luong">
+                                    <?= e($sanPham->getSoLuong()) ?>
+                                </td>
                             </tr>
 
                         </tbody>
@@ -213,56 +257,82 @@
 
                 </section>
 
+                <section>
+
+                    <h3>
+                        Thêm vào giỏ hàng
+                    </h3>
+
+                    <form
+                        method="POST"
+                        action="gio-hang.php">
+
+                        <input
+                            type="hidden"
+                            name="hanh-dong"
+                            value="them">
+
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<?= e($sanPham->getId()) ?>">
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="<?= e(taoCsrfToken()) ?>">
+
+                        <label for="so-luong">
+                            Số lượng:
+                        </label>
+
+                        <input
+                            type="number"
+                            id="so-luong"
+                            name="so-luong"
+                            min="1"
+                            max="<?= e($sanPham->getSoLuong()) ?>"
+                            value="1"
+                            required>
+
+                        <button type="submit">
+                            Thêm vào giỏ hàng
+                        </button>
+
+                    </form>
+
+                </section>
+
             </div>
 
         </article>
 
-        <section class="card chi-tiet-phu">
+    <?php endif; ?>
 
-            <h2 class="card__title">
-                Khám phá thêm
-            </h2>
+    <section class="card chi-tiet-phu">
 
-            <p>
-                <a
-                    class="btn btn--chinh"
-                    href="danh-sach.php">
-                    Quay lại danh sách sản phẩm
-                </a>
-            </p>
+        <h2 class="card__title">
+            Khám phá thêm
+        </h2>
 
-            <p>
-                <a
-                    class="btn btn--phu"
-                    href="lien-he.php">
-                    Liên hệ để được tư vấn quà tặng
-                </a>
-            </p>
-
-        </section>
-
-    </main>
-
-    <footer>
         <p>
-            &copy; 2026 Quà Tặng Thông Minh. Nhóm 15.
+            <a
+                class="btn btn--chinh"
+                href="danh-sach.php">
+                Quay lại danh sách sản phẩm
+            </a>
         </p>
-    </footer>
 
-    <script
-        type="module"
-        src="js/main.js">
-    </script>
+        <p>
+            <a
+                class="btn btn--phu"
+                href="lien-he.php">
+                Liên hệ để được tư vấn quà tặng
+            </a>
+        </p>
 
-    <script
-        type="module"
-        src="js/trang-chi-tiet.js">
-    </script>
+    </section>
 
-    <script
-        type="module"
-        src="js/yeu-thich.js">
-    </script>
+</main>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/inc/footer.php'; ?>

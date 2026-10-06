@@ -15,7 +15,7 @@
     "gia": 250000,
     "soLuong": 15,
     "moTa": "Hộp quà sinh nhật được trang trí đẹp mắt.",
-    "hinhAnh": "images/hop-qua.jpg"
+    "hinhAnh": "images/qua-sinh-nhat.jpg"
   },
   {
     "id": 3,
@@ -42,7 +42,7 @@
     "gia": 500000,
     "soLuong": 8,
     "moTa": "Hộp quà cao cấp dành cho những dịp quan trọng.",
-    "hinhAnh": "images/hop-qua.jpg"
+    "hinhAnh": "images/hop-qua-cao-cap.jpg"
   },
   {
     "id": 6,
@@ -51,7 +51,7 @@
     "gia": 220000,
     "soLuong": 18,
     "moTa": "Hộp quà với các món bánh kẹo ngọt ngào.",
-    "hinhAnh": "images/hop-qua-banh-keo.jpg"
+    "hinhAnh": "images/hop-qua-ngot-ngao.jpg"
   },
   {
     "id": 7,
@@ -60,7 +60,7 @@
     "gia": 280000,
     "soLuong": 10,
     "moTa": "Món quà ý nghĩa dành tặng bạn thân trong ngày sinh nhật.",
-    "hinhAnh": "images/qua-ban-be.jpg"
+    "hinhAnh": "images/qua-sinh-nhat-ban-than.jpg"
   },
   {
     "id": 8,
@@ -69,7 +69,7 @@
     "gia": 190000,
     "soLuong": 16,
     "moTa": "Quà tặng thể hiện tình cảm dành cho bạn bè.",
-    "hinhAnh": "images/qua-ban-be.jpg"
+    "hinhAnh": "images/qua-le-tinh-ban.jpg"
   },
   {
     "id": 9,
@@ -78,7 +78,7 @@
     "gia": 350000,
     "soLuong": 9,
     "moTa": "Giỏ quà phù hợp tặng trong các ngày lễ.",
-    "hinhAnh": "images/qua-dip-le.jpg"
+    "hinhAnh": "images/gio-qua-ngay-le.jpg"
   },
   {
     "id": 10,
@@ -87,7 +87,7 @@
     "gia": 400000,
     "soLuong": 14,
     "moTa": "Hộp quà dành tặng người thân và gia đình.",
-    "hinhAnh": "images/hop-qua.jpg"
+    "hinhAnh": "images/hop-qua-gia-dinh.jpg"
   },
   {
     "id": 11,
@@ -96,7 +96,7 @@
     "gia": 170000,
     "soLuong": 22,
     "moTa": "Hộp bánh ngọt thích hợp làm quà tặng.",
-    "hinhAnh": "images/hop-qua-banh-keo.jpg"
+    "hinhAnh": "images/hop-qua-banh-ngot.jpg"
   },
   {
     "id": 12,
@@ -105,6 +105,6 @@
     "gia": 600000,
     "soLuong": 6,
     "moTa": "Món quà đặc biệt dành cho những người quan trọng.",
-    "hinhAnh": "images/qua-dip-le.jpg"
+    "hinhAnh": "images/qua-dac-biet.jpg"
   }
 ]

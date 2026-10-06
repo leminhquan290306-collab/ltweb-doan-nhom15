@@ -2,3 +2,4 @@
 /storage/logs/*
 /uploads/*
 !.gitkeep
+/storage/*.jsonl

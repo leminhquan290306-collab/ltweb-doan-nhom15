@@ -96,6 +96,15 @@ nav a:focus-visible {
     object-fit: cover;
 }
 
+/* Ảnh dọc: hiển thị đầy đủ, không bị cắt */
+.card img[src*="qua-sinh-nhat-ban-than.jpg"],
+.card img[src*="qua-le-tinh-ban.jpg"],
+.card img[src*="qua-dac-biet.jpg"] {
+    object-fit: contain;
+    padding: 10px;
+    background-color: var(--mau-trang);
+}
+
 .card__body {
     padding: var(--khoang-cach-2);
 }

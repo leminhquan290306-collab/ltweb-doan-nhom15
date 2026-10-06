@@ -1,74 +1,375 @@
-<!DOCTYPE html>
+<?php
 
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+require_once __DIR__ . '/inc/config.php';
 
-<title>Liên hệ và tư vấn - Quà Tặng Thông Minh</title>
+use App\Data\KhoLienHe;
 
-<meta name="description"
-      content="Biểu mẫu liên hệ và đăng ký tư vấn quà tặng theo người nhận, dịp tặng, ngân sách và sở thích.">
+$tieuDeTrang = 'Liên hệ và tư vấn - Quà Tặng Thông Minh';
+$baseUrl = '';
 
-<link rel="stylesheet" href="css/01-bien.css">
-<link rel="stylesheet" href="css/02-chuan-hoa.css">
-<link rel="stylesheet" href="css/03-bo-cuc.css">
-<link rel="stylesheet" href="css/04-thanh-phan.css">
-<link rel="stylesheet" href="css/05-tien-ich.css">
+$thongBao = $_SESSION['thong_bao_lien_he'] ?? '';
+unset($_SESSION['thong_bao_lien_he']);
 
+$loiForm = [];
 
-</head>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-<body class="trang">
+    /* =========================
+       LẤY DỮ LIỆU FORM
+       ========================= */
 
-<header>
-    <h1>Liên hệ và tư vấn quà tặng</h1>
+    $hoTen = trim((string) ($_POST['ho-ten'] ?? ''));
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $soDienThoai = trim((string) ($_POST['so-dien-thoai'] ?? ''));
+    $nguoiNhan = trim((string) ($_POST['nguoi-nhan'] ?? ''));
+    $dipTang = trim((string) ($_POST['dip-tang'] ?? ''));
 
-    <p>
-        Cung cấp một số thông tin để nhận được gợi ý quà tặng phù hợp.
-    </p>
+    $nganSach = filter_var(
+        $_POST['ngan-sach'] ?? null,
+        FILTER_VALIDATE_INT
+    );
 
-    <p>
-        Yêu thích:
-        <strong data-so-luong-yeu-thich>0</strong>
-    </p>
-</header>
+    $ngayCanQua = trim((string) ($_POST['ngay-can-qua'] ?? ''));
+    $soThich = trim((string) ($_POST['so-thich'] ?? ''));
+    $dongY = isset($_POST['dong-y']);
 
-<nav aria-label="Điều hướng chính">
+    /* =========================
+       KIỂM TRA CSRF
+       ========================= */
 
-    <button
-        class="nut-menu"
-        type="button"
-        aria-expanded="false"
-        aria-controls="menu-chinh">
-        Menu
-    </button>
+    if (!kiemTraCsrfToken($_POST['csrf_token'] ?? null)) {
+        $loiForm[] =
+            'Phiên gửi biểu mẫu không hợp lệ. Vui lòng tải lại trang.';
+    }
 
-    <ul class="menu-list" id="menu-chinh">
+    /* =========================
+       KIỂM TRA HỌ TÊN
+       ========================= */
 
-        <li>
-            <a href="index.php">Trang chủ</a>
-        </li>
+    if (
+        $hoTen === ''
+        || mb_strlen($hoTen) < 2
+        || mb_strlen($hoTen) > 50
+        || !preg_match('/^[\p{L}\s]+$/u', $hoTen)
+    ) {
+        $loiForm[] =
+            'Họ tên phải từ 2 đến 50 ký tự và chỉ gồm chữ cái, khoảng trắng.';
+    }
 
-        <li>
-            <a href="danh-sach.php">Danh sách</a>
-        </li>
+    /* =========================
+       KIỂM TRA EMAIL
+       ========================= */
 
-        <li>
-            <a href="chi-tiet.php">Chi tiết</a>
-        </li>
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $loiForm[] = 'Email không hợp lệ.';
+    }
 
-        <li>
-            <a href="gioi-thieu.php">Về chúng tôi</a>
-        </li>
+    /* =========================
+       KIỂM TRA SỐ ĐIỆN THOẠI
+       ========================= */
 
-        <li>
-            <a href="lien-he.php">Liên hệ</a>
-        </li>
+    if (!preg_match('/^[0-9]{10}$/', $soDienThoai)) {
+        $loiForm[] =
+            'Số điện thoại phải gồm đúng 10 chữ số.';
+    }
 
-    </ul>
+    /* =========================
+       KIỂM TRA NGƯỜI NHẬN
+       ========================= */
 
-</nav>
+    $nguoiNhanHopLe = [
+        'ban-be',
+        'nguoi-yeu',
+        'gia-dinh',
+        'dong-nghiep'
+    ];
+
+    if (!in_array($nguoiNhan, $nguoiNhanHopLe, true)) {
+        $loiForm[] =
+            'Vui lòng chọn người nhận quà hợp lệ.';
+    }
+
+    /* =========================
+       KIỂM TRA DỊP TẶNG
+       ========================= */
+
+    $dipTangHopLe = [
+        'sinh-nhat',
+        'ky-niem',
+        'le',
+        'khac'
+    ];
+
+    if (!in_array($dipTang, $dipTangHopLe, true)) {
+        $loiForm[] =
+            'Vui lòng chọn dịp tặng hợp lệ.';
+    }
+
+    /* =========================
+       KIỂM TRA NGÂN SÁCH
+       5.000 - 100.000.000
+       Bước 1.000
+       ========================= */
+
+    if (
+        $nganSach === false
+        || $nganSach < 5000
+        || $nganSach > 100000000
+        || $nganSach % 1000 !== 0
+    ) {
+        $loiForm[] =
+            'Ngân sách phải từ 5.000 đến 100.000.000 VNĐ và theo bước 1.000 VNĐ.';
+    }
+
+    /* =========================
+       KIỂM TRA NGÀY CẦN QUÀ
+       ========================= */
+
+    if ($ngayCanQua === '') {
+
+        $loiForm[] =
+            'Vui lòng chọn ngày cần quà.';
+
+    } else {
+
+        $ngay = DateTime::createFromFormat(
+            'Y-m-d',
+            $ngayCanQua
+        );
+
+        if (
+            !$ngay
+            || $ngay->format('Y-m-d') !== $ngayCanQua
+        ) {
+            $loiForm[] =
+                'Ngày cần quà không hợp lệ.';
+        }
+    }
+
+    /* =========================
+       KIỂM TRA SỞ THÍCH
+       ========================= */
+
+    if ($soThich === '') {
+
+        $loiForm[] =
+            'Vui lòng nhập sở thích hoặc yêu cầu.';
+
+    } elseif (mb_strlen($soThich) > 1000) {
+
+        $loiForm[] =
+            'Sở thích hoặc yêu cầu không được vượt quá 1000 ký tự.';
+    }
+
+    /* =========================
+       KIỂM TRA ĐỒNG Ý
+       ========================= */
+
+    if (!$dongY) {
+
+        $loiForm[] =
+            'Bạn cần đồng ý cung cấp thông tin để được tư vấn.';
+    }
+
+    /* =========================
+       KIỂM TRA UPLOAD ẢNH
+       ========================= */
+
+    $tenAnhDaLuu = null;
+
+    if (
+        isset($_FILES['anh'])
+        && is_array($_FILES['anh'])
+        && $_FILES['anh']['error'] !== UPLOAD_ERR_NO_FILE
+    ) {
+
+        $anh = $_FILES['anh'];
+
+        /* Kiểm tra lỗi upload */
+
+        if ($anh['error'] !== UPLOAD_ERR_OK) {
+
+            $loiForm[] =
+                'Không thể tải ảnh lên. Vui lòng thử lại.';
+
+        } else {
+
+            /* Kiểm tra dung lượng tối đa 2MB */
+
+            if ((int) $anh['size'] > 2 * 1024 * 1024) {
+
+                $loiForm[] =
+                    'Ảnh tải lên không được vượt quá 2MB.';
+            }
+
+            /* Kiểm tra MIME bằng finfo */
+
+            if (is_uploaded_file($anh['tmp_name'])) {
+
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+
+                $mime = $finfo->file($anh['tmp_name']);
+
+                $mimeHopLe = [
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                    'image/webp' => 'webp'
+                ];
+
+                if (!isset($mimeHopLe[$mime])) {
+
+                    $loiForm[] =
+                        'Ảnh chỉ được phép có định dạng JPG, PNG hoặc WEBP.';
+
+                } else {
+
+                    /*
+                     * Lưu tạm MIME và phần mở rộng.
+                     * Chỉ di chuyển file sau khi toàn bộ
+                     * validation của form thành công.
+                     */
+
+                    $phanMoRongAnh = $mimeHopLe[$mime];
+                }
+
+            } else {
+
+                $loiForm[] =
+                    'File tải lên không hợp lệ.';
+            }
+        }
+    }
+
+    /* =========================
+       NẾU TẤT CẢ HỢP LỆ
+       ========================= */
+
+    if (!$loiForm) {
+
+        /*
+         * Nếu có ảnh thì tạo tên ngẫu nhiên
+         * và lưu vào uploads/
+         */
+
+        if (
+            isset($_FILES['anh'])
+            && is_array($_FILES['anh'])
+            && $_FILES['anh']['error'] === UPLOAD_ERR_OK
+        ) {
+
+            $thuMucUploads = __DIR__ . '/uploads';
+
+            if (!is_dir($thuMucUploads)) {
+
+                if (!mkdir($thuMucUploads, 0755, true)) {
+
+                    $loiForm[] =
+                        'Không thể tạo thư mục lưu ảnh.';
+                }
+            }
+
+            if (!$loiForm) {
+
+                $tenNgauNhien =
+                    bin2hex(random_bytes(16))
+                    . '.'
+                    . $phanMoRongAnh;
+
+                $duongDanAnh =
+                    $thuMucUploads . '/' . $tenNgauNhien;
+
+                if (
+                    !move_uploaded_file(
+                        $_FILES['anh']['tmp_name'],
+                        $duongDanAnh
+                    )
+                ) {
+
+                    $loiForm[] =
+                        'Không thể lưu ảnh tải lên.';
+                } else {
+
+                    $tenAnhDaLuu = $tenNgauNhien;
+                }
+            }
+        }
+    }
+
+    /* =========================
+       LƯU DỮ LIỆU
+       ========================= */
+
+    if (!$loiForm) {
+
+        $duLieu = [
+            'thoiGian' => date('c'),
+            'hoTen' => $hoTen,
+            'email' => $email,
+            'soDienThoai' => $soDienThoai,
+            'nguoiNhan' => $nguoiNhan,
+            'dipTang' => $dipTang,
+            'nganSach' => $nganSach,
+            'ngayCanQua' => $ngayCanQua,
+            'soThich' => $soThich,
+            'dongY' => true,
+            'anh' => $tenAnhDaLuu
+        ];
+
+        try {
+
+            $khoLienHe = new KhoLienHe();
+
+            $khoLienHe->luu($duLieu);
+
+            /*
+             * PRG:
+             * POST -> lưu dữ liệu -> chuyển hướng sang GET
+             */
+
+            $_SESSION['thong_bao_lien_he'] =
+                'Gửi yêu cầu tư vấn thành công!';
+
+            redirect('lien-he.php');
+
+        } catch (Throwable $e) {
+
+            /*
+             * Nếu lưu JSON thất bại thì xóa ảnh vừa upload
+             * để tránh tạo file rác.
+             */
+
+            if ($tenAnhDaLuu !== null) {
+
+                $duongDanAnh =
+                    __DIR__ . '/uploads/' . $tenAnhDaLuu;
+
+                if (is_file($duongDanAnh)) {
+                    unlink($duongDanAnh);
+                }
+            }
+
+            $loiForm[] =
+                'Không thể lưu thông tin liên hệ. Vui lòng thử lại.';
+        }
+    }
+
+    if ($loiForm) {
+
+        $thongBao =
+            'Vui lòng kiểm tra lại thông tin trong biểu mẫu.';
+    }
+}
+
+$csrfToken = taoCsrfToken();
+
+$jsFiles = [
+    'js/trang-lien-he.js',
+    'js/yeu-thich.js'
+];
+
+require_once __DIR__ . '/inc/header.php';
+
+?>
 
 <main>
 
@@ -76,16 +377,49 @@
 
         <h2>Đăng ký tư vấn</h2>
 
-        <p
-            id="thong-bao-lien-he"
-            aria-live="polite">
-        </p>
+        <?php if ($thongBao !== ''): ?>
+
+            <p
+                id="thong-bao-lien-he"
+                aria-live="polite">
+                <?= e($thongBao) ?>
+            </p>
+
+        <?php endif; ?>
+
+        <?php if ($loiForm): ?>
+
+            <div
+                class="thong-bao-loi"
+                role="alert">
+
+                <ul>
+
+                    <?php foreach ($loiForm as $loi): ?>
+
+                        <li>
+                            <?= e($loi) ?>
+                        </li>
+
+                    <?php endforeach; ?>
+
+                </ul>
+
+            </div>
+
+        <?php endif; ?>
 
         <form
             id="form-lien-he"
-            action="https://jsonplaceholder.typicode.com/posts"
+            action="lien-he.php"
             method="post"
+            enctype="multipart/form-data"
             novalidate>
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= e($csrfToken) ?>">
 
             <fieldset>
 
@@ -102,6 +436,7 @@
                         id="ho-ten"
                         name="ho-ten"
                         pattern="[A-Za-zÀ-ỹĐđ\s]{2,50}"
+                        value="<?= e($_POST['ho-ten'] ?? '') ?>"
                         required>
 
                     <small
@@ -122,6 +457,7 @@
                         type="email"
                         id="email"
                         name="email"
+                        value="<?= e($_POST['email'] ?? '') ?>"
                         required>
 
                     <small
@@ -143,6 +479,7 @@
                         id="so-dien-thoai"
                         name="so-dien-thoai"
                         pattern="[0-9]{10}"
+                        value="<?= e($_POST['so-dien-thoai'] ?? '') ?>"
                         required>
 
                     <small
@@ -168,19 +505,27 @@
                             -- Chọn người nhận --
                         </option>
 
-                        <option value="ban-be">
+                        <option
+                            value="ban-be"
+                            <?= (($_POST['nguoi-nhan'] ?? '') === 'ban-be') ? 'selected' : '' ?>>
                             Bạn bè
                         </option>
 
-                        <option value="nguoi-yeu">
+                        <option
+                            value="nguoi-yeu"
+                            <?= (($_POST['nguoi-nhan'] ?? '') === 'nguoi-yeu') ? 'selected' : '' ?>>
                             Người yêu
                         </option>
 
-                        <option value="gia-dinh">
+                        <option
+                            value="gia-dinh"
+                            <?= (($_POST['nguoi-nhan'] ?? '') === 'gia-dinh') ? 'selected' : '' ?>>
                             Gia đình
                         </option>
 
-                        <option value="dong-nghiep">
+                        <option
+                            value="dong-nghiep"
+                            <?= (($_POST['nguoi-nhan'] ?? '') === 'dong-nghiep') ? 'selected' : '' ?>>
                             Đồng nghiệp
                         </option>
 
@@ -209,19 +554,27 @@
                             -- Chọn dịp tặng --
                         </option>
 
-                        <option value="sinh-nhat">
+                        <option
+                            value="sinh-nhat"
+                            <?= (($_POST['dip-tang'] ?? '') === 'sinh-nhat') ? 'selected' : '' ?>>
                             Sinh nhật
                         </option>
 
-                        <option value="ky-niem">
+                        <option
+                            value="ky-niem"
+                            <?= (($_POST['dip-tang'] ?? '') === 'ky-niem') ? 'selected' : '' ?>>
                             Kỷ niệm
                         </option>
 
-                        <option value="le">
+                        <option
+                            value="le"
+                            <?= (($_POST['dip-tang'] ?? '') === 'le') ? 'selected' : '' ?>>
                             Ngày lễ
                         </option>
 
-                        <option value="khac">
+                        <option
+                            value="khac"
+                            <?= (($_POST['dip-tang'] ?? '') === 'khac') ? 'selected' : '' ?>>
                             Dịp khác
                         </option>
 
@@ -245,9 +598,10 @@
                         type="number"
                         id="ngan-sach"
                         name="ngan-sach"
-                        min="50000"
-                        max="10000000"
-                        step="50000"
+                        min="5000"
+                        max="100000000"
+                        step="1000"
+                        value="<?= e($_POST['ngan-sach'] ?? '') ?>"
                         required>
 
                     <small
@@ -268,6 +622,7 @@
                         type="date"
                         id="ngay-can-qua"
                         name="ngay-can-qua"
+                        value="<?= e($_POST['ngay-can-qua'] ?? '') ?>"
                         required>
 
                     <small
@@ -288,12 +643,32 @@
                         id="so-thich"
                         name="so-thich"
                         rows="5"
-                        required></textarea>
+                        required><?= e($_POST['so-thich'] ?? '') ?></textarea>
 
                     <small
                         class="loi-truong"
                         id="loi-so-thich"
                         aria-live="polite">
+                    </small>
+
+                </p>
+
+                <!-- UPLOAD ẢNH -->
+
+                <p class="form-nhom">
+
+                    <label for="anh">
+                        Ảnh tham khảo (không bắt buộc):
+                    </label>
+
+                    <input
+                        type="file"
+                        id="anh"
+                        name="anh"
+                        accept="image/jpeg,image/png,image/webp">
+
+                    <small>
+                        Chỉ nhận JPG, PNG, WEBP và dung lượng tối đa 2MB.
                     </small>
 
                 </p>
@@ -363,28 +738,4 @@
 
 </main>
 
-<footer>
-
-    <p>
-        &copy; 2026 Quà Tặng Thông Minh.
-        Website đồ án môn Lập trình Web.
-    </p>
-
-</footer>
-
-<script
-    type="module"
-    src="js/main.js">
-</script>
-
-<script
-    type="module"
-    src="js/trang-lien-he.js">
-</script>
-
-<script
-    type="module"
-    src="js/yeu-thich.js">
-</script>
-</body>
-</html>
+<?php require_once __DIR__ . '/inc/footer.php'; ?>
