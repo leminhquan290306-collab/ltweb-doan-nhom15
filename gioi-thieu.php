@@ -28,11 +28,11 @@
 
     <nav aria-label="Điều hướng chính">
         <ul class="menu-list">
-            <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="danh-sach.html">Danh sách</a></li>
-            <li><a href="chi-tiet.html">Chi tiết</a></li>
-            <li><a href="gioi-thieu.html">Về chúng tôi</a></li>
-            <li><a href="lien-he.html">Liên hệ</a></li>
+            <li><a href="index.php">Trang chủ</a></li>
+            <li><a href="danh-sach.php">Danh sách</a></li>
+            <li><a href="chi-tiet.php">Chi tiết</a></li>
+            <li><a href="gioi-thieu.php">Về chúng tôi</a></li>
+            <li><a href="lien-he.php">Liên hệ</a></li>
         </ul>
     </nav>
 
@@ -70,19 +70,19 @@
 
             <ul class="danh-sach-thanh-vien">
                 <li>
-                    <a href="thanhvien/3120224116_leminhquan/gioithieu.html">
+                    <a href="thanhvien/3120224116_leminhquan/gioithieu.php">
                         Lê Minh Quân
                     </a>
                 </li>
 
                 <li>
-                    <a href="thanhvien/3120224032_dung/gioithieu.html">
+                    <a href="thanhvien/3120224032_dung/gioithieu.php">
                         Nguyễn Phạm Tiến Dũng
                     </a>
                 </li>
 
                 <li>
-                    <a href="thanhvien/3120224120_NguyenBuiAnhQuoc/gioithieu.html">
+                    <a href="thanhvien/3120224120_NguyenBuiAnhQuoc/gioithieu.php">
                         Nguyễn Bùi Anh Quốc
                     </a>
                 </li>
@@ -118,7 +118,7 @@
 
             <p>
                 Người dùng có thể sử dụng trang
-                <a href="lien-he.html">Liên hệ</a>
+                <a href="lien-he.php">Liên hệ</a>
                 để cung cấp thông tin về người nhận, dịp tặng,
                 ngân sách và sở thích.
             </p>

@@ -48,23 +48,23 @@
         <ul class="menu-list" id="menu-chinh">
 
             <li>
-                <a href="index.html">Trang chủ</a>
+                <a href="index.php">Trang chủ</a>
             </li>
 
             <li>
-                <a href="danh-sach.html">Danh sách</a>
+                <a href="danh-sach.php">Danh sách</a>
             </li>
 
             <li>
-                <a href="chi-tiet.html">Chi tiết</a>
+                <a href="chi-tiet.php">Chi tiết</a>
             </li>
 
             <li>
-                <a href="gioi-thieu.html">Về chúng tôi</a>
+                <a href="gioi-thieu.php">Về chúng tôi</a>
             </li>
 
             <li>
-                <a href="lien-he.html">Liên hệ</a>
+                <a href="lien-he.php">Liên hệ</a>
             </li>
 
         </ul>
@@ -179,7 +179,7 @@
             <p>
                 <a
                     class="btn btn--chinh"
-                    href="lien-he.html">
+                    href="lien-he.php">
                     Bắt đầu liên hệ
                 </a>
             </p>

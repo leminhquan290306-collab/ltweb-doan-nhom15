@@ -72,7 +72,7 @@ function taoTheSanPham(sanPham) {
     const lienKet = document.createElement('a');
 
     lienKet.href =
-        `chi-tiet.html?id=${sanPham.id}`;
+        `chi-tiet.php?id=${sanPham.id}`;
 
     lienKet.textContent = 'Xem chi tiết';
 

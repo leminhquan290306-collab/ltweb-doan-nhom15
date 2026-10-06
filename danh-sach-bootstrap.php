@@ -45,7 +45,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
 
-            <a class="navbar-brand fw-bold" href="index.html">
+            <a class="navbar-brand fw-bold" href="index.php">
                 Quà Tặng Thông Minh
             </a>
 
@@ -64,31 +64,31 @@
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="index.php">
                             Trang chủ
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="danh-sach-bootstrap.html">
+                        <a class="nav-link active" href="danh-sach-bootstrap.php">
                             Danh sách
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="chi-tiet.html">
+                        <a class="nav-link" href="chi-tiet.php">
                             Chi tiết
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="gioi-thieu.html">
+                        <a class="nav-link" href="gioi-thieu.php">
                             Về chúng tôi
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="lien-he.html">
+                        <a class="nav-link" href="lien-he.php">
                             Liên hệ
                         </a>
                     </li>
@@ -157,7 +157,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -194,7 +194,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -231,7 +231,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -268,7 +268,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -305,7 +305,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -342,7 +342,7 @@
                             </p>
 
                             <a
-                                href="chi-tiet.html"
+                                href="chi-tiet.php"
                                 class="btn btn-primary mt-auto">
                                 Xem chi tiết
                             </a>
@@ -420,7 +420,7 @@
             </h2>
 
             <a
-                href="lien-he.html"
+                href="lien-he.php"
                 class="btn btn-primary btn-lg">
                 Liên hệ tư vấn
             </a>

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta name="description"
-        content="Trang giới thiệu cá nhân của Nguyễn Bùi Anh Quốc - Thành viên nhóm 15">
+        content="Trang giới thiệu cá nhân của Lê Minh Quân - Thành viên nhóm 15">
 
-  <title>Giới thiệu cá nhân - Nguyễn Bùi Anh Quốc</title>
+  <title>Giới thiệu cá nhân - Lê Minh Quân</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -27,31 +27,31 @@
     <nav aria-label="Điều hướng trang nhóm">
       <ul class="menu-ca-nhan">
         <li>
-          <a class="nut-ve-trang-chu" href="../../index.html">
+          <a class="nut-ve-trang-chu" href="../../index.php">
             Trang chủ nhóm
           </a>
         </li>
 
         <li>
-          <a class="nut-ve-trang-chu" href="../../danh-sach.html">
+          <a class="nut-ve-trang-chu" href="../../danh-sach.php">
             Danh sách
           </a>
         </li>
 
         <li>
-          <a class="nut-ve-trang-chu" href="../../chi-tiet.html">
+          <a class="nut-ve-trang-chu" href="../../chi-tiet.php">
             Chi tiết
           </a>
         </li>
 
         <li>
-          <a class="nut-ve-trang-chu" href="../../gioi-thieu.html">
+          <a class="nut-ve-trang-chu" href="../../gioi-thieu.php">
             Giới thiệu nhóm
           </a>
         </li>
 
         <li>
-          <a class="nut-ve-trang-chu" href="../../lien-he.html">
+          <a class="nut-ve-trang-chu" href="../../lien-he.php">
             Liên hệ
           </a>
         </li>
@@ -62,12 +62,12 @@
 
       <h1>Trang Giới Thiệu Cá Nhân</h1>
 
-      <section class="khoi-dau thong-tin-ca-nhan">
-<h2>Thông tin cá nhân</h2>
+      <div class="khoi-dau thong-tin-ca-nhan">
+
         <img
           class="anh-chan-dung"
           src="anh_the.jpg"
-          alt="Ảnh chân dung của Nguyễn Bùi Anh Quốc"
+          alt="Ảnh chân dung của Lê Minh Quân"
           width="300"
           height="400"
         >
@@ -75,11 +75,11 @@
         <div class="thong-tin-chinh">
 
           <p>
-            <strong>Họ và tên:</strong> Nguyễn Bùi Anh Quốc
+            <strong>Họ và tên:</strong> Lê Minh Quân
           </p>
 
           <p>
-            <strong>Lớp:</strong> 24CNTT3
+            <strong>Lớp:</strong> 24CNTT2
           </p>
 
           <p>
@@ -90,7 +90,7 @@
 
         </div>
 
-      </section>
+      </div>
 
       <article class="muc-noi-dung">
 
@@ -134,8 +134,8 @@
 
         <ul>
           <li>Bóng đá</li>
-          <li>Cầu lông</li>
-          <li>Ăn uống</li>
+          <li>Đọc sách</li>
+          <li>Lập trình web</li>
         </ul>
 
       </article>
@@ -147,7 +147,8 @@
         <div
           class="khung-chua-bang"
           tabindex="0"
-        
+          role="region"
+          aria-label="Bảng thời khóa biểu cá nhân"
         >
 
           <table>
@@ -171,9 +172,9 @@
 
               <tr>
                 <th scope="row">Sáng</th>
-                <td>Tự học</td>
-                <td>Công nghệ phần mềm</td>
-                <td>AI</td>
+                <td>Lập trình</td>
+                <td>Mạng máy tính</td>
+                <td>Cơ sở dữ liệu</td>
                 <td>Lập trình Web</td>
                 <td>Tự học</td>
               </tr>
@@ -184,7 +185,7 @@
                 <td>Lập trình Web</td>
                 <td>Tự học</td>
                 <td>Làm bài nhóm</td>
-                <td>Khai phá dữ liệu</td>
+                <td>Ôn tập</td>
               </tr>
 
             </tbody>
@@ -199,11 +200,13 @@
 
     <footer class="chan-trang">
       <p>
-        &copy; 2026 Nguyễn Bùi Anh Quốc - Nhóm 15 - Khoa Toán – Tin
+        &copy; 2026 Lê Minh Quân - Nhóm 15 - Khoa Toán – Tin
       </p>
     </footer>
 
   </div>
- <script src="js/canhan.js"></script>
+
+  <script type="module" src="js/canhan.js"></script>
+
 </body>
 </html>

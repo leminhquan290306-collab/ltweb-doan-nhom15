@@ -44,31 +44,31 @@
         <ul class="menu-list" id="menu-chinh">
 
             <li>
-                <a href="index.html">
+                <a href="index.php">
                     Trang chủ
                 </a>
             </li>
 
             <li>
-                <a href="danh-sach.html">
+                <a href="danh-sach.php">
                     Danh sách
                 </a>
             </li>
 
             <li>
-                <a href="chi-tiet.html">
+                <a href="chi-tiet.php">
                     Chi tiết
                 </a>
             </li>
 
             <li>
-                <a href="gioi-thieu.html">
+                <a href="gioi-thieu.php">
                     Về chúng tôi
                 </a>
             </li>
 
             <li>
-                <a href="lien-he.html">
+                <a href="lien-he.php">
                     Liên hệ
                 </a>
             </li>
@@ -226,7 +226,7 @@
             <p>
                 <a
                     class="btn btn--chinh"
-                    href="danh-sach.html">
+                    href="danh-sach.php">
                     Quay lại danh sách sản phẩm
                 </a>
             </p>
@@ -234,7 +234,7 @@
             <p>
                 <a
                     class="btn btn--phu"
-                    href="lien-he.html">
+                    href="lien-he.php">
                     Liên hệ để được tư vấn quà tặng
                 </a>
             </p>

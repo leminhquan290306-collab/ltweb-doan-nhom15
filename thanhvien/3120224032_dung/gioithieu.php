@@ -21,11 +21,11 @@
     <!-- Menu điều hướng 2 chiều quay về các trang nhóm -->
     <nav aria-label="Điều hướng trang nhóm">
       <ul style="display: flex; gap: 12px; list-style: none; padding: 0; flex-wrap: wrap;">
-        <li><a class="nut-ve-trang-chu" href="../../index.html">Trang chủ nhóm</a></li>
-        <li><a class="nut-ve-trang-chu" href="../../danh-sach.html">Danh sách</a></li>
-        <li><a class="nut-ve-trang-chu" href="../../chi-tiet.html">Chi tiết</a></li>
-        <li><a class="nut-ve-trang-chu" href="../../gioi-thieu.html">Giới thiệu nhóm</a></li>
-        <li><a class="nut-ve-trang-chu" href="../../lien-he.html">Liên hệ</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../index.php">Trang chủ nhóm</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../danh-sach.php">Danh sách</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../chi-tiet.php">Chi tiết</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../gioi-thieu.php">Giới thiệu nhóm</a></li>
+        <li><a class="nut-ve-trang-chu" href="../../lien-he.php">Liên hệ</a></li>
       </ul>
     </nav>
 
