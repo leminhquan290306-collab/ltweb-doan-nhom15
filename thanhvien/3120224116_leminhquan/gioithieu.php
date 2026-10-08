@@ -1,5 +1,14 @@
 
 <?php
+/*
+
+* Tệp gioithieu.php hiển thị trang giới thiệu cá nhân của Lê Minh Quân.
+* Trang sử dụng PHP để hiển thị nội dung giới thiệu và thông tin cá nhân.
+* Chức năng lọc dữ liệu cho phép lọc nội dung theo điều kiện được chọn.
+* Chức năng sáng/tối cho phép người dùng thay đổi giao diện trang web.
+* Cách thử: mở trang giới thiệu, thử lọc dữ liệu và chuyển đổi sáng/tối.
+  */
+
 require __DIR__ . '/../../inc/config.php';
 
 $baseUrl = '../../';
