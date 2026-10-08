@@ -1,14 +1,11 @@
 <?php
 /**
- * Trang giới thiệu cá nhân của Nguyễn Phạm Tiến Dũng.
- * Thành viên nhóm 15 - Bài tập nhóm số 5 (Phần B).
+ * Tệp: thanhvien/3120224032_dung/gioithieu.php
+ * Tác giả: Nguyễn Phạm Tiến Dũng (MSSV: 3120224032 - Lớp 24CNTT2)
+ * Mô tả: Trang cá nhân sử dụng chung header/footer của nhóm.
  * Chức năng PHP máy chủ:
- *  1. Bộ đếm lượt xem trang cá nhân (Session + File Storage).
- *  2. Sổ lưu bút cá nhân (Validation máy chủ, lưu file JSONL, PRG).
- * Chức năng Client JS (canhan.js):
- *  1. Đồng hồ đếm ngược thời gian thực đến ngày thi cuối kỳ.
- *  2. Sao chép địa chỉ email cá nhân vào Clipboard.
- * MSSV: 3120224032
+ *  1. Bộ đếm lượt xem trang cá nhân (Session + File storage/3120224032_luotxem.txt).
+ *  2. Sổ lưu bút cá nhân (Validation máy chủ, PRG, lưu storage/3120224032_luubut.jsonl).
  */
 
 declare(strict_types=1);
@@ -23,9 +20,7 @@ $tieuDe = $tieuDeTrang;
 $fileLuotXem = __DIR__ . '/../../storage/3120224032_luotxem.txt';
 $fileLuuBut = __DIR__ . '/../../storage/3120224032_luubut.jsonl';
 
-/*
- * CHỨC NĂNG 1 (PHP Máy chủ): Bộ đếm lượt xem trang cá nhân
- */
+/* 1. Bộ đếm lượt xem */
 if (!isset($_SESSION['da_xem_trang_dung'])) {
     $_SESSION['da_xem_trang_dung'] = true;
     $count = is_file($fileLuotXem) ? (int)file_get_contents($fileLuotXem) : 0;
@@ -35,9 +30,7 @@ if (!isset($_SESSION['da_xem_trang_dung'])) {
     $count = is_file($fileLuotXem) ? (int)file_get_contents($fileLuotXem) : 1;
 }
 
-/*
- * CHỨC NĂNG 2 (PHP Máy chủ): Sổ lưu bút (Validation máy chủ + PRG + JSONL)
- */
+/* 2. Sổ lưu bút */
 $loiLuuBut = [];
 $duLieuLuuBut = ['ten' => '', 'noiDung' => ''];
 $thongBaoLuuBut = $_SESSION['thong_bao_luu_but'] ?? '';
@@ -89,33 +82,8 @@ if (is_file($fileLuuBut)) {
 
 <?php require_once __DIR__ . '/../../inc/header.php'; ?>
 
-<!-- NHÚNG CSS CÁ NHÂN -->
+<!-- LINK CSS CÁ NHÂN -->
 <link rel="stylesheet" href="css/style.css">
-
-<!-- BỘ STYLE KHÓA DỰT CĂN GIỮA MÀN HÌNH -->
-<style>
-  html, body {
-    background-color: #eef5fc !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    width: 100% !important;
-  }
-
-  header, .dau-trang, nav, .trang-ca-nhan {
-    max-width: 960px !important;
-    width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    box-sizing: border-box !important;
-    float: none !important;
-  }
-
-  .trang-ca-nhan {
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-  }
-</style>
 
 <div class="trang-ca-nhan">
 
@@ -124,7 +92,7 @@ if (is_file($fileLuuBut)) {
     <h1>Trang Giới Thiệu Cá Nhân</h1>
 
     <!-- 1. THÔNG TIN CÁ NHÂN -->
-    <section class="khoi-dau">
+    <div class="khoi-dau">
 
       <img
         class="anh-chan-dung"
@@ -162,9 +130,9 @@ if (is_file($fileLuuBut)) {
 
       </div>
 
-    </section>
+    </div>
 
-    <!-- 2. ĐỒNG HỒ ĐẾM NGƯỜC NGÀY THI CUỐI KỲ -->
+    <!-- 2. ĐỒNG HỒ ĐẾM NGƯỜC -->
     <section class="muc-noi-dung">
       <h2>Đồng hồ đếm ngược ngày thi cuối kỳ</h2>
       
@@ -233,7 +201,7 @@ if (is_file($fileLuuBut)) {
 
     </article>
 
-    <!-- 4. SỔ LƯU BÚT CÁ NHÂN -->
+    <!-- 4. SỔ LƯU BÚT -->
     <section class="muc-noi-dung">
 
       <h2>Sổ lưu bút cá nhân</h2>
