@@ -1,212 +1,241 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="description"
-        content="Trang giới thiệu cá nhân của Lê Minh Quân - Thành viên nhóm 15">
+<?php
+require __DIR__ . '/../../inc/config.php';
 
-  <title>Giới thiệu cá nhân - Lê Minh Quân</title>
+$baseUrl = '../../';
+$trangCaNhan = true;
+$tieuDeTrang = 'Giới thiệu cá nhân - Lê Minh Quân';
+$cssCaNhan = '<link rel="stylesheet" href="style.css?v=99">';
 
-  <link rel="stylesheet" href="style.css">
-</head>
+/* 1. Dữ liệu kỹ năng */
+$kyNang = [
+    [
+        'ten' => 'Lập trình Web',
+        'nhom' => 'web',
+        'mo_ta' => 'HTML5, CSS3, PHP 8 và JavaScript.'
+    ],
+    [
+        'ten' => 'Cơ sở dữ liệu',
+        'nhom' => 'laptrinh',
+        'mo_ta' => 'Thực hành làm việc với MySQL và PostgreSQL.'
+    ],
+    [
+        'ten' => 'Lập trình cơ bản',
+        'nhom' => 'laptrinh',
+        'mo_ta' => 'Sử dụng Python và C++ để giải quyết các bài toán.'
+    ],
+    [
+        'ten' => 'Công cụ phát triển',
+        'nhom' => 'congcu',
+        'mo_ta' => 'Git, GitHub và Visual Studio Code.'
+    ]
+];
 
-<body>
+/* 2. Dữ liệu dự án */
+$duAn = [
+    [
+        'ten' => 'Website Quà Tặng Thông Minh',
+        'nhom' => 'web',
+        'mo_ta' => 'Xây dựng website giới thiệu và hiển thị danh sách sản phẩm quà tặng.'
+    ],
+    [
+        'ten' => 'Trang giới thiệu cá nhân',
+        'nhom' => 'web',
+        'mo_ta' => 'Thiết kế trang cá nhân bằng HTML, CSS và PHP.'
+    ],
+    [
+        'ten' => 'Bài tập lập trình mạng',
+        'nhom' => 'laptrinh',
+        'mo_ta' => 'Thực hành giao tiếp giữa client và server bằng socket.'
+    ]
+];
 
-  <div class="trang-ca-nhan">
+/* 3. Lọc kỹ năng và dự án theo nhóm bằng GET */
+$tenNhom = [
+    'tatca' => 'Tất cả',
+    'web' => 'Phát triển Web',
+    'laptrinh' => 'Lập trình',
+    'congcu' => 'Công cụ'
+];
 
-    <header class="khoi-dau">
-      <div class="thong-tin-chinh">
-        <p>
-          <strong>Website Đồ Án Nhóm 15 - Khoa Toán – Tin</strong>
-        </p>
-      </div>
-    </header>
+$nhom = isset($_GET['nhom']) && is_string($_GET['nhom'])
+    ? $_GET['nhom']
+    : 'tatca';
 
-    <nav aria-label="Điều hướng trang nhóm">
-      <ul class="menu-ca-nhan">
-        <li>
-          <a class="nut-ve-trang-chu" href="../../index.php">
-            Trang chủ nhóm
-          </a>
-        </li>
+if (!array_key_exists($nhom, $tenNhom)) {
+    $nhom = 'tatca';
+}
 
-        <li>
-          <a class="nut-ve-trang-chu" href="../../danh-sach.php">
-            Danh sách
-          </a>
-        </li>
+$kyNangHienThi = array_filter(
+    $kyNang,
+    function ($item) use ($nhom) {
+        return $nhom === 'tatca' || $item['nhom'] === $nhom;
+    }
+);
 
-        <li>
-          <a class="nut-ve-trang-chu" href="../../chi-tiet.php">
-            Chi tiết
-          </a>
-        </li>
+$duAnHienThi = array_filter(
+    $duAn,
+    function ($item) use ($nhom) {
+        return $nhom === 'tatca' || $item['nhom'] === $nhom;
+    }
+);
 
-        <li>
-          <a class="nut-ve-trang-chu" href="../../gioi-thieu.php">
-            Giới thiệu nhóm
-          </a>
-        </li>
+require __DIR__ . '/../../inc/header.php';
+?>
 
-        <li>
-          <a class="nut-ve-trang-chu" href="../../lien-he.php">
-            Liên hệ
-          </a>
-        </li>
-      </ul>
-    </nav>
-
+<div class="trang-ca-nhan">
     <main>
 
-      <h1>Trang Giới Thiệu Cá Nhân</h1>
+        <!-- Tiêu đề trang -->
+        <h1 class="tieu-de-trang">Trang Giới Thiệu Cá Nhân</h1>
 
-      <div class="khoi-dau thong-tin-ca-nhan">
+        <!-- 1. Khối thông tin cá nhân -->
+        <div class="khoi-dau thong-tin-ca-nhan">
+            <img
+                class="anh-chan-dung"
+                src="anh_the.jpg"
+                alt="Ảnh chân dung Lê Minh Quân"
+                width="150"
+                height="150"
+            >
 
-        <img
-          class="anh-chan-dung"
-          src="anh_the.jpg"
-          alt="Ảnh chân dung của Lê Minh Quân"
-          width="300"
-          height="400"
-        >
+            <div class="thong-tin-chinh">
+                <p>
+                    <strong>Họ và tên:</strong> Lê Minh Quân
+                </p>
 
-        <div class="thong-tin-chinh">
+                <p>
+                    <strong>Lớp:</strong> 24CNTT2
+                </p>
 
-          <p>
-            <strong>Họ và tên:</strong> Lê Minh Quân
-          </p>
+                <p>
+                    <strong>MSSV:</strong> 3120224116
+                </p>
 
-          <p>
-            <strong>Lớp:</strong> 24CNTT2
-          </p>
+                <p>
+                    <strong>Sở thích:</strong> Bóng đá, đọc sách và lập trình web.
+                </p>
 
-          <p>
-            <strong>Vai trò trong nhóm:</strong>
-            Thành viên - Phụ trách xây dựng trang giới thiệu thành viên
-            và hỗ trợ nội dung đồ án.
-          </p>
-
+                <p>
+                    Tôi luôn cố gắng học hỏi kiến thức mới, rèn luyện kỹ năng
+                    và vận dụng những gì đã học vào các bài tập, dự án.
+                </p>
+            </div>
         </div>
 
-      </div>
+        <!-- 2. Đóng góp trong đồ án nhóm -->
+        <section class="muc-noi-dung">
+            <h2>Đóng góp trong đồ án nhóm</h2>
 
-      <article class="muc-noi-dung">
+            <p>
+                Tham gia xây dựng giao diện website, tổ chức mã nguồn,
+                chỉnh sửa HTML, CSS và PHP, kiểm tra hoạt động của trang
+                web và quản lý mã nguồn bằng GitHub.
+            </p>
+        </section>
 
-        <h2>Dự án &amp; Sở thích</h2>
+        <!-- 3. Kỹ năng và dự án học tập -->
+        <section class="muc-noi-dung">
+            <h2>Kỹ năng và dự án học tập</h2>
 
-        <h3>1. Đóng góp trong đồ án nhóm</h3>
+            <p>
+                Dưới đây là những kỹ năng và dự án mà tôi đã thực hành
+                trong quá trình học tập.
+            </p>
 
-        <p>
-          Tham gia xây dựng giao diện trang giới thiệu thành viên,
-          đóng góp mã nguồn HTML5/CSS3 chuẩn W3C Validator và
-          quản lý phiên bản trên GitHub.
-        </p>
+            <form method="get" action="gioithieu.php" class="form-loc">
+                <label for="nhom">Lọc theo nhóm:</label>
 
-        <h3>2. Danh sách kỹ năng</h3>
+                <select id="nhom" name="nhom">
+                    <?php foreach ($tenNhom as $maNhom => $nhanNhom): ?>
+                        <option
+                            value="<?= e($maNhom) ?>"
+                            <?= $nhom === $maNhom ? 'selected' : '' ?>
+                        >
+                            <?= e($nhanNhom) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
 
-        <div class="danh-sach-ky-nang">
+                <button type="submit">Lọc dữ liệu</button>
+            </form>
 
-          <div class="the-ky-nang">
-            <h3>Lập trình Web</h3>
-            <p>HTML5, CSS cơ bản</p>
-          </div>
+            <p>
+                <strong>Nhóm đang xem:</strong>
+                <?= e($tenNhom[$nhom]) ?>
+            </p>
 
-          <div class="the-ky-nang">
-            <h3>Ngôn ngữ lập trình</h3>
-            <p>Python, C++</p>
-          </div>
+            <h3>Danh sách kỹ năng</h3>
 
-          <div class="the-ky-nang">
-            <h3>Quản lý mã nguồn</h3>
-            <p>Git &amp; GitHub</p>
-          </div>
+            <?php if (count($kyNangHienThi) > 0): ?>
+                <div class="danh-sach-ky-nang">
+                    <?php foreach ($kyNangHienThi as $item): ?>
+                        <article class="the-ky-nang">
+                            <h3><?= e($item['ten']) ?></h3>
+                            <p><?= e($item['mo_ta']) ?></p>
+                            <p>
+                                <strong>Nhóm:</strong>
+                                <?= e($tenNhom[$item['nhom']]) ?>
+                            </p>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>Không có kỹ năng trong nhóm này.</p>
+            <?php endif; ?>
 
-          <div class="the-ky-nang">
-            <h3>Mạng &amp; CSDL</h3>
-            <p>Mạng máy tính, Cơ sở dữ liệu cơ bản</p>
-          </div>
+            <h3>Danh sách dự án</h3>
 
-        </div>
+            <?php if (count($duAnHienThi) > 0): ?>
+                <div class="danh-sach-du-an">
+                    <?php foreach ($duAnHienThi as $item): ?>
+                        <article class="the-du-an">
+                            <h3><?= e($item['ten']) ?></h3>
+                            <p><?= e($item['mo_ta']) ?></p>
+                            <p>
+                                <strong>Nhóm:</strong>
+                                <?= e($tenNhom[$item['nhom']]) ?>
+                            </p>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>Không có dự án trong nhóm này.</p>
+            <?php endif; ?>
+        </section>
 
-        <h3>3. Sở thích cá nhân</h3>
+        <!-- 4. Sở thích cá nhân -->
+        <section class="muc-noi-dung">
+            <h2>Sở thích cá nhân</h2>
 
-        <ul>
-          <li>Bóng đá</li>
-          <li>Đọc sách</li>
-          <li>Lập trình web</li>
-        </ul>
+            <ul>
+                <li>Bóng đá</li>
+                <li>Đọc sách</li>
+                <li>Lập trình web</li>
+            </ul>
+        </section>
 
-      </article>
+        <!-- 5. Chuyển giao diện sáng/tối -->
+        <section class="muc-noi-dung">
+            <h2>Tùy chỉnh giao diện</h2>
 
-      <section class="muc-noi-dung">
+            <p>
+                Bạn có thể chuyển đổi giữa giao diện sáng và giao diện tối
+                để phù hợp với nhu cầu sử dụng.
+            </p>
 
-        <h2>Thời khóa biểu cá nhân tuần này</h2>
-
-        <div
-          class="khung-chua-bang"
-          tabindex="0"
-          role="region"
-          aria-label="Bảng thời khóa biểu cá nhân"
-        >
-
-          <table>
-
-            <caption>
-              Thời khóa biểu học tập trong tuần
-            </caption>
-
-            <thead>
-              <tr>
-                <th scope="col">Thời gian</th>
-                <th scope="col">Thứ 2</th>
-                <th scope="col">Thứ 3</th>
-                <th scope="col">Thứ 4</th>
-                <th scope="col">Thứ 5</th>
-                <th scope="col">Thứ 6</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-                <th scope="row">Sáng</th>
-                <td>Lập trình</td>
-                <td>Mạng máy tính</td>
-                <td>Cơ sở dữ liệu</td>
-                <td>Lập trình Web</td>
-                <td>Tự học</td>
-              </tr>
-
-              <tr>
-                <th scope="row">Chiều</th>
-                <td>Tự học</td>
-                <td>Lập trình Web</td>
-                <td>Tự học</td>
-                <td>Làm bài nhóm</td>
-                <td>Ôn tập</td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
+            <button
+                type="button"
+                id="nut-doi-giao-dien"
+                aria-pressed="false"
+            >
+                🌙 Chuyển sang giao diện tối
+            </button>
+        </section>
 
     </main>
+</div>
 
-    <footer class="chan-trang">
-      <p>
-        &copy; 2026 Lê Minh Quân - Nhóm 15 - Khoa Toán – Tin
-      </p>
-    </footer>
+<script src="js/canhan.js?v=5" defer></script>
 
-  </div>
-
-  <script type="module" src="js/canhan.js"></script>
-
-</body>
-</html>
+<?php require __DIR__ . '/../../inc/footer.php'; ?>
