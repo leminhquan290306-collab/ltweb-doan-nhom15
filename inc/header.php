@@ -75,6 +75,7 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
         <li>
             <a href="<?= e($baseUrl) ?>lien-he.php">Liên hệ</a>
         </li>
+        <li> <a href="<?= e($baseUrl) ?>dang-nhap.php">Đăng nhập</a> </li>
 
     </ul>
 
