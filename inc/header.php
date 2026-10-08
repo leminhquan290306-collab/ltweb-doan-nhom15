@@ -1,6 +1,9 @@
+
 <?php
 $tieuDeTrang = $tieuDeTrang ?? 'Quà Tặng Thông Minh';
 $baseUrl = $baseUrl ?? '';
+
+$laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -22,9 +25,11 @@ $baseUrl = $baseUrl ?? '';
     <link rel="stylesheet" href="<?= e($baseUrl) ?>css/03-bo-cuc.css">
     <link rel="stylesheet" href="<?= e($baseUrl) ?>css/04-thanh-phan.css">
     <link rel="stylesheet" href="<?= e($baseUrl) ?>css/05-tien-ich.css">
+
+    <?= $cssCaNhan ?? '' ?>
 </head>
 
-<body class="trang">
+<body class="trang<?= $laTrangCaNhan ? ' trang-ca-nhan-body' : '' ?>">
 
 <header>
     <h1>Quà Tặng Thông Minh</h1>

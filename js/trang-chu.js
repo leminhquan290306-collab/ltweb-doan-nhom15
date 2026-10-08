@@ -1,3 +1,4 @@
+
 /*
  * trang-chu.js
  * Tải và hiển thị dữ liệu thời tiết Đà Nẵng
@@ -72,6 +73,12 @@ function hienThiThoiTiet(duLieu) {
         );
     }
 
+    // Kiểm tra các phần tử trước khi cập nhật.
+    // Nếu trang không có khu vực thời tiết thì dừng an toàn.
+    if (!nhietDo || !doAm || !trangThai || !jsonThoiTiet) {
+        return;
+    }
+
     const nhietDoHienTai =
         hienTai.temperature_2m;
 
@@ -97,11 +104,7 @@ function hienThiThoiTiet(duLieu) {
     };
 
     jsonThoiTiet.textContent =
-        JSON.stringify(
-            duLieuRutGon,
-            null,
-            2
-        );
+        JSON.stringify(duLieuRutGon, null, 2);
 
     hienThiThongBao(
         'Đã cập nhật dữ liệu thời tiết.'
@@ -146,4 +149,7 @@ async function taiThoiTiet() {
     }
 }
 
-taiThoiTiet();
+// Chỉ tải thời tiết khi trang có đủ các phần tử cần thiết.
+if (nhietDo && doAm && trangThai && jsonThoiTiet) {
+    taiThoiTiet();
+}
