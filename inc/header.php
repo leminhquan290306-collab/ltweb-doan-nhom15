@@ -31,17 +31,40 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
 
 <body class="trang<?= $laTrangCaNhan ? ' trang-ca-nhan-body' : '' ?>">
 
-<header>
-    <h1>Quà Tặng Thông Minh</h1>
+<header class="dau-trang">
+    <div class="dau-trang-noi-dung">
+        <h1>Quà Tặng Thông Minh</h1>
 
-    <p>
-        Gợi ý món quà phù hợp cho những người bạn yêu thương
-    </p>
+        <p>
+            Gợi ý món quà phù hợp cho những người bạn yêu thương
+        </p>
 
-    <p>
-        Yêu thích:
-        <strong data-so-luong-yeu-thich>0</strong>
-    </p>
+        <p>
+            Yêu thích:
+            <strong data-so-luong-yeu-thich>0</strong>
+        </p>
+    </div>
+
+        <div class="dau-trang-tai-khoan">
+        <?php
+        require_once __DIR__ . '/tai-khoan.php';
+        ?>
+
+        <?php if (daDangNhap()): ?>
+            <span class="ten-tai-khoan">
+                Xin chào, <?= e($_SESSION['tai_khoan']['hoTen'] ?? $_SESSION['tai_khoan']['email'] ?? 'Bạn') ?>!
+            </span>
+
+            <?php if (laQuanTri()): ?>
+                <a href="<?= e($baseUrl) ?>quan-tri.php">Quản trị</a>
+            <?php endif; ?>
+
+            <a href="<?= e($baseUrl) ?>dang-xuat.php">Đăng xuất</a>
+        <?php else: ?>
+            <a href="<?= e($baseUrl) ?>dang-nhap.php">Đăng nhập</a>
+            <a href="<?= e($baseUrl) ?>dang-ky.php">Đăng ký</a>
+        <?php endif; ?>
+    </div>
 </header>
 
 <nav aria-label="Điều hướng chính">
@@ -72,10 +95,10 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
             <a href="<?= e($baseUrl) ?>gioi-thieu.php">Về chúng tôi</a>
         </li>
 
-        <li>
+                <li>
             <a href="<?= e($baseUrl) ?>lien-he.php">Liên hệ</a>
         </li>
-        <li> <a href="<?= e($baseUrl) ?>dang-nhap.php">Đăng nhập</a> </li>
+
 
     </ul>
 

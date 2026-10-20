@@ -356,3 +356,47 @@ DANH SÁCH SẢN PHẨM - ĐẢM BẢO TOÀN CHIỀU RỘNG
 .trang > main > .danh-sach-san-pham {
     min-width: 0;
 }
+/* Tiêu đề và tài khoản ở hàng đầu */
+.dau-trang {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.dau-trang-noi-dung {
+    min-width: 0;
+}
+
+.dau-trang-tai-khoan {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.dau-trang-tai-khoan a {
+    display: inline-block;
+    padding: 0.65rem 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+}
+
+.dau-trang-tai-khoan a:hover {
+    background-color: #ffffff;
+    color: var(--mau-chinh);
+}
+
+@media (max-width: 600px) {
+    .dau-trang {
+        flex-direction: column;
+    }
+
+    .dau-trang-tai-khoan {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
