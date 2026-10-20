@@ -16,50 +16,14 @@ $trangCaNhan = true;
 $tieuDeTrang = 'Giới thiệu cá nhân - Lê Minh Quân';
 $cssCaNhan = '<link rel="stylesheet" href="style.css?v=99">';
 
-/* 1. Dữ liệu kỹ năng */
-$kyNang = [
-    [
-        'ten' => 'Lập trình Web',
-        'nhom' => 'web',
-        'mo_ta' => 'HTML5, CSS3, PHP 8 và JavaScript.'
-    ],
-    [
-        'ten' => 'Cơ sở dữ liệu',
-        'nhom' => 'laptrinh',
-        'mo_ta' => 'Thực hành làm việc với MySQL và PostgreSQL.'
-    ],
-    [
-        'ten' => 'Lập trình cơ bản',
-        'nhom' => 'laptrinh',
-        'mo_ta' => 'Sử dụng Python và C++ để giải quyết các bài toán.'
-    ],
-    [
-        'ten' => 'Công cụ phát triển',
-        'nhom' => 'congcu',
-        'mo_ta' => 'Git, GitHub và Visual Studio Code.'
-    ]
-];
 
-/* 2. Dữ liệu dự án */
-$duAn = [
-    [
-        'ten' => 'Website Quà Tặng Thông Minh',
-        'nhom' => 'web',
-        'mo_ta' => 'Xây dựng website giới thiệu và hiển thị danh sách sản phẩm quà tặng.'
-    ],
-    [
-        'ten' => 'Trang giới thiệu cá nhân',
-        'nhom' => 'web',
-        'mo_ta' => 'Thiết kế trang cá nhân bằng HTML, CSS và PHP.'
-    ],
-    [
-        'ten' => 'Bài tập lập trình mạng',
-        'nhom' => 'laptrinh',
-        'mo_ta' => 'Thực hành giao tiếp giữa client và server bằng socket.'
-    ]
-];
+/* 1. Kết nối cơ sở dữ liệu */
+require_once __DIR__ . '/../../inc/db.php';
 
-/* 3. Lọc kỹ năng và dự án theo nhóm bằng GET */
+$pdo = hamCSDL();
+$mssv = '3120224116';
+
+/* 2. Danh sách nhóm dùng cho bộ lọc */
 $tenNhom = [
     'tatca' => 'Tất cả',
     'web' => 'Phát triển Web',
@@ -75,19 +39,196 @@ if (!array_key_exists($nhom, $tenNhom)) {
     $nhom = 'tatca';
 }
 
-$kyNangHienThi = array_filter(
-    $kyNang,
-    function ($item) use ($nhom) {
-        return $nhom === 'tatca' || $item['nhom'] === $nhom;
+/* 3. Lấy kỹ năng từ MySQL */
+$sqlKyNang = '
+    SELECT ten_ky_nang AS ten, nhom, mo_ta
+    FROM tv_ky_nang
+    WHERE mssv = :mssv
+';
+
+$paramsKyNang = [':mssv' => $mssv];
+
+if ($nhom !== 'tatca') {
+    $sqlKyNang .= ' AND nhom = :nhom';
+    $paramsKyNang[':nhom'] = $nhom;
+}
+
+$sqlKyNang .= ' ORDER BY id ASC';
+
+$stmtKyNang = $pdo->prepare($sqlKyNang);
+$stmtKyNang->execute($paramsKyNang);
+$kyNangHienThi = $stmtKyNang->fetchAll();
+
+/* 4. Lấy dự án từ MySQL */
+$sqlDuAn = '
+    SELECT ten_du_an AS ten, nhom, mo_ta
+    FROM tv_du_an
+    WHERE mssv = :mssv
+';
+
+$paramsDuAn = [':mssv' => $mssv];
+
+if ($nhom !== 'tatca') {
+    $sqlDuAn .= ' AND nhom = :nhom';
+    $paramsDuAn[':nhom'] = $nhom;
+}
+
+$sqlDuAn .= ' ORDER BY id ASC';
+
+$stmtDuAn = $pdo->prepare($sqlDuAn);
+$stmtDuAn->execute($paramsDuAn);
+$duAnHienThi = $stmtDuAn->fetchAll();
+
+/* 5. Nhật ký học tập của Quân */
+$thongBaoNhatKy = '';
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && ($_POST['hanh_dong'] ?? '') === 'them_nhat_ky'
+) {
+    $tieuDeNhatKy = trim(
+        is_string($_POST['tieu_de'] ?? null)
+            ? $_POST['tieu_de']
+            : ''
+    );
+
+    $noiDungNhatKy = trim(
+        is_string($_POST['noi_dung'] ?? null)
+            ? $_POST['noi_dung']
+            : ''
+    );
+
+    if (
+        $tieuDeNhatKy === ''
+        || mb_strlen($tieuDeNhatKy) > 200
+        || $noiDungNhatKy === ''
+    ) {
+        $_SESSION['thong_bao_nhat_ky'] =
+            'Vui lòng nhập tiêu đề và nội dung hợp lệ.';
+    } else {
+        $stmtThemNhatKy = $pdo->prepare(
+            'INSERT INTO tv_nhat_ky (mssv, tieu_de, noi_dung)
+             VALUES (:mssv, :tieu_de, :noi_dung)'
+        );
+
+        $stmtThemNhatKy->execute([
+            ':mssv' => $mssv,
+            ':tieu_de' => $tieuDeNhatKy,
+            ':noi_dung' => $noiDungNhatKy,
+        ]);
+
+        $_SESSION['thong_bao_nhat_ky'] =
+            'Đã lưu nhật ký học tập thành công.';
     }
+
+    header('Location: gioithieu.php#nhat-ky');
+    exit;
+}
+
+if (isset($_SESSION['thong_bao_nhat_ky'])) {
+    $thongBaoNhatKy = $_SESSION['thong_bao_nhat_ky'];
+    unset($_SESSION['thong_bao_nhat_ky']);
+}
+
+$stmtNhatKy = $pdo->prepare(
+    'SELECT id, tieu_de, noi_dung, ngay_tao
+     FROM tv_nhat_ky
+     WHERE mssv = :mssv
+     ORDER BY id DESC
+     LIMIT 10'
 );
 
-$duAnHienThi = array_filter(
-    $duAn,
-    function ($item) use ($nhom) {
-        return $nhom === 'tatca' || $item['nhom'] === $nhom;
+$stmtNhatKy->execute([':mssv' => $mssv]);
+$nhatKyHienThi = $stmtNhatKy->fetchAll();
+/* 6. Danh sách công việc của Quân */
+$thongBaoCongViec = '';
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && ($_POST['hanh_dong'] ?? '') === 'them_cong_viec'
+) {
+    $tenCongViec = trim(
+        is_string($_POST['ten_cong_viec'] ?? null)
+            ? $_POST['ten_cong_viec']
+            : ''
+    );
+
+    if ($tenCongViec === '' || mb_strlen($tenCongViec) > 200) {
+        $_SESSION['thong_bao_cong_viec'] =
+            'Vui lòng nhập tên công việc hợp lệ.';
+    } else {
+        $stmtThemCongViec = $pdo->prepare(
+            'INSERT INTO tv_cong_viec (mssv, ten_cong_viec)
+             VALUES (:mssv, :ten_cong_viec)'
+        );
+
+        $stmtThemCongViec->execute([
+            ':mssv' => $mssv,
+            ':ten_cong_viec' => $tenCongViec,
+        ]);
+
+        $_SESSION['thong_bao_cong_viec'] =
+            'Đã thêm công việc thành công.';
     }
+
+    header('Location: gioithieu.php#cong-viec');
+    exit;
+}
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && ($_POST['hanh_dong'] ?? '') === 'hoan_thanh_cong_viec'
+) {
+    $idCongViec = filter_var(
+        $_POST['id_cong_viec'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    if ($idCongViec !== false && $idCongViec !== null) {
+        $stmtHoanThanh = $pdo->prepare(
+            'UPDATE tv_cong_viec
+             SET hoan_thanh = 1
+             WHERE id = :id
+               AND mssv = :mssv
+               AND hoan_thanh = 0'
+        );
+
+        $stmtHoanThanh->execute([
+            ':id' => $idCongViec,
+            ':mssv' => $mssv,
+        ]);
+
+        $_SESSION['thong_bao_cong_viec'] =
+            $stmtHoanThanh->rowCount() > 0
+                ? 'Đã đánh dấu công việc hoàn thành.'
+                : 'Không tìm thấy công việc cần cập nhật.';
+    } else {
+        $_SESSION['thong_bao_cong_viec'] =
+            'Mã công việc không hợp lệ.';
+    }
+
+    header('Location: gioithieu.php#cong-viec');
+    exit;
+}
+
+if (isset($_SESSION['thong_bao_cong_viec'])) {
+    $thongBaoCongViec = $_SESSION['thong_bao_cong_viec'];
+    unset($_SESSION['thong_bao_cong_viec']);
+}
+
+$stmtCongViec = $pdo->prepare(
+    'SELECT id, ten_cong_viec, hoan_thanh, ngay_tao
+     FROM tv_cong_viec
+     WHERE mssv = :mssv
+     ORDER BY hoan_thanh ASC, id DESC
+     LIMIT 20'
 );
+
+$stmtCongViec->execute([':mssv' => $mssv]);
+$congViecHienThi = $stmtCongViec->fetchAll();
+
+
 
 require __DIR__ . '/../../inc/header.php';
 ?>
@@ -184,7 +325,7 @@ require __DIR__ . '/../../inc/header.php';
                             <p><?= e($item['mo_ta']) ?></p>
                             <p>
                                 <strong>Nhóm:</strong>
-                                <?= e($tenNhom[$item['nhom']]) ?>
+                                <?= e($tenNhom[$item['nhom']] ?? 'Chưa phân nhóm') ?>
                             </p>
                         </article>
                     <?php endforeach; ?>
@@ -212,8 +353,145 @@ require __DIR__ . '/../../inc/header.php';
                 <p>Không có dự án trong nhóm này.</p>
             <?php endif; ?>
         </section>
+    
 
-        <!-- 4. Sở thích cá nhân -->
+        <!-- 4. Nhật ký học tập -->
+        <section class="muc-noi-dung" id="nhat-ky">
+            <h2>Nhật ký học tập</h2>
+
+            <p>
+                Ghi lại những kiến thức và kinh nghiệm tôi học được
+                trong quá trình thực hành lập trình.
+            </p>
+
+            <?php if ($thongBaoNhatKy !== ''): ?>
+                <p role="status">
+                    <?= e($thongBaoNhatKy) ?>
+                </p>
+            <?php endif; ?>
+
+            <form method="post" action="gioithieu.php#nhat-ky">
+                <input type="hidden" name="hanh_dong" value="them_nhat_ky">
+
+                <p>
+                    <label for="tieu_de_nhat_ky">Tiêu đề:</label>
+                    <input
+                        type="text"
+                        id="tieu_de_nhat_ky"
+                        name="tieu_de"
+                        maxlength="200"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="noi_dung_nhat_ky">Nội dung:</label>
+                    <textarea
+                        id="noi_dung_nhat_ky"
+                        name="noi_dung"
+                        rows="4"
+                        required
+                    ></textarea>
+                </p>
+
+                <button type="submit">Lưu nhật ký</button>
+            </form>
+
+            <h3>Các ghi chép gần đây</h3>
+
+            <?php if (count($nhatKyHienThi) > 0): ?>
+                <?php foreach ($nhatKyHienThi as $ghiChep): ?>
+                    <article>
+                        <h4><?= e($ghiChep['tieu_de']) ?></h4>
+                        <p><?= nl2br(e($ghiChep['noi_dung'])) ?></p>
+                        <p>
+                            <small>
+                                Ngày tạo: <?= e($ghiChep['ngay_tao']) ?>
+                            </small>
+                        </p>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Chưa có ghi chép học tập nào.</p>
+            <?php endif; ?>
+                </section>
+
+        <!-- 5. Danh sách công việc -->
+        <section class="muc-noi-dung" id="cong-viec">
+            <h2>Danh sách công việc</h2>
+
+            <p>Ghi lại các công việc cần làm trong quá trình học tập.</p>
+
+            <?php if ($thongBaoCongViec !== ''): ?>
+                <p role="status"><?= e($thongBaoCongViec) ?></p>
+            <?php endif; ?>
+
+            <form method="post" action="gioithieu.php#cong-viec">
+                <input type="hidden" name="hanh_dong" value="them_cong_viec">
+
+                <p>
+                    <label for="ten_cong_viec">Tên công việc:</label>
+                    <input
+                        type="text"
+                        id="ten_cong_viec"
+                        name="ten_cong_viec"
+                        maxlength="200"
+                        required
+                    >
+                </p>
+
+                <button type="submit">Thêm công việc</button>
+            </form>
+
+            <h3>Các công việc của tôi</h3>
+
+            <?php if (count($congViecHienThi) > 0): ?>
+                <ul>
+                    <?php foreach ($congViecHienThi as $congViec): ?>
+                        <li>
+                            <strong>
+                                <?= e($congViec['ten_cong_viec']) ?>
+                            </strong>
+
+                            <?php if ((int) $congViec['hoan_thanh'] === 1): ?>
+                                <span> — Đã hoàn thành</span>
+                            <?php else: ?>
+                                <span> — Chưa hoàn thành</span>
+
+                                <form
+                                    method="post"
+                                    action="gioithieu.php#cong-viec"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="hanh_dong"
+                                        value="hoan_thanh_cong_viec"
+                                    >
+                                    <input
+                                        type="hidden"
+                                        name="id_cong_viec"
+                                        value="<?= e($congViec['id']) ?>"
+                                    >
+                                    <button type="submit">
+                                        Đánh dấu hoàn thành
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+
+                            <p>
+                                <small>
+                                    Ngày tạo: <?= e($congViec['ngay_tao']) ?>
+                                </small>
+                            </p>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p>Chưa có công việc nào. Hãy thêm công việc đầu tiên!</p>
+            <?php endif; ?>
+        </section>
+
+        <!-- 6. Sở thích cá nhân -->
         <section class="muc-noi-dung">
             <h2>Sở thích cá nhân</h2>
 
@@ -224,7 +502,7 @@ require __DIR__ . '/../../inc/header.php';
             </ul>
         </section>
 
-        <!-- 5. Chuyển giao diện sáng/tối -->
+        <!-- 6. Chuyển giao diện sáng/tối -->
         <section class="muc-noi-dung">
             <h2>Tùy chỉnh giao diện</h2>
 
