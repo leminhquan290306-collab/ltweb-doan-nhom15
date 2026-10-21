@@ -1,7 +1,5 @@
 <?php
-
 declare(strict_types=1);
-
 /**
  * Đường dẫn lưu tài khoản khách đã đăng ký.
  */
