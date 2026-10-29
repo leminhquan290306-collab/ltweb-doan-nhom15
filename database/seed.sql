@@ -96,8 +96,53 @@ WHERE NOT EXISTS (
       AND ten_du_an = 'Bài tập lập trình mạng'
 );
 
--- 6. Khởi tạo bộ đếm lượt xem của Dũng, không ghi đè số đếm đã có.
+-- 6. Khởi tạo bộ đếm lượt xem của Dũng.
+-- Không ghi đè số lượt xem đã có.
 INSERT INTO tv_luot_xem (mssv, luot_xem)
 VALUES ('3120224032', 0)
 ON DUPLICATE KEY UPDATE
     mssv = VALUES(mssv);
+
+-- 6.1. Dữ liệu mẫu thống kê lượt xem theo ngày của Dũng.
+-- Chỉ thêm ngày chưa có để không ghi đè số lượt xem hiện tại.
+INSERT INTO tv_luot_xem_ngay (mssv, ngay, luot_xem)
+SELECT '3120224032', DATE_SUB(CURDATE(), INTERVAL 6 DAY), 3
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM tv_luot_xem_ngay
+    WHERE mssv = '3120224032'
+      AND ngay = DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+);
+
+INSERT INTO tv_luot_xem_ngay (mssv, ngay, luot_xem)
+SELECT '3120224032', DATE_SUB(CURDATE(), INTERVAL 3 DAY), 5
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM tv_luot_xem_ngay
+    WHERE mssv = '3120224032'
+      AND ngay = DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+);
+
+INSERT INTO tv_luot_xem_ngay (mssv, ngay, luot_xem)
+SELECT '3120224032', CURDATE(), 8
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM tv_luot_xem_ngay
+    WHERE mssv = '3120224032'
+      AND ngay = CURDATE()
+);
+
+-- 7. Lời nhắn mẫu cho sổ lưu bút của Dũng.
+-- Chỉ thêm một lần để tránh trùng dữ liệu khi chạy seed nhiều lần.
+INSERT INTO tv_luu_but (mssv, ten, noi_dung)
+SELECT
+    '3120224032',
+    'Người dùng thử',
+    'Kiểm tra chức năng sổ lưu bút'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM tv_luu_but
+    WHERE mssv = '3120224032'
+      AND ten = 'Người dùng thử'
+      AND noi_dung = 'Kiểm tra chức năng sổ lưu bút'
+);

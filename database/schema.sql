@@ -1,8 +1,5 @@
 SET NAMES utf8mb4;
-DROP DATABASE IF EXISTS ltweb_nhom15;
-CREATE DATABASE ltweb_nhom15
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ltweb_nhom15;
+USE ltweb_doan_nhom15;
 
 -- =======================================================
 -- PHẦN A: CÁC BẢNG DÙNG CHUNG CỦA ĐỒ ÁN (BẠN PHỤ TRÁCH)
@@ -128,6 +125,18 @@ CREATE TABLE IF NOT EXISTS tv_luot_xem (
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 3.1. Thống kê lượt xem theo ngày của Nguyễn Phạm Tiến Dũng
+CREATE TABLE IF NOT EXISTS tv_luot_xem_ngay (
+    mssv VARCHAR(20) NOT NULL,
+    ngay DATE NOT NULL,
+    luot_xem INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (mssv, ngay),
+    CONSTRAINT fk_tv_luot_xem_ngay_thanh_vien
+        FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- 4. Sổ lưu bút của Nguyễn Phạm Tiến Dũng
 CREATE TABLE IF NOT EXISTS tv_luu_but (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -139,4 +148,29 @@ CREATE TABLE IF NOT EXISTS tv_luu_but (
         FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv)
         ON DELETE CASCADE,
     INDEX idx_tv_luu_but_mssv_id (mssv, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- 5. Nhật ký học tập của Lê Minh Quân
+CREATE TABLE IF NOT EXISTS tv_nhat_ky (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv VARCHAR(20) NOT NULL,
+    tieu_de VARCHAR(200) NOT NULL,
+    noi_dung TEXT NOT NULL,
+    ngay_tao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tv_nhat_ky_thanh_vien
+        FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE,
+    INDEX idx_tv_nhat_ky_mssv_id (mssv, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 6. Danh sách công việc của Lê Minh Quân
+CREATE TABLE IF NOT EXISTS tv_cong_viec (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv VARCHAR(20) NOT NULL,
+    ten_cong_viec VARCHAR(200) NOT NULL,
+    hoan_thanh TINYINT(1) NOT NULL DEFAULT 0,
+    ngay_tao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tv_cong_viec_thanh_vien
+        FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE,
+    INDEX idx_tv_cong_viec_mssv_id (mssv, id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
