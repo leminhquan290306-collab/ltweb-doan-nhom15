@@ -19,9 +19,22 @@ $id = filter_input(
 );
 
 $sanPham = null;
+$sanPhamCungDanhMuc = [];
 
 if ($id !== false && $id !== null && $id > 0) {
     $sanPham = $khoSanPham->timTheoId($id);
+    
+    // Bổ sung lấy 4 sản phẩm cùng danh mục theo đúng chuẩn yêu cầu Bảng 1[cite: 4]
+    if ($sanPham !== null) {
+        // Lấy ID danh mục (nếu bảng dùng danh_muc_id, ta truy vấn thông qua đối tượng hoặc database)
+        // Dưới đây ta lấy trực tiếp qua PDO từ hàm hamCSDL() cho nhanh và khớp tuyệt đối
+        $stmtDm = hamCSDL()->prepare("SELECT danh_muc_id FROM san_pham WHERE id = ?");
+        $stmtDm->execute([$id]);
+        $row = $stmtDm->fetch();
+        if ($row) {
+            $sanPhamCungDanhMuc = $khoSanPham->layCungDanhMuc((int)$row['danh_muc_id'], $id, 4);
+        }
+    }
 }
 
 /*
@@ -313,6 +326,23 @@ require_once __DIR__ . '/inc/header.php';
             </div>
 
         </article>
+
+        <!-- KHỐI HIỂN THỊ 4 SẢN PHẨM CÙNG DANH MỤC (ĐÚNG YÊU CẦU BẢNG 1) -->
+        <?php if (!empty($sanPhamCungDanhMuc)): ?>
+            <section class="card" style="margin-top: 30px;">
+                <h3>Sản phẩm cùng danh mục</h3>
+                <div class="luoi-san-pham" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px;">
+                    <?php foreach ($sanPhamCungDanhMuc as $spCung): ?>
+                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; background: #fff;">
+                            <img src="<?= e($spCung->getHinhAnh()) ?>" alt="<?= e($spCung->getTen()) ?>" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px;">
+                            <h4 style="font-size: 14px; margin: 10px 0 5px;"><?= e($spCung->getTen()) ?></h4>
+                            <p style="color: #e74c3c; font-weight: bold; font-size: 13px;"><?= number_format($spCung->getGia(), 0, ',', '.') ?> đ</p>
+                            <a href="chi-tiet.php?id=<?= e($spCung->getId()) ?>" style="display: inline-block; padding: 4px 8px; background: #3498db; color: #fff; font-size: 12px; text-decoration: none; border-radius: 3px;">Xem chi tiết</a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
     <?php endif; ?>
 

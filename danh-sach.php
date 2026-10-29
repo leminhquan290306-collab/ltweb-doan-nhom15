@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
 
@@ -8,242 +9,95 @@ use App\Services\GioHang;
 $tieuDeTrang = 'Danh sách quà tặng - Quà Tặng Thông Minh';
 $baseUrl = '';
 
-$khoSanPham = new KhoSanPham();
+$khoSanPham = new KhoSanPham(hamCSDL());
 $gioHang = new GioHang();
-$tongSoLuongGioHang = $gioHang->tongSoLuong();
+$tongSoLuongGioHang = method_exists($gioHang, 'tongSoLuong') ? $gioHang->tongSoLuong() : 0;
 
-$tuKhoa = trim((string) ($_GET['tim-kiem'] ?? ''));
-$danhMuc = trim((string) ($_GET['loc-danh-muc'] ?? ''));
-$sapXep = trim((string) ($_GET['sap-xep'] ?? ''));
+$duong = ['options' => ['min_range' => 1]];
+$loc = [
+    'q' => trim((string) ($_GET['tim-kiem'] ?? '')),
+    'dm' => filter_var($_GET['loc-danh-muc'] ?? '', FILTER_VALIDATE_INT, $duong),
+    'giaToiDa' => filter_var($_GET['gia-toi-da'] ?? '', FILTER_VALIDATE_INT, $duong),
+];
 
-$sanPhams = $khoSanPham->layTatCa();
+$sapXep = trim((string) ($_GET['sap-xep'] ?? 'moi'));
 
-/*
- * Tìm kiếm theo tên sản phẩm.
- */
-if ($tuKhoa !== '') {
-    $tuKhoaTimKiem = mb_strtolower($tuKhoa, 'UTF-8');
+$moiTrang = 8;
+$tongSoDong = $khoSanPham->dem($loc);
+$tongSoTrang = max(1, (int) ceil($tongSoDong / $moiTrang));
 
-    $sanPhams = array_filter(
-        $sanPhams,
-        function ($sanPham) use ($tuKhoaTimKiem): bool {
-            return str_contains(
-                mb_strtolower($sanPham->getTen(), 'UTF-8'),
-                $tuKhoaTimKiem
-            );
-        }
-    );
+$hienTai = filter_var($_GET['trang'] ?? 1, FILTER_VALIDATE_INT, [
+    'options' => ['min_range' => 1, 'default' => 1]
+]);
+$hienTai = min($hienTai, $tongSoTrang);
+$boQua = ($hienTai - 1) * $moiTrang;
+
+$sanPhams = $khoSanPham->trang($loc, $sapXep, $moiTrang, $boQua);
+$dsDanhMuc = hamCSDL()->query('SELECT id, ten FROM danh_muc ORDER BY ten')->fetchAll();
+
+function lienKetTrang(int $so): string
+{
+    return '?' . http_build_query(array_merge($_GET, ['trang' => $so]));
 }
 
-/*
- * Lọc theo danh mục.
- */
-if ($danhMuc !== '') {
-    $sanPhams = array_filter(
-        $sanPhams,
-        function ($sanPham) use ($danhMuc): bool {
-            return $sanPham->getDanhMuc() === $danhMuc;
-        }
-    );
-}
-
-/*
- * Sắp xếp.
- */
-switch ($sapXep) {
-    case 'gia-tang':
-        usort(
-            $sanPhams,
-            fn($a, $b) => $a->getGia() <=> $b->getGia()
-        );
-        break;
-
-    case 'gia-giam':
-        usort(
-            $sanPhams,
-            fn($a, $b) => $b->getGia() <=> $a->getGia()
-        );
-        break;
-
-    case 'ten-tang':
-        usort(
-            $sanPhams,
-            fn($a, $b) => strcasecmp($a->getTen(), $b->getTen())
-        );
-        break;
-
-    case 'ten-giam':
-        usort(
-            $sanPhams,
-            fn($a, $b) => strcasecmp($b->getTen(), $a->getTen())
-        );
-        break;
-}
+$csrfToken = function_exists('taoCsrfToken') ? taoCsrfToken() : '';
 
 require_once __DIR__ . '/inc/header.php';
 ?>
 
 <main>
-
     <section class="danh-sach-san-pham">
-
         <h2>Danh sách sản phẩm</h2>
 
         <form method="GET" action="danh-sach.php">
-
             <div class="bo-loc-san-pham">
-
                 <p>
-                    <label for="tim-kiem">
-                        Tìm kiếm sản phẩm:
-                    </label>
-
-                    <input
-                        type="search"
-                        id="tim-kiem"
-                        name="tim-kiem"
-                        value="<?= e($tuKhoa) ?>"
-                        placeholder="Nhập tên sản phẩm...">
+                    <label for="tim-kiem">Tìm kiếm sản phẩm:</label>
+                    <input type="search" id="tim-kiem" name="tim-kiem" value="<?= e($loc['q']) ?>" placeholder="Nhập tên sản phẩm...">
                 </p>
 
                 <p>
-                    <label for="loc-danh-muc">
-                        Lọc theo danh mục:
-                    </label>
-
-                    <select
-                        id="loc-danh-muc"
-                        name="loc-danh-muc">
-
-                        <option value="">
-                            Tất cả danh mục
-                        </option>
-
-                        <option
-                            value="banh-keo"
-                            <?= $danhMuc === 'banh-keo' ? 'selected' : '' ?>>
-                            Bánh kẹo
-                        </option>
-
-                        <option
-                            value="sinh-nhat"
-                            <?= $danhMuc === 'sinh-nhat' ? 'selected' : '' ?>>
-                            Sinh nhật
-                        </option>
-
-                        <option
-                            value="ban-be"
-                            <?= $danhMuc === 'ban-be' ? 'selected' : '' ?>>
-                            Bạn bè
-                        </option>
-
-                        <option
-                            value="dip-le"
-                            <?= $danhMuc === 'dip-le' ? 'selected' : '' ?>>
-                            Dịp lễ
-                        </option>
-
-                        <option
-                            value="cao-cap"
-                            <?= $danhMuc === 'cao-cap' ? 'selected' : '' ?>>
-                            Cao cấp
-                        </option>
-
-                        <option
-                            value="gia-dinh"
-                            <?= $danhMuc === 'gia-dinh' ? 'selected' : '' ?>>
-                            Gia đình
-                        </option>
-
+                    <label for="loc-danh-muc">Lọc theo danh mục:</label>
+                    <select id="loc-danh-muc" name="loc-danh-muc">
+                        <option value="">Tất cả danh mục</option>
+                        <?php foreach ($dsDanhMuc as $dm): ?>
+                            <option value="<?= $dm['id'] ?>" <?= $loc['dm'] === (int)$dm['id'] ? 'selected' : '' ?>>
+                                <?= e($dm['ten']) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </p>
 
                 <p>
-                    <label for="sap-xep">
-                        Sắp xếp:
-                    </label>
-
-                    <select
-                        id="sap-xep"
-                        name="sap-xep">
-
-                        <option
-                            value=""
-                            <?= $sapXep === '' ? 'selected' : '' ?>>
-                            Mặc định
-                        </option>
-
-                        <option
-                            value="gia-tang"
-                            <?= $sapXep === 'gia-tang' ? 'selected' : '' ?>>
-                            Giá tăng dần
-                        </option>
-
-                        <option
-                            value="gia-giam"
-                            <?= $sapXep === 'gia-giam' ? 'selected' : '' ?>>
-                            Giá giảm dần
-                        </option>
-
-                        <option
-                            value="ten-tang"
-                            <?= $sapXep === 'ten-tang' ? 'selected' : '' ?>>
-                            Tên A-Z
-                        </option>
-
-                        <option
-                            value="ten-giam"
-                            <?= $sapXep === 'ten-giam' ? 'selected' : '' ?>>
-                            Tên Z-A
-                        </option>
-
+                    <label for="sap-xep">Sắp xếp:</label>
+                    <select id="sap-xep" name="sap-xep">
+                        <option value="moi" <?= $sapXep === 'moi' ? 'selected' : '' ?>>Mới nhất</option>
+                        <option value="gia-tang" <?= $sapXep === 'gia-tang' ? 'selected' : '' ?>>Giá tăng dần</option>
+                        <option value="gia-giam" <?= $sapXep === 'gia-giam' ? 'selected' : '' ?>>Giá giảm dần</option>
+                        <option value="ten-tang" <?= $sapXep === 'ten-tang' ? 'selected' : '' ?>>Tên A-Z</option>
+                        <option value="ten-giam" <?= $sapXep === 'ten-giam' ? 'selected' : '' ?>>Tên Z-A</option>
                     </select>
                 </p>
 
                 <p>
-                    <button type="submit">
-                        Lọc sản phẩm
-                    </button>
-
-                    <a href="danh-sach.php">
-                        Xóa bộ lọc
-                    </a>
+                    <button type="submit">Lọc sản phẩm</button>
+                    <a href="danh-sach.php">Xóa bộ lọc</a>
                 </p>
-
             </div>
-
         </form>
 
         <p aria-live="polite">
-            Tìm thấy
-            <strong><?= count($sanPhams) ?></strong>
-            sản phẩm.
+            Tìm thấy <strong><?= $tongSoDong ?></strong> sản phẩm.
         </p>
 
         <?php if ($sanPhams === []): ?>
-
-            <p>
-                Không tìm thấy sản phẩm phù hợp.
-            </p>
-
+            <p>Không tìm thấy sản phẩm phù hợp.</p>
         <?php else: ?>
-
-            <div
-                id="danh-sach-dong"
-                class="luoi-san-pham">
-
+            <div id="danh-sach-dong" class="luoi-san-pham">
                 <?php foreach ($sanPhams as $sanPham): ?>
-
                     <article class="card">
-
                         <figure>
-
-                            <img
-                                src="<?= e($sanPham->getHinhAnh()) ?>"
-                                alt="<?= e($sanPham->getTen()) ?>"
-                                class="anh-responsive"
-                                loading="lazy">
-
+                            <img src="<?= e($sanPham->getHinhAnh()) ?>" alt="<?= e($sanPham->getTen()) ?>" class="anh-responsive" loading="lazy">
                         </figure>
 
                         <h3 class="card__title">
@@ -274,31 +128,34 @@ require_once __DIR__ . '/inc/header.php';
                         </p>
 
                         <p style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            <a
-                                class="btn btn--chinh"
-                                href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
+                            <a class="btn btn--chinh" href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
                                 Xem chi tiết
                             </a>
 
-                            <!-- Form xử lý thêm vào giỏ hàng bằng AJAX -->
                             <form class="form-them-gio" method="POST" action="gio-hang.php" style="margin: 0;">
                                 <input type="hidden" name="ajax" value="1">
                                 <input type="hidden" name="hanh-dong" value="them">
                                 <input type="hidden" name="id" value="<?= e($sanPham->getId()) ?>">
                                 <input type="hidden" name="so-luong" value="1">
-                                <input type="hidden" name="csrf_token" value="<?= e(taoCsrfToken()) ?>">
+                                <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
                                 <button type="submit" style="background: #27ae60; color: #fff; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: 500;">
                                     🛒 Thêm vào giỏ
                                 </button>
                             </form>
                         </p>
-
                     </article>
-
                 <?php endforeach; ?>
-
             </div>
 
+            <?php if ($tongSoTrang > 1): ?>
+                <nav aria-label="Phân trang danh sách" style="margin-top: 30px; display: flex; justify-content: center; gap: 5px;">
+                    <?php for ($i = 1; $i <= $tongSoTrang; $i++): ?>
+                        <a href="<?= lienKetTrang($i) ?>" style="padding: 8px 12px; border: 1px solid #ccc; background: <?= $i === $hienTai ? '#5a20cb' : '#fff' ?>; color: <?= $i === $hienTai ? '#fff' : '#333' ?>; text-decoration: none; border-radius: 4px;">
+                            <?= $i ?>
+                        </a>
+                    <?php endfor; ?>
+                </nav>
+            <?php endif; ?>
         <?php endif; ?>
 
         <!-- BONG BÓNG GIỎ HÀNG NỔI (FLOATING CART BUBBLE) -->
@@ -357,9 +214,7 @@ require_once __DIR__ . '/inc/header.php';
                 sắp xếp vẫn hoạt động bằng PHP trên máy chủ.
             </p>
         </noscript>
-
     </section>
-
 </main>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

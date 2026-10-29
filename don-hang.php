@@ -1,14 +1,21 @@
 <?php
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/db.php';
+require_once __DIR__ . '/inc/tai-khoan.php';
+
+// Kiểm tra đăng nhập
+if (!daDangNhap()) {
+    $_SESSION['dang_nhap_tb'] = 'Vui lòng đăng nhập để xem lịch sử đơn hàng.';
+    redirect('dang-nhap.php');
+}
 
 $tieuDeTrang = 'Đơn hàng của tôi - Quà Tặng Thông Minh';
 $pdo = hamCSDL();
 
-$nguoiDungId = $_SESSION['user_id'] ?? 2;
+$nguoiDungId = $_SESSION['nguoi_dung_id'] ?? $_SESSION['user_id'] ?? $_SESSION['tai_khoan']['id'] ?? 0;
 $thanhCongId = $_GET['thanh-cong'] ?? null;
 
-// Lấy danh sách đơn hàng của người dùng
+// Lấy danh sách đơn hàng của người dùng đang đăng nhập
 $stmt = $pdo->prepare("
     SELECT * FROM don_hang 
     WHERE nguoi_dung_id = ? 
@@ -26,7 +33,7 @@ require_once __DIR__ . '/inc/header.php';
 
         <?php if ($thanhCongId): ?>
             <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
-                🎉 Đặt hàng thành công! Mã đơn hàng của bạn là: <strong>#<?= e($thanhCongId) ?></strong>
+                🎉 Đặt hàng thành công! Mã đơn hàng của bạn là: <strong>#<?= e((string)$thanhCongId) ?></strong>
             </div>
         <?php endif; ?>
 

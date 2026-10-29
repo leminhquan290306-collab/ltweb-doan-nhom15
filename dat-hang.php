@@ -1,8 +1,15 @@
 <?php
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/db.php';
+require_once __DIR__ . '/inc/tai-khoan.php';
 
 use App\Services\GioHang;
+
+// Kiểm tra đăng nhập bắt buộc trước khi đặt hàng
+if (!daDangNhap()) {
+    $_SESSION['dang_nhap_tb'] = 'Vui lòng đăng nhập để tiến hành đặt hàng.';
+    redirect('dang-nhap.php');
+}
 
 $tieuDeTrang = 'Đặt hàng - Quà Tặng Thông Minh';
 $gioHang = new GioHang();
@@ -23,9 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $pdo = hamCSDL();
     
-    // Lấy ID người dùng từ session đang đăng nhập (nếu chưa thì mặc định id = 2 để test)
-    $nguoiDungId = $_SESSION['nguoi_dung_id'] ?? $_SESSION['user_id'] ?? 2; 
+    // Lấy chính xác ID người dùng từ session đang đăng nhập
+    $nguoiDungId = $_SESSION['nguoi_dung_id'] ?? $_SESSION['user_id'] ?? $_SESSION['tai_khoan']['id'] ?? 0; 
     $tongTien = $gioHang->tongTien();
+
+    if ($nguoiDungId <= 0) {
+        redirect('dang-nhap.php');
+    }
 
     try {
         // BẮT ĐẦU TRANSACTION AN TOÀN
