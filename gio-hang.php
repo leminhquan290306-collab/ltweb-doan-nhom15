@@ -16,6 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!kiemTraCsrfToken(
         is_string($csrfToken) ? $csrfToken : null
     )) {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === '1') {
+            header('Content-Type: application/json');
+            http_response_code(419);
+            echo json_encode(['success' => false, 'message' => 'CSRF token không hợp lệ.']);
+            exit;
+        }
         http_response_code(419);
         exit('419 - CSRF token không hợp lệ.');
     }
@@ -115,11 +121,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         /*
+         * Nếu là yêu cầu AJAX (thêm vào giỏ từ trang danh sách), trả về JSON
+         */
+        if (isset($_POST['ajax']) && $_POST['ajax'] === '1') {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'tongSoLuong' => $gioHang->tongSoLuong()
+            ]);
+            exit;
+        }
+
+        /*
          * PRG: POST -> Redirect -> GET
          */
         redirect('gio-hang.php');
 
     } catch (Throwable $e) {
+
+        if (isset($_POST['ajax']) && $_POST['ajax'] === '1') {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+            exit;
+        }
 
         $_SESSION['gio_hang_loi'] = $e->getMessage();
 
@@ -329,6 +357,13 @@ require_once __DIR__ . '/inc/header.php';
                     </button>
 
                 </form>
+
+                <!-- Nút Tiến hành đặt hàng -->
+                <p style="margin-top: 15px;">
+                    <a href="dat-hang.php" class="btn btn--chinh" style="background: #27ae60; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                        Tiến hành đặt hàng ➔
+                    </a>
+                </p>
 
             </section>
 

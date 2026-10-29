@@ -17,7 +17,7 @@ function hamCSDL(): PDO
     }
 
     $host = '127.0.0.1';
-    $port = '3306';
+    $port = '3307';
     $dbname = 'ltweb_doan_nhom15';
     $username = 'root';
     $password = '';

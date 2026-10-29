@@ -3,11 +3,14 @@
 require_once __DIR__ . '/inc/config.php';
 
 use App\Data\KhoSanPham;
+use App\Services\GioHang;
 
 $tieuDeTrang = 'Danh sách quà tặng - Quà Tặng Thông Minh';
 $baseUrl = '';
 
 $khoSanPham = new KhoSanPham();
+$gioHang = new GioHang();
+$tongSoLuongGioHang = $gioHang->tongSoLuong();
 
 $tuKhoa = trim((string) ($_GET['tim-kiem'] ?? ''));
 $danhMuc = trim((string) ($_GET['loc-danh-muc'] ?? ''));
@@ -270,12 +273,24 @@ require_once __DIR__ . '/inc/header.php';
                             <?= e($sanPham->getMoTa()) ?>
                         </p>
 
-                        <p>
+                        <p style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <a
                                 class="btn btn--chinh"
                                 href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
                                 Xem chi tiết
                             </a>
+
+                            <!-- Form xử lý thêm vào giỏ hàng bằng AJAX -->
+                            <form class="form-them-gio" method="POST" action="gio-hang.php" style="margin: 0;">
+                                <input type="hidden" name="ajax" value="1">
+                                <input type="hidden" name="hanh-dong" value="them">
+                                <input type="hidden" name="id" value="<?= e($sanPham->getId()) ?>">
+                                <input type="hidden" name="so-luong" value="1">
+                                <input type="hidden" name="csrf_token" value="<?= e(taoCsrfToken()) ?>">
+                                <button type="submit" style="background: #27ae60; color: #fff; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: 500;">
+                                    🛒 Thêm vào giỏ
+                                </button>
+                            </form>
                         </p>
 
                     </article>
@@ -286,41 +301,62 @@ require_once __DIR__ . '/inc/header.php';
 
         <?php endif; ?>
 
+        <!-- BONG BÓNG GIỎ HÀNG NỔI (FLOATING CART BUBBLE) -->
+        <div id="bong-bong-gio-hang" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
+            <a href="gio-hang.php" style="background: #2c3e50; color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 26px; position: relative; transition: transform 0.2s;">
+                🛒
+                <span id="so-luong-bong-bong" style="position: absolute; top: -5px; right: -5px; background: #e74c3c; color: #fff; font-size: 14px; font-weight: bold; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
+                    <?= e($tongSoLuongGioHang) ?>
+                </span>
+            </a>
+        </div>
+
+        <!-- SCRIPT XỬ LÝ AJAX THÊM VÀO GIỎ HÀNG KHÔNG RELOAD TRANG -->
+        <script>
+            document.querySelectorAll('.form-them-gio').forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    
+                    try {
+                        const response = await fetch('gio-hang.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            const badge = document.getElementById('so-luong-bong-bong');
+                            if (badge) {
+                                badge.textContent = result.tongSoLuong;
+                            }
+                            
+                            const bubble = document.querySelector('#bong-bong-gio-hang a');
+                            if (bubble) {
+                                bubble.style.transform = 'scale(1.2)';
+                                setTimeout(() => {
+                                    bubble.style.transform = 'scale(1)';
+                                }, 200);
+                            }
+                        } else {
+                            alert('Có lỗi xảy ra: ' + (result.message || 'Không thể thêm vào giỏ'));
+                        }
+                    } catch (error) {
+                        console.error('Lỗi:', error);
+                        this.submit();
+                    }
+                });
+            });
+        </script>
+
         <noscript>
             <p>
                 JavaScript đang tắt. Chức năng tìm kiếm, lọc và
                 sắp xếp vẫn hoạt động bằng PHP trên máy chủ.
             </p>
         </noscript>
-
-    </section>
-
-    <section class="card">
-
-        <h2 class="card__title">
-            Khám phá sản phẩm
-        </h2>
-
-        <p>
-            Danh sách trên cung cấp những sản phẩm quà tặng phổ biến,
-            giúp người dùng tham khảo theo ngân sách và đối tượng nhận quà.
-        </p>
-
-        <p>
-            <a
-                class="btn btn--chinh"
-                href="chi-tiet.php">
-                Xem chi tiết sản phẩm tiêu biểu
-            </a>
-        </p>
-
-        <p>
-            <a
-                class="btn btn--phu"
-                href="lien-he.php">
-                Đi đến trang liên hệ
-            </a>
-        </p>
 
     </section>
 

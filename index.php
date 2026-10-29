@@ -1,13 +1,32 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/inc/config.php';
+require_once __DIR__ . '/inc/db.php';
 
 $tieuDeTrang = 'Quà Tặng Thông Minh - Tư vấn và mua sắm quà tặng';
 $baseUrl = '';
 
+// Kết nối CSDL và truy vấn danh sách sản phẩm từ MySQL thông qua PDO
+try {
+    $pdo = hamCSDL();
+    $stmt = $pdo->query("
+        SELECT san_pham.*, danh_muc.ten AS ten_danh_muc 
+        FROM san_pham 
+        JOIN danh_muc ON san_pham.danh_muc_id = danh_muc.id
+        ORDER BY san_pham.ngay_tao DESC
+    ");
+    $danhSachSanPham = $stmt->fetchAll();
+} catch (PDOException $e) {
+    echo "<div style='background: #fee; color: #c00; padding: 20px; margin: 20px; border: 1px solid #fcc; font-family: sans-serif;'>";
+    echo "<strong>Lỗi truy vấn CSDL:</strong> " . $e->getMessage();
+    echo "</div>";
+    $danhSachSanPham = [];
+}
+
 require_once __DIR__ . '/inc/header.php';
 ?>
-
 <main>
 
     <section class="hero">
@@ -70,6 +89,28 @@ require_once __DIR__ . '/inc/header.php';
             <li>Quà dành cho đồng nghiệp</li>
         </ul>
 
+    </section>
+    
+    <section class="card">
+        <h2 class="card__title">
+            Danh sách sản phẩm từ MySQL
+        </h2>
+
+        <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+            <?php if (empty($danhSachSanPham)): ?>
+                <p>Chưa có sản phẩm nào trong cơ sở dữ liệu.</p>
+            <?php else: ?>
+                <?php foreach ($danhSachSanPham as $sp): ?>
+                    <div style="background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 6px;">
+                        <h3 style="margin-top: 0; color: #333;"><?= htmlspecialchars($sp['ten']) ?></h3>
+                        <p>Danh mục: <strong><?= htmlspecialchars($sp['ten_danh_muc']) ?></strong></p>
+                        <p style="color: #e74c3c; font-weight: bold;">Giá: <?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
+                        <p>Tồn kho: <?= $sp['ton_kho'] > 0 ? $sp['ton_kho'] : '<span style="color:red">Hết hàng</span>' ?></p>
+                        <a href="chi-tiet.php?id=<?= $sp['id'] ?>" style="display: inline-block; padding: 6px 12px; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; margin-top: 10px;">Xem chi tiết</a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
     </section>
 
     <section class="card">

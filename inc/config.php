@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 require_once __DIR__ . '/ham.php';
+require_once __DIR__ . '/db.php';
 
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 

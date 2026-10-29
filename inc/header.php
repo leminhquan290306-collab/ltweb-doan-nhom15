@@ -1,4 +1,3 @@
-
 <?php
 $tieuDeTrang = $tieuDeTrang ?? 'Quà Tặng Thông Minh';
 $baseUrl = $baseUrl ?? '';
@@ -45,15 +44,18 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
         </p>
     </div>
 
-        <div class="dau-trang-tai-khoan">
+    <div class="dau-trang-tai-khoan">
         <?php
         require_once __DIR__ . '/tai-khoan.php';
         ?>
 
         <?php if (daDangNhap()): ?>
             <span class="ten-tai-khoan">
-                Xin chào, <?= e($_SESSION['tai_khoan']['hoTen'] ?? $_SESSION['tai_khoan']['email'] ?? 'Bạn') ?>!
+                Xin chào, <?= e($_SESSION['tai_khoan']['hoTen'] ?? $_SESSION['ho_ten'] ?? $_SESSION['tai_khoan']['email'] ?? $_SESSION['email'] ?? 'Bạn') ?>!
             </span>
+
+            <!-- Thêm liên kết dẫn nhanh tới Thông tin cá nhân & Lịch sử mua hàng -->
+            <a href="<?= e($baseUrl) ?>thong-tin-ca-nhan.php">Thông tin cá nhân</a>
 
             <?php if (laQuanTri()): ?>
                 <a href="<?= e($baseUrl) ?>quan-tri.php">Quản trị</a>
@@ -95,10 +97,9 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
             <a href="<?= e($baseUrl) ?>gioi-thieu.php">Về chúng tôi</a>
         </li>
 
-                <li>
+        <li>
             <a href="<?= e($baseUrl) ?>lien-he.php">Liên hệ</a>
         </li>
-
 
     </ul>
 

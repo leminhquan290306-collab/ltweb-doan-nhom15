@@ -6,63 +6,68 @@ use App\Models\SanPham;
 
 class KhoSanPham
 {
-    private string $duongDan;
-
-    public function __construct(?string $duongDan = null)
-    {
-        $this->duongDan = $duongDan ?? dirname(__DIR__, 2) . '/data/san-pham.json';
-    }
-
     /**
-     * Đọc toàn bộ sản phẩm từ file JSON.
+     * Đọc toàn bộ sản phẩm từ cơ sở dữ liệu MySQL thông qua PDO.
      */
     public function layTatCa(): array
     {
-        $noiDung = file_get_contents($this->duongDan);
+        // Gọi hàm kết nối hamCSDL() từ file db.php của nhóm
+        $pdo = hamCSDL();
 
-        if ($noiDung === false) {
-            throw new \RuntimeException('Không thể đọc dữ liệu sản phẩm.');
-        }
+        // Truy vấn lấy sản phẩm kết hợp bảng danh_muc để lấy tên danh mục chuẩn
+        $stmt = $pdo->query("
+            SELECT sp.*, dm.ten AS ten_danh_muc 
+            FROM san_pham sp 
+            JOIN danh_muc dm ON sp.danh_muc_id = dm.id 
+            ORDER BY sp.id DESC
+        ");
+        $duLieu = $stmt->fetchAll();
 
-        $duLieu = json_decode($noiDung, true);
-
-        if (!is_array($duLieu)) {
-            throw new \RuntimeException('Dữ liệu sản phẩm không hợp lệ.');
-        }
-
+        // Chuyển đổi dữ liệu từ mảng CSDL sang đối tượng SanPham y hệt cấu trúc cũ
         return array_map(
-            fn(array $sp) => $this->taoSanPham($sp),
+            function (array $sp) {
+                return new SanPham(
+                    (int) $sp['id'],
+                    (string) $sp['ten'],
+                    (string) ($sp['ten_danh_muc'] ?? 'Khác'), // Tên danh mục lấy từ bảng danh_muc
+                    (float) $sp['gia'],
+                    (int) ($sp['ton_kho'] ?? $sp['so_luong'] ?? 0), // Mapping số lượng / tồn kho
+                    (string) ($sp['mo_ta'] ?? ''),
+                    (string) ($sp['anh'] ?? 'images/default.jpg') // Đường dẫn ảnh
+                );
+            },
             $duLieu
         );
     }
 
     /**
-     * Tìm sản phẩm theo ID.
+     * Tìm sản phẩm theo ID từ MySQL.
      */
     public function timTheoId(int $id): ?SanPham
     {
-        foreach ($this->layTatCa() as $sanPham) {
-            if ($sanPham->getId() === $id) {
-                return $sanPham;
-            }
+        $pdo = hamCSDL();
+        
+        $stmt = $pdo->prepare("
+            SELECT sp.*, dm.ten AS ten_danh_muc 
+            FROM san_pham sp 
+            JOIN danh_muc dm ON sp.danh_muc_id = dm.id 
+            WHERE sp.id = ?
+        ");
+        $stmt->execute([$id]);
+        $sp = $stmt->fetch();
+
+        if (!$sp) {
+            return null;
         }
 
-        return null;
-    }
-
-    /**
-     * Chuyển dữ liệu JSON thành đối tượng SanPham.
-     */
-    private function taoSanPham(array $duLieu): SanPham
-    {
         return new SanPham(
-            (int) $duLieu['id'],
-            (string) $duLieu['ten'],
-            (string) $duLieu['danhMuc'],
-            (float) $duLieu['gia'],
-            (int) $duLieu['soLuong'],
-            (string) $duLieu['moTa'],
-            (string) $duLieu['hinhAnh']
+            (int) $sp['id'],
+            (string) $sp['ten'],
+            (string) ($sp['ten_danh_muc'] ?? 'Khác'),
+            (float) $sp['gia'],
+            (int) ($sp['ton_kho'] ?? $sp['so_luong'] ?? 0),
+            (string) ($sp['mo_ta'] ?? ''),
+            (string) ($sp['anh'] ?? 'images/default.jpg')
         );
     }
 }

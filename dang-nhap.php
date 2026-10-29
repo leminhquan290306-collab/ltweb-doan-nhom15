@@ -1,15 +1,15 @@
 <?php
-
 declare(strict_types=1);
 
+// Nạp các file cấu hình và thư viện tài khoản chuẩn của nhóm
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/tai-khoan.php';
 
+// Kiểm tra nếu đã đăng nhập thì chuyển hướng luôn
 if (daDangNhap()) {
     if (laQuanTri()) {
         redirect('quan-tri.php');
     }
-
     redirect('index.php');
 }
 
@@ -29,12 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $loi = 'Vui lòng nhập mật khẩu.';
     } elseif (!dangNhap($email, $matKhau)) {
         $loi = 'Email hoặc mật khẩu không đúng.';
-        error_log('Đăng nhập thất bại: ' . $email);
     } else {
         if (laQuanTri()) {
             redirect('quan-tri.php');
         }
-
         redirect('index.php');
     }
 }
@@ -46,11 +44,11 @@ require_once __DIR__ . '/inc/header.php';
 ?>
 
 <main class="container">
-    <section>
+    <section class="card" style="max-width: 500px; margin: 30px auto; padding: 20px;">
         <h2>Đăng nhập tài khoản</h2>
 
         <?php if ($loi !== ''): ?>
-            <p role="alert"><?= e($loi) ?></p>
+            <p role="alert" style="color: red; font-weight: bold;"><?= e($loi) ?></p>
         <?php endif; ?>
 
         <form method="post" action="dang-nhap.php">
@@ -60,8 +58,8 @@ require_once __DIR__ . '/inc/header.php';
                 value="<?= e(taoCsrfToken()) ?>"
             >
 
-            <div>
-                <label for="email">Email:</label>
+            <p>
+                <label for="email">Email:</label><br>
                 <input
                     type="email"
                     id="email"
@@ -69,24 +67,28 @@ require_once __DIR__ . '/inc/header.php';
                     value="<?= e($email) ?>"
                     autocomplete="email"
                     required
+                    style="width: 100%; padding: 8px;"
                 >
-            </div>
+            </p>
 
-            <div>
-                <label for="mat-khau">Mật khẩu:</label>
+            <p>
+                <label for="mat-khau">Mật khẩu:</label><br>
                 <input
                     type="password"
                     id="mat-khau"
                     name="mat-khau"
                     autocomplete="current-password"
                     required
+                    style="width: 100%; padding: 8px;"
                 >
-            </div>
+            </p>
 
-            <button type="submit">Đăng nhập</button>
+            <p>
+                <button type="submit" class="btn btn--chinh" style="padding: 10px 20px;">Đăng nhập</button>
+            </p>
         </form>
 
-        <p>
+        <p style="margin-top: 15px;">
             Chưa có tài khoản?
             <a href="dang-ky.php">Đăng ký ngay</a>
         </p>

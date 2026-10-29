@@ -301,6 +301,13 @@ require_once __DIR__ . '/inc/header.php';
 
                     </form>
 
+                    <!-- Thêm liên kết dẫn nhanh tới giỏ hàng -->
+                    <p style="margin-top: 15px;">
+                        <a href="gio-hang.php" style="color: #3498db; text-decoration: underline; font-weight: bold;">
+                            🛒 Xem giỏ hàng & Tiến hành đặt hàng ➔
+                        </a>
+                    </p>
+
                 </section>
 
             </div>

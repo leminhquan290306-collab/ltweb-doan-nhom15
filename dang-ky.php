@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
-require_once __DIR__ . '/inc/tai-khoan.php';
+require_once __DIR__ . '/inc/db.php';
+use App\Data\KhoNguoiDung;
 
-$tieuDeTrang = 'Đăng ký tài khoản';
+$tieuDeTrang = 'Đăng ký tài khoản - Quà Tặng Thông Minh';
 $baseUrl = '';
 
 $hoTen = '';
@@ -24,18 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $loi = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng tải lại trang.';
     } elseif ($matKhau !== $xacNhanMatKhau) {
         $loi = 'Mật khẩu xác nhận không khớp.';
+    } elseif (mb_strlen($matKhau) < 8) {
+        $loi = 'Mật khẩu phải có ít nhất 8 ký tự.';
     } else {
         try {
-            $loi = dangKyTaiKhoan($hoTen, $email, $matKhau);
+            $khoNguoiDung = new KhoNguoiDung();
+            
+            // Mã hóa mật khẩu bảo mật
+            $matKhauHash = password_hash($matKhau, PASSWORD_DEFAULT);
 
-            if ($loi === null) {
-                $thanhCong = true;
-                $hoTen = '';
-                $email = '';
-            }
+            // Lưu trực tiếp vào bảng nguoi_dung qua KhoNguoiDung OOP
+            $khoNguoiDung->taoMoi($matKhauHash, $hoTen, $email);
+
+            $thanhCong = true;
+            $hoTen = '';
+            $email = '';
         } catch (Throwable $e) {
             error_log((string) $e);
-            $loi = 'Không thể đăng ký lúc này. Vui lòng thử lại sau.';
+            $loi = 'Email này đã được đăng ký hoặc không thể đăng ký lúc này.';
         }
     }
 }
@@ -44,16 +51,16 @@ require_once __DIR__ . '/inc/header.php';
 ?>
 
 <main class="container">
-    <section>
+    <section class="card" style="max-width: 500px; margin: 30px auto; padding: 20px;">
         <h2>Đăng ký tài khoản khách hàng</h2>
 
         <?php if ($thanhCong): ?>
-            <p role="status">Đăng ký thành công! Bà có thể đăng nhập bằng tài khoản vừa tạo.</p>
-            <p><a href="dang-nhap.php">Đến trang đăng nhập</a></p>
+            <p role="status" style="color: green; font-weight: bold;">Đăng ký thành công! Bạn có thể đăng nhập bằng tài khoản vừa tạo.</p>
+            <p><a href="dang-nhap.php" class="btn btn--chinh">Đến trang đăng nhập</a></p>
         <?php else: ?>
 
             <?php if ($loi !== ''): ?>
-                <p role="alert"><?= e($loi) ?></p>
+                <p role="alert" style="color: red;"><?= e($loi) ?></p>
             <?php endif; ?>
 
             <form method="post" action="dang-ky.php">
@@ -63,8 +70,8 @@ require_once __DIR__ . '/inc/header.php';
                     value="<?= e(taoCsrfToken()) ?>"
                 >
 
-                <div>
-                    <label for="ho-ten">Họ và tên:</label>
+                <p>
+                    <label for="ho-ten">Họ và tên:</label><br>
                     <input
                         type="text"
                         id="ho-ten"
@@ -73,11 +80,12 @@ require_once __DIR__ . '/inc/header.php';
                         value="<?= e($hoTen) ?>"
                         autocomplete="name"
                         required
+                        style="width: 100%; padding: 8px;"
                     >
-                </div>
+                </p>
 
-                <div>
-                    <label for="email">Email:</label>
+                <p>
+                    <label for="email">Email:</label><br>
                     <input
                         type="email"
                         id="email"
@@ -85,11 +93,12 @@ require_once __DIR__ . '/inc/header.php';
                         value="<?= e($email) ?>"
                         autocomplete="email"
                         required
+                        style="width: 100%; padding: 8px;"
                     >
-                </div>
+                </p>
 
-                <div>
-                    <label for="mat-khau">Mật khẩu (ít nhất 8 ký tự):</label>
+                <p>
+                    <label for="mat-khau">Mật khẩu (ít nhất 8 ký tự):</label><br>
                     <input
                         type="password"
                         id="mat-khau"
@@ -97,11 +106,12 @@ require_once __DIR__ . '/inc/header.php';
                         minlength="8"
                         autocomplete="new-password"
                         required
+                        style="width: 100%; padding: 8px;"
                     >
-                </div>
+                </p>
 
-                <div>
-                    <label for="xac-nhan-mat-khau">Xác nhận mật khẩu:</label>
+                <p>
+                    <label for="xac-nhan-mat-khau">Xác nhận mật khẩu:</label><br>
                     <input
                         type="password"
                         id="xac-nhan-mat-khau"
@@ -109,13 +119,16 @@ require_once __DIR__ . '/inc/header.php';
                         minlength="8"
                         autocomplete="new-password"
                         required
+                        style="width: 100%; padding: 8px;"
                     >
-                </div>
+                </p>
 
-                <button type="submit">Đăng ký</button>
+                <p>
+                    <button type="submit" class="btn btn--chinh" style="padding: 10px 20px;">Đăng ký</button>
+                </p>
             </form>
 
-            <p>Đã có tài khoản? <a href="dang-nhap.php">Đăng nhập</a></p>
+            <p style="margin-top: 15px;">Đã có tài khoản? <a href="dang-nhap.php">Đăng nhập ngay</a></p>
         <?php endif; ?>
     </section>
 </main>

@@ -4,69 +4,26 @@ namespace App\Data;
 
 class KhoLienHe
 {
-    private string $duongDan;
-
-    public function __construct(?string $duongDan = null)
+    public function __construct()
     {
-        $this->duongDan = $duongDan
-            ?? dirname(__DIR__, 2) . '/storage/lien-he.jsonl';
+        // Sử dụng kết nối PDO chung từ hàm hamCSDL()
     }
 
     public function luu(array $duLieu): void
     {
-        $thuMuc = dirname($this->duongDan);
-
-        if (!is_dir($thuMuc)) {
-            mkdir($thuMuc, 0755, true);
-        }
-
-        $dong = json_encode(
-            $duLieu,
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-        );
-
-        if ($dong === false) {
-            throw new \RuntimeException('Không thể chuyển dữ liệu sang JSON.');
-        }
-
-        $ketQua = file_put_contents(
-            $this->duongDan,
-            $dong . PHP_EOL,
-            FILE_APPEND | LOCK_EX
-        );
-
-        if ($ketQua === false) {
-            throw new \RuntimeException('Không thể lưu thông tin liên hệ.');
-        }
+        $db = hamCSDL();
+        $st = $db->prepare("INSERT INTO lien_he (ten, email, noi_dung) VALUES (?, ?, ?)");
+        $st->execute([
+            $duLieu['ten'] ?? '',
+            $duLieu['email'] ?? '',
+            $duLieu['noiDung'] ?? $duLieu['noi_dung'] ?? ''
+        ]);
     }
 
     public function layTatCa(): array
     {
-        if (!is_file($this->duongDan)) {
-            return [];
-        }
-
-        $cacDong = file(
-            $this->duongDan,
-            FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
-        );
-
-        if ($cacDong === false) {
-            throw new \RuntimeException(
-                'Không thể đọc dữ liệu liên hệ.'
-            );
-        }
-
-        $ketQua = [];
-
-        foreach ($cacDong as $dong) {
-            $duLieu = json_decode($dong, true);
-
-            if (is_array($duLieu)) {
-                $ketQua[] = $duLieu;
-            }
-        }
-
-        return $ketQua;
+        $db = hamCSDL();
+        $st = $db->query("SELECT id, ten, email, noi_dung as noiDung, ngay_tao as ngayTao FROM lien_he ORDER BY id DESC");
+        return $st->fetchAll();
     }
 }
