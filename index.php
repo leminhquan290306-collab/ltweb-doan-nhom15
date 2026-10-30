@@ -47,59 +47,6 @@ try {
 
 require_once __DIR__ . '/inc/header.php';
 ?>
-<style>
-    /* CSS tinh chỉnh để khung sản phẩm có thanh cuộn gọn gàng, không bị kéo dài thườn thượt */
-    #thoi-tiet code {
-        word-break: break-all;
-        display: block;
-        background: #f1f1f1;
-        padding: 8px;
-        border-radius: 4px;
-    }
-    
-    /* Khung chứa danh sách sản phẩm có thanh cuộn (Scrollable Box) */
-    .product-scroll-container {
-        max-height: 600px; /* Chiều cao cố định của khung, vượt quá sẽ xuất hiện thanh cuộn */
-        overflow-y: auto;  /* Bật thanh cuộn dọc */
-        padding-right: 10px;
-        margin-top: 15px;
-    }
-
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-    }
-    .product-item {
-        background: #fff;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .product-item img {
-        width: 100%;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-bottom: 10px;
-    }
-    .product-item h3 {
-        font-size: 15px;
-        margin: 0 0 8px 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: #333;
-    }
-    @media (max-width: 900px) {
-        .product-grid {
-            grid-template-columns: repeat(1, 1fr);
-        }
-    }
-</style>
 
 <main>
 
@@ -184,7 +131,7 @@ require_once __DIR__ . '/inc/header.php';
                     <div class="product-item" style="background: #f9f9f9; padding: 12px;">
                         <div>
                             <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="" style="height: 90px;">
-                            <h4 title="<?= htmlspecialchars($sp['ten']) ?>" style="margin: 0 0 6px 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($sp['ten']) ?></h4>
+                            <h3 title="<?= htmlspecialchars($sp['ten']) ?>" style="margin: 0 0 6px 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($sp['ten']) ?></h3>
                             <p style="color: #e74c3c; font-weight: bold; font-size: 13px; margin: 0;"><?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
                         </div>
                         <div style="margin-top: 10px;">

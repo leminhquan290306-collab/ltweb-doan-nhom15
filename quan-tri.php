@@ -6,15 +6,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/inc/config.php';
-require_once __DIR__ . '/inc/tai-khoan.php';
+require_once __DIR__ . '/inc/xac-thuc.php';
+
+// Kiểm tra quyền quản trị viên tối cao
+yeuCauQuyen('quan_tri');
 
 use App\Data\KhoSanPham;
 
-if (!laQuanTri()) {
-    redirect('dang-nhap.php');
-}
-
-$khoSanPham = new KhoSanPham(hamCSDL());
+$khoSanPham = new KhoSanPham(db());
 
 // Xử lý phân trang cho danh sách quản trị sản phẩm
 $moiTrang = 10;
@@ -28,10 +27,10 @@ $boQua = ($hienTai - 1) * $moiTrang;
 
 $danhSachSanPham = $khoSanPham->trang([], 'moi', $moiTrang, $boQua);
 
-// Lấy danh sách liên hệ như code cũ của ông
+// Lấy danh sách liên hệ từ cơ sở dữ liệu
 $danhSachLienHe = [];
 try {
-    $pdo = hamCSDL();
+    $pdo = db();
     $stmt = $pdo->query("SELECT * FROM lien_he ORDER BY id DESC");
     $danhSachLienHe = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
@@ -54,7 +53,8 @@ require_once __DIR__ . '/inc/header.php';
     <section style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
         <div>
             <h2>Khu vực Quản trị (Admin)</h2>
-            <p>Xin chào: <strong><?= e($_SESSION['email'] ?? $_SESSION['tai_khoan']['email'] ?? 'Admin') ?></strong></p>
+            <?php $nd = nguoiDung(); ?>
+            <p>Xin chào: <strong><?= e($nd['ho_ten'] ?? $nd['email'] ?? 'Admin') ?></strong></p>
         </div>
         <div>
             <a href="quan-tri.php?tab=san-pham" class="btn" style="padding: 8px 15px; background: <?= $tab === 'san-pham' ? '#5a20cb' : '#ccc' ?>; color: #fff; text-decoration: none; border-radius: 4px; margin-right: 5px;">Quản lý Sản phẩm</a>
@@ -132,10 +132,10 @@ require_once __DIR__ . '/inc/header.php';
             <?php else: ?>
                 <?php foreach ($danhSachLienHe as $lienHe): ?>
                     <?php 
-                        $hoTen = $lienHe['ten'] ?? $lienHe['hoTen'] ?? $lienHe['ho_ten'] ?? 'N/A';
+                        $hoTen = $lienHe['ten'] ?? $lienHe['ho_ten'] ?? 'N/A';
                         $email = $lienHe['email'] ?? 'N/A';
-                        $noiDung = $lienHe['noi_dung'] ?? $lienHe['noiDung'] ?? $lienHe['soThich'] ?? 'N/A';
-                        $ngayTao = $lienHe['ngayTao'] ?? $lienHe['ngay_tao'] ?? $lienHe['thoiGian'] ?? 'N/A';
+                        $noiDung = $lienHe['noi_dung'] ?? $lienHe['noiDung'] ?? 'N/A';
+                        $ngayTao = $lienHe['ngay_tao'] ?? $lienHe['ngayTao'] ?? 'N/A';
                     ?>
                     <article style="border-bottom: 2px solid #eee; padding: 15px 0; margin-bottom: 15px;">
                         <p><strong>Họ tên:</strong> <?= e((string)$hoTen) ?></p>

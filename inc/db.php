@@ -1,11 +1,13 @@
 <?php
 
 /**
- * Kết nối MySQL cho website nhóm 15.
+ * Tệp: inc/db.php
+ * Mô tả: Kết nối MySQL cho website nhóm 15.
  * Sử dụng database ltweb_doan_nhom15 trên XAMPP.
- * Trả về một kết nối PDO dùng chung trong mỗi request.
  * MSSV: 3120224120.
  */
+
+declare(strict_types=1);
 
 function hamCSDL(): PDO
 {
@@ -45,4 +47,14 @@ function hamCSDL(): PDO
     }
 
     return $pdo;
+}
+
+/**
+ * Hàm alias db() để tương thích với các đoạn code gọi kết nối kiểu ngắn gọn.
+ */
+if (!function_exists('db')) {
+    function db(): PDO
+    {
+        return hamCSDL();
+    }
 }

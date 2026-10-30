@@ -207,7 +207,7 @@ $danhSachLuuBut = $stmt->fetchAll();
         </p>
 
         <section class="thong-ke-luot-xem">
-          <h3>Thống kê lượt xem 7 ngày gần nhất</h3>
+          <h2>Thống kê lượt xem 7 ngày gần nhất</h2>
 
           <table>
             <thead>

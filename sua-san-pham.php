@@ -6,27 +6,28 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/inc/config.php';
-require_once __DIR__ . '/inc/tai-khoan.php';
+require_once __DIR__ . '/inc/xac-thuc.php';
+
+yeuCauQuyen('quan_tri');
 
 use App\Data\KhoSanPham;
 
-if (!laQuanTri()) {
-    redirect('dang-nhap.php');
-}
-
-$khoSanPham = new KhoSanPham(hamCSDL());
+$khoSanPham = new KhoSanPham(db());
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
-    redirect('quan-tri.php?tab=san-pham');
+    header('Location: quan-tri.php?tab=san-pham');
+    exit;
 }
 
 $sanPham = $khoSanPham->timTheoId($id);
 if (!$sanPham) {
-    die('Sản phẩm không tồn tại.');
+    http_response_code(404);
+    require __DIR__ . '/404.php';
+    exit;
 }
 
 $loiForm = [];
-$danhMucList = hamCSDL()->query("SELECT id, ten FROM danh_muc ORDER BY ten")->fetchAll();
+$danhMucList = db()->query("SELECT id, ten FROM danh_muc ORDER BY ten")->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ten = trim((string)($_POST['ten'] ?? ''));
@@ -37,12 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($ten === '') $loiForm[] = 'Tên sản phẩm không được để trống.';
     if (!$danhMucId) $loiForm[] = 'Danh mục không hợp lệ.';
-    if ($gia === false || $gia < 1000) $loiForm[] = 'Giá không hợp lệ.';
+    if ($gia === false || $gia < 1000) $loiForm[] = 'Giá không hợp lệ (tối thiểu 1.000 VNĐ).';
     if ($tonKho === false || $tonKho < 0) $loiForm[] = 'Tồn kho không hợp lệ.';
 
     $anhUrl = $sanPham->getHinhAnh();
     if (isset($_FILES['anh']) && $_FILES['anh']['error'] === UPLOAD_ERR_OK) {
         $thuMucUpload = __DIR__ . '/images';
+        if (!is_dir($thuMucUpload)) {
+            mkdir($thuMucUpload, 0755, true);
+        }
         $ext = pathinfo($_FILES['anh']['name'], PATHINFO_EXTENSION);
         $tenFile = 'sp_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
         if (move_uploaded_file($_FILES['anh']['tmp_name'], $thuMucUpload . '/' . $tenFile)) {
@@ -52,12 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($loiForm)) {
         try {
-            $pdo = hamCSDL();
+            $pdo = db();
             $stmt = $pdo->prepare("UPDATE san_pham SET danh_muc_id = ?, ten = ?, gia = ?, ton_kho = ?, anh = ?, mo_ta = ? WHERE id = ?");
             $stmt->execute([$danhMucId, $ten, $gia, $tonKho, $anhUrl, $moTa, $id]);
 
             $_SESSION['quan_tri_tb'] = 'Cập nhật sản phẩm thành công!';
-            redirect('quan-tri.php?tab=san-pham');
+            header('Location: quan-tri.php?tab=san-pham');
+            exit;
         } catch (PDOException $e) {
             $loiForm[] = 'Lỗi CSDL: ' . $e->getMessage();
         }
@@ -93,8 +98,12 @@ require_once __DIR__ . '/inc/header.php';
             <p style="margin-bottom: 15px;">
                 <label for="danh_muc_id">Danh mục:</label><br>
                 <select id="danh_muc_id" name="danh_muc_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <!-- Thêm option rỗng có value="" để pass hoàn toàn lỗi W3C Validator -->
+                    <option value="">-- Chọn danh mục sản phẩm --</option>
                     <?php 
-                    $dmHienTaiId = hamCSDL()->query("SELECT danh_muc_id FROM san_pham WHERE id = $id")->fetchColumn();
+                    $stmtDm = db()->prepare("SELECT danh_muc_id FROM san_pham WHERE id = ?");
+                    $stmtDm->execute([$id]);
+                    $dmHienTaiId = $stmtDm->fetchColumn();
                     foreach ($danhMucList as $dm): 
                     ?>
                         <option value="<?= $dm['id'] ?>" <?= ((int)$dmHienTaiId === (int)$dm['id']) ? 'selected' : '' ?>>

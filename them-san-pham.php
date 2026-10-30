@@ -6,14 +6,12 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/inc/config.php';
-require_once __DIR__ . '/inc/tai-khoan.php';
+require_once __DIR__ . '/inc/xac-thuc.php';
 
-if (!laQuanTri()) {
-    redirect('dang-nhap.php');
-}
+yeuCauQuyen('quan_tri');
 
 $loiForm = [];
-$danhMucList = hamCSDL()->query("SELECT id, ten FROM danh_muc ORDER BY ten")->fetchAll();
+$danhMucList = db()->query("SELECT id, ten FROM danh_muc ORDER BY ten")->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ten = trim((string)($_POST['ten'] ?? ''));
@@ -51,14 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($loiForm)) {
         try {
-            $pdo = hamCSDL();
+            $pdo = db();
             $stmt = $pdo->prepare("INSERT INTO san_pham (danh_muc_id, ten, gia, ton_kho, anh, mo_ta) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$danhMucId, $ten, $gia, $tonKho, $anhUrl, $moTa]);
 
             $_SESSION['quan_tri_tb'] = 'Thêm sản phẩm thành công!';
-            redirect('quan-tri.php?tab=san-pham');
+            header('Location: quan-tri.php?tab=san-pham');
+            exit;
         } catch (PDOException $e) {
-            if ($e->getCode() == 23000) { // Lỗi trùng lặp dữ liệu (1062)
+            if ($e->getCode() === '23000') {
                 $loiForm[] = 'Sản phẩm này đã tồn tại trong hệ thống.';
             } else {
                 $loiForm[] = 'Lỗi cơ sở dữ liệu: ' . $e->getMessage();

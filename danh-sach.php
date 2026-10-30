@@ -127,7 +127,8 @@ require_once __DIR__ . '/inc/header.php';
                             <?= e($sanPham->getMoTa()) ?>
                         </p>
 
-                        <p style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <!-- Đã thay thẻ <p> thành <div> để chuẩn cú pháp HTML5, tránh lỗi W3C -->
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <a class="btn btn--chinh" href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
                                 Xem chi tiết
                             </a>
@@ -142,7 +143,7 @@ require_once __DIR__ . '/inc/header.php';
                                     🛒 Thêm vào giỏ
                                 </button>
                             </form>
-                        </p>
+                        </div>
                     </article>
                 <?php endforeach; ?>
             </div>
