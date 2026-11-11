@@ -65,16 +65,17 @@ function kiemTraCsrfToken(?string $token): bool
         && isset($_SESSION['csrf_token'])
         && hash_equals($_SESSION['csrf_token'], $token);
 }
+
 // Lấy mã CSRF
 function csrfToken(): string
 {
     return taoCsrfToken();
 }
 
-// In trường CSRF cho form POST
+// In trường CSRF cho form POST (Đã sửa name="csrf" chuẩn xác)
 function csrfField(): string
 {
-    return '<input type="hidden" name="csrf_token" value="' .
+    return '<input type="hidden" name="csrf" value="' .
         htmlspecialchars(csrfToken(), ENT_QUOTES, 'UTF-8') .
         '">';
 }

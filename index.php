@@ -92,6 +92,7 @@ require_once __DIR__ . '/inc/header.php';
             <li>Quà dành cho đồng nghiệp</li>
         </ul>
     </section>
+<<<<<<< Updated upstream
 
     <!-- KHU VỰC DANH SÁCH SẢN PHẨM TỪ MYSQL CÓ THANH CUỘN GỌN GÀNG -->
     <section class="card">
@@ -127,13 +128,42 @@ require_once __DIR__ . '/inc/header.php';
         <?php endif; ?>
     </div>
 </div>
+=======
+    
+    <!-- KHU VỰC DANH SÁCH SẢN PHẨM TỪ MYSQL CÓ KHUNG CUỘN NHỎ GỌN -->
+    <section class="card">
+        <h2 class="card__title">Danh sách sản phẩm từ MySQL</h2>
+
+        <div style="max-height: 400px; overflow-y: auto; overflow-x: hidden; padding-right: 6px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; background: #fafafa;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;">
+                <?php if (empty($danhSachSanPham)): ?>
+                    <p>Chưa có sản phẩm nào trong cơ sở dữ liệu.</p>
+                <?php else: ?>
+                    <?php foreach ($danhSachSanPham as $sp): ?>
+                        <div class="product-item" style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; background: #fff;">
+                            <div>
+                                <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="<?= htmlspecialchars($sp['ten']) ?>" style="width: 100%; height: 110px; object-fit: cover; border-radius: 4px;">
+                                <h3 title="<?= htmlspecialchars($sp['ten']) ?>" style="font-size: 14px; margin: 6px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($sp['ten']) ?></h3>
+                                <p style="font-size: 12px; margin: 2px 0;">Danh mục: <strong><?= htmlspecialchars($sp['ten_danh_muc']) ?></strong></p>
+                                <p style="color: #e74c3c; font-weight: bold; font-size: 13px; margin: 2px 0;">Giá: <?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <a href="chi-tiet.php?id=<?= $sp['id'] ?>" style="display: block; text-align: center; padding: 5px 10px; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; font-size: 12px;">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+>>>>>>> Stashed changes
     </section>
 
-    <!-- KHỐI HIỂN THỊ SẢN PHẨM ĐÃ XEM GẦN ĐÂY TỪ COOKIE -->
+    <!-- KHỐI HIỂN THỊ SẢN PHẨM ĐÃ XEM GẦN ĐÂY CÓ KHUNG CUỘN NHỎ GỌN -->
     <?php if (!empty($danhSachDaXem)): ?>
         <section class="card">
             <h2 class="card__title">Sản phẩm bạn đã xem gần đây</h2>
 
+<<<<<<< Updated upstream
 
 <div class="product-grid trang-chu-san-pham-da-xem">
     <?php foreach ($danhSachDaXem as $sp): ?>
@@ -142,6 +172,23 @@ require_once __DIR__ . '/inc/header.php';
                 <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="" class="trang-chu-anh-da-xem">
                 <h3 title="<?= htmlspecialchars($sp['ten']) ?>" class="trang-chu-ten-da-xem"><?= htmlspecialchars($sp['ten']) ?></h3>
                 <p class="trang-chu-gia-da-xem"><?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
+=======
+            <div style="max-height: 400px; overflow-y: auto; overflow-x: hidden; padding-right: 6px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; background: #fafafa;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;">
+                    <?php foreach ($danhSachDaXem as $sp): ?>
+                        <div class="product-item" style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; background: #fff;">
+                            <div>
+                                <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="" style="width: 100%; height: 110px; object-fit: cover; border-radius: 4px;">
+                                <h3 title="<?= htmlspecialchars($sp['ten']) ?>" style="margin: 6px 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($sp['ten']) ?></h3>
+                                <p style="color: #e74c3c; font-weight: bold; font-size: 13px; margin: 0;"><?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <a href="chi-tiet.php?id=<?= $sp['id'] ?>" style="display: block; text-align: center; padding: 5px 10px; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; font-size: 12px;">Xem lại</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+>>>>>>> Stashed changes
             </div>
             <div class="trang-chu-lien-ket-da-xem">
                 <a href="chi-tiet.php?id=<?= $sp['id'] ?>">Xem lại</a>

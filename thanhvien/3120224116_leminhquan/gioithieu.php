@@ -1,7 +1,5 @@
-
 <?php
 /*
-
 * Tệp gioithieu.php hiển thị trang giới thiệu cá nhân của Lê Minh Quân.
 * Trang sử dụng PHP để hiển thị nội dung giới thiệu và thông tin cá nhân.
 * Chức năng lọc dữ liệu cho phép lọc nội dung theo điều kiện được chọn.
@@ -460,11 +458,8 @@ require __DIR__ . '/../../inc/header.php';
                             <?php else: ?>
                                 <span> — Chưa hoàn thành</span>
 
-                                <form
-                                <?= csrfField() ?>
-                                    method="post"
-                                    action="gioithieu.php#cong-viec"
-                                >
+                                <form method="post" action="gioithieu.php#cong-viec">
+                                    <?= csrfField() ?>
                                     <input
                                         type="hidden"
                                         name="hanh_dong"

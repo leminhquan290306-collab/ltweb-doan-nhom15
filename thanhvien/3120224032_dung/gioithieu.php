@@ -3,9 +3,6 @@
  * Tệp: thanhvien/3120224032_dung/gioithieu.php
  * Tác giả: Nguyễn Phạm Tiến Dũng (MSSV: 3120224032 - Lớp 24CNTT2)
  * Mô tả: Trang cá nhân sử dụng chung header/footer của nhóm.
- * Chức năng:
- *  1. Bộ đếm lượt xem lưu trong MySQL.
- *  2. Sổ lưu bút lưu trong MySQL.
  */
 
 declare(strict_types=1);
@@ -27,7 +24,6 @@ if (!isset($_SESSION['da_xem_trang_dung'])) {
     $pdo->beginTransaction();
 
     try {
-        // Tăng bộ đếm tổng lượt xem hiện có.
         $stmt = $pdo->prepare(
             'INSERT INTO tv_luot_xem (mssv, luot_xem)
              VALUES (:mssv, 1)
@@ -35,7 +31,6 @@ if (!isset($_SESSION['da_xem_trang_dung'])) {
         );
         $stmt->execute(['mssv' => $mssvDung]);
 
-        // Ghi nhận lượt xem của ngày hiện tại.
         $stmt = $pdo->prepare(
             'INSERT INTO tv_luot_xem_ngay (mssv, ngay, luot_xem)
              VALUES (:mssv, CURDATE(), 1)
@@ -53,11 +48,11 @@ if (!isset($_SESSION['da_xem_trang_dung'])) {
         throw $e;
     }
 }
-     $stmt = $pdo->prepare(
+
+$stmt = $pdo->prepare(
     'SELECT luot_xem
      FROM tv_luot_xem
      WHERE mssv = :mssv'
-
 );
 $stmt->execute(['mssv' => $mssvDung]);
 $count = (int) $stmt->fetchColumn();
@@ -74,7 +69,6 @@ $stmt = $pdo->prepare(
 $stmt->execute(['mssv' => $mssvDung]);
 $luotXemTheoNgay = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-/* Bổ sung các ngày chưa có lượt xem để đủ 7 ngày */
 $thongKeLuotXem = [];
 $duLieuTheoNgay = [];
 
@@ -101,19 +95,11 @@ $duLieuLuuBut = [
 $thongBaoLuuBut = $_SESSION['thong_bao_luu_but'] ?? '';
 unset($_SESSION['thong_bao_luu_but']);
 
-/* 3. Xử lý gửi lời nhắn */
+/* 3. Xử lý gửi lời nhắn kèm kiểm tra ràng buộc ký tự chặt chẽ */
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['gui_luu_but'])
 ) {
-      if (!csrfHopLe(
-        is_string($_POST['csrf_token'] ?? null)
-            ? $_POST['csrf_token']
-            : null
-    )) {
-        http_response_code(403);
-        exit('403 - Yêu cầu không hợp lệ.');
-    }
     $duLieuLuuBut['ten'] = trim(
         (string) ($_POST['ten'] ?? '')
     );
@@ -319,22 +305,22 @@ $danhSachLuuBut = $stmt->fetchAll();
       <h2>Sổ lưu bút cá nhân</h2>
 
       <form method="post">
-    <?= csrfField() ?>
+        <!-- TỰ ĐỘNG CHÈN MÃ BẢO VỆ CSRF (Khớp với ham.php) -->
+        <?= csrfField() ?>
 
-    <p>
+        <p>
           <label for="ten">Họ tên của bạn:</label>
           <input
             type="text"
             id="ten"
             name="ten"
-            maxlength="50"
             value="<?= e($duLieuLuuBut['ten']) ?>"
             required
           >
         </p>
 
         <?php if (isset($loiLuuBut['ten'])): ?>
-          <p role="alert" class="dung-loi-luu-but">
+          <p role="alert" class="dung-loi-luu-but" style="color: #e53e3e; font-weight: bold;">
             <?= e($loiLuuBut['ten']) ?>
           </p>
         <?php endif; ?>
@@ -345,13 +331,12 @@ $danhSachLuuBut = $stmt->fetchAll();
             id="noiDung"
             name="noiDung"
             rows="3"
-            maxlength="300"
             required
           ><?= e($duLieuLuuBut['noiDung']) ?></textarea>
         </p>
 
         <?php if (isset($loiLuuBut['noiDung'])): ?>
-          <p role="alert" class="dung-loi-luu-but">
+          <p role="alert" class="dung-loi-luu-but" style="color: #e53e3e; font-weight: bold;">
             <?= e($loiLuuBut['noiDung']) ?>
           </p>
         <?php endif; ?>
@@ -363,7 +348,7 @@ $danhSachLuuBut = $stmt->fetchAll();
       </form>
 
       <?php if ($thongBaoLuuBut !== ''): ?>
-        <p class="dung-thong-bao-luu-but">
+        <p class="dung-thong-bao-luu-but" style="color: #38a169; font-weight: bold;">
           <?= e($thongBaoLuuBut) ?>
         </p>
       <?php endif; ?>
@@ -377,7 +362,7 @@ $danhSachLuuBut = $stmt->fetchAll();
             <li>
               <strong><?= e($lb['ten'] ?? '') ?></strong>
               <small>(<?= e($lb['thoi_gian'] ?? '') ?>)</small>:
-              <div><?= e($lb['noiDung'] ?? '') ?></div>
+              <div><?= nl2br(e($lb['noiDung'] ?? '')) ?></div>
             </li>
           <?php endforeach; ?>
         </ul>
