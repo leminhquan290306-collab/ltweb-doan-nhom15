@@ -32,6 +32,14 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['muc_tieu'])
 ) {
+      if (!csrfHopLe(
+        is_string($_POST['csrf_token'] ?? null)
+            ? $_POST['csrf_token']
+            : null
+    )) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ.');
+    }
     $mucTieu = trim((string) ($_POST['muc_tieu'] ?? ''));
 
     if ($mucTieu === '') {
@@ -72,6 +80,14 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['tinh_tien_do'])
 ) {
+      if (!csrfHopLe(
+        is_string($_POST['csrf_token'] ?? null)
+            ? $_POST['csrf_token']
+            : null
+    )) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ.');
+    }
     $tongSoBai = filter_var(
         $_POST['tong_so_bai'] ?? null,
         FILTER_VALIDATE_INT
@@ -277,7 +293,9 @@ try {
       <h2>Mục tiêu cá nhân</h2>
 
       <form method="post">
-        <p>
+    <?= csrfField() ?>
+
+    <p>
           <label for="muc_tieu">Nhập mục tiêu:</label>
           <input
             type="text"
@@ -318,7 +336,9 @@ try {
       <h2>Tính tiến độ học tập</h2>
 
       <form method="post">
-        <p>
+    <?= csrfField() ?>
+
+    <p>
           <label for="tong_so_bai">Tổng số bài:</label>
           <input
             type="number"

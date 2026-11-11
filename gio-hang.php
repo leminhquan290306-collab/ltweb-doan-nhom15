@@ -359,11 +359,13 @@ require_once __DIR__ . '/inc/header.php';
                 </form>
 
                 <!-- Nút Tiến hành đặt hàng -->
-                <p style="margin-top: 15px;">
-                    <a href="dat-hang.php" class="btn btn--chinh" style="background: #27ae60; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
-                        Tiến hành đặt hàng ➔
-                    </a>
-                </p>
+
+<p class="gio-hang__lien-ket-dat-hang">
+    <a href="dat-hang.php" class="btn btn--chinh gio-hang__nut-dat-hang">
+        Tiến hành đặt hàng ➔
+    </a>
+</p>
+
 
             </section>
 

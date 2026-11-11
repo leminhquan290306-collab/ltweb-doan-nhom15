@@ -1,14 +1,10 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-header('Content-Type: application/json; charset=UTF-8');
-
 require_once __DIR__ . '/../inc/config.php';
 require_once __DIR__ . '/../inc/db.php';
+
+header('Content-Type: application/json; charset=UTF-8');
 
 use App\Services\GioHang;
 
@@ -21,6 +17,7 @@ try {
         $danhSach = $gioHang->laySanPham();
         $tongTien = $gioHang->tongTien();
         $tongSoLuong = 0;
+
         foreach ($danhSach as $item) {
             $tongSoLuong += $item['soLuong'];
         }
@@ -42,34 +39,111 @@ try {
     }
 
     if ($method === 'POST') {
-        // Thêm sản phẩm vào giỏ hàng qua AJAX (POST)
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $soLuong = filter_input(INPUT_POST, 'so_luong', FILTER_VALIDATE_INT) ?? 1;
+        // Kiểm tra CSRF cho API
+        $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
 
-        if (!$id || $id <= 0) {
-            http_response_code(400);
-            echo json_encode(['thanh_cong' => false, 'loi' => 'ID sản phẩm không hợp lệ'], JSON_UNESCAPED_UNICODE);
+        if (!csrfHopLe(is_string($token) ? $token : null)) {
+            http_response_code(403);
+
+            echo json_encode([
+                'thanh_cong' => false,
+                'loi' => 'Yêu cầu không hợp lệ hoặc CSRF token không đúng.'
+            ], JSON_UNESCAPED_UNICODE);
+
             exit;
         }
 
-        $gioHang->them($id, max(1, $soLuong));
+        // Hỗ trợ cả FormData và JSON
+        $duLieu = $_POST;
 
-        // Tính lại tổng số lượng món trên header
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+        if (stripos($contentType, 'application/json') !== false) {
+            $json = json_decode(
+                file_get_contents('php://input'),
+                true
+            );
+
+            if (!is_array($json)) {
+                http_response_code(400);
+
+                echo json_encode([
+                    'thanh_cong' => false,
+                    'loi' => 'Dữ liệu JSON không hợp lệ.'
+                ], JSON_UNESCAPED_UNICODE);
+
+                exit;
+            }
+
+            $duLieu = $json;
+        }
+
+        $id = filter_var(
+            $duLieu['id'] ?? null,
+            FILTER_VALIDATE_INT
+        );
+
+        $soLuong = filter_var(
+            $duLieu['so_luong'] ?? 1,
+            FILTER_VALIDATE_INT
+        );
+
+        if ($id === false || $id === null || $id <= 0) {
+            http_response_code(400);
+
+            echo json_encode([
+                'thanh_cong' => false,
+                'loi' => 'ID sản phẩm không hợp lệ.'
+            ], JSON_UNESCAPED_UNICODE);
+
+            exit;
+        }
+
+        if ($soLuong === false || $soLuong === null || $soLuong <= 0) {
+            http_response_code(400);
+
+            echo json_encode([
+                'thanh_cong' => false,
+                'loi' => 'Số lượng sản phẩm không hợp lệ.'
+            ], JSON_UNESCAPED_UNICODE);
+
+            exit;
+        }
+
+        $gioHang->them($id, $soLuong);
+
+        // Tính lại tổng số lượng sản phẩm
         $danhSach = $gioHang->laySanPham();
         $tongSoLuong = 0;
+
         foreach ($danhSach as $item) {
             $tongSoLuong += $item['soLuong'];
         }
 
         echo json_encode([
             'thanh_cong' => true,
-            'thong_bao' => 'Đã thêm sản phẩm vào giỏ hàng thành công!',
+            'thanh_bao' => 'Đã thêm sản phẩm vào giỏ hàng thành công!',
             'tong_so_luong' => $tongSoLuong
         ], JSON_UNESCAPED_UNICODE);
+
         exit;
     }
 
+    http_response_code(405);
+    header('Allow: GET, POST');
+
+    echo json_encode([
+        'thanh_cong' => false,
+        'loi' => 'Phương thức không được hỗ trợ.'
+    ], JSON_UNESCAPED_UNICODE);
+
 } catch (Throwable $e) {
+    error_log((string) $e);
+
     http_response_code(500);
-    echo json_encode(['thanh_cong' => false, 'loi' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+
+    echo json_encode([
+        'thanh_cong' => false,
+        'loi' => 'Đã xảy ra lỗi máy chủ.'
+    ], JSON_UNESCAPED_UNICODE);
 }

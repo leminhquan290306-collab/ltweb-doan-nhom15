@@ -50,17 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
+
 <main class="container">
-    <section class="card" style="max-width: 500px; margin: 30px auto; padding: 20px;">
+    <section class="card dang-ky-khung">
         <h2>Đăng ký tài khoản khách hàng</h2>
 
         <?php if ($thanhCong): ?>
-            <p role="status" style="color: green; font-weight: bold;">Đăng ký thành công! Bạn có thể đăng nhập bằng tài khoản vừa tạo.</p>
+            <p role="status" class="dang-ky-thanh-cong">
+                Đăng ký thành công! Bạn có thể đăng nhập bằng tài khoản vừa tạo.
+            </p>
             <p><a href="dang-nhap.php" class="btn btn--chinh">Đến trang đăng nhập</a></p>
         <?php else: ?>
 
             <?php if ($loi !== ''): ?>
-                <p role="alert" style="color: red;"><?= e($loi) ?></p>
+                <p role="alert" class="dang-ky-loi"><?= e($loi) ?></p>
             <?php endif; ?>
 
             <form method="post" action="dang-ky.php">
@@ -80,7 +83,7 @@ require_once __DIR__ . '/inc/header.php';
                         value="<?= e($hoTen) ?>"
                         autocomplete="name"
                         required
-                        style="width: 100%; padding: 8px;"
+                        class="dang-ky-input"
                     >
                 </p>
 
@@ -93,7 +96,7 @@ require_once __DIR__ . '/inc/header.php';
                         value="<?= e($email) ?>"
                         autocomplete="email"
                         required
-                        style="width: 100%; padding: 8px;"
+                        class="dang-ky-input"
                     >
                 </p>
 
@@ -106,7 +109,7 @@ require_once __DIR__ . '/inc/header.php';
                         minlength="8"
                         autocomplete="new-password"
                         required
-                        style="width: 100%; padding: 8px;"
+                        class="dang-ky-input"
                     >
                 </p>
 
@@ -119,16 +122,20 @@ require_once __DIR__ . '/inc/header.php';
                         minlength="8"
                         autocomplete="new-password"
                         required
-                        style="width: 100%; padding: 8px;"
+                        class="dang-ky-input"
                     >
                 </p>
 
                 <p>
-                    <button type="submit" class="btn btn--chinh" style="padding: 10px 20px;">Đăng ký</button>
+                    <button type="submit" class="btn btn--chinh nut-dang-ky">
+                        Đăng ký
+                    </button>
                 </p>
             </form>
 
-            <p style="margin-top: 15px;">Đã có tài khoản? <a href="dang-nhap.php">Đăng nhập ngay</a></p>
+            <p class="dang-ky-dang-nhap">
+                Đã có tài khoản? <a href="dang-nhap.php">Đăng nhập ngay</a>
+            </p>
         <?php endif; ?>
     </section>
 </main>

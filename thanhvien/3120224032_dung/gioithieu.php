@@ -106,6 +106,14 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['gui_luu_but'])
 ) {
+      if (!csrfHopLe(
+        is_string($_POST['csrf_token'] ?? null)
+            ? $_POST['csrf_token']
+            : null
+    )) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ.');
+    }
     $duLieuLuuBut['ten'] = trim(
         (string) ($_POST['ten'] ?? '')
     );
@@ -311,8 +319,9 @@ $danhSachLuuBut = $stmt->fetchAll();
       <h2>Sổ lưu bút cá nhân</h2>
 
       <form method="post">
+    <?= csrfField() ?>
 
-        <p>
+    <p>
           <label for="ten">Họ tên của bạn:</label>
           <input
             type="text"
@@ -325,7 +334,7 @@ $danhSachLuuBut = $stmt->fetchAll();
         </p>
 
         <?php if (isset($loiLuuBut['ten'])): ?>
-          <p role="alert" style="color: #dc2626;">
+          <p role="alert" class="dung-loi-luu-but">
             <?= e($loiLuuBut['ten']) ?>
           </p>
         <?php endif; ?>
@@ -342,7 +351,7 @@ $danhSachLuuBut = $stmt->fetchAll();
         </p>
 
         <?php if (isset($loiLuuBut['noiDung'])): ?>
-          <p role="alert" style="color: #dc2626;">
+          <p role="alert" class="dung-loi-luu-but">
             <?= e($loiLuuBut['noiDung']) ?>
           </p>
         <?php endif; ?>
@@ -354,7 +363,7 @@ $danhSachLuuBut = $stmt->fetchAll();
       </form>
 
       <?php if ($thongBaoLuuBut !== ''): ?>
-        <p style="color: #16a34a; font-weight: bold;">
+        <p class="dung-thong-bao-luu-but">
           <?= e($thongBaoLuuBut) ?>
         </p>
       <?php endif; ?>

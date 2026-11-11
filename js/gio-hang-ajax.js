@@ -9,10 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const formData = new FormData(form);
 
-            fetch('api/gio-hang.php', {
-                method: 'POST',
-                body: formData
-            })
+const csrfToken = document.querySelector(
+    'meta[name="csrf-token"]'
+)?.content;
+
+fetch('api/gio-hang.php', {
+    method: 'POST',
+    headers: {
+        'X-CSRF-Token': csrfToken || ''
+    },
+    body: formData
+})
             .then(res => res.json())
             .then(data => {
                 if (data.thanh_cong) {

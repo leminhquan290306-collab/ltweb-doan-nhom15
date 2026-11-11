@@ -371,6 +371,7 @@ require __DIR__ . '/../../inc/header.php';
             <?php endif; ?>
 
             <form method="post" action="gioithieu.php#nhat-ky">
+                <?= csrfField() ?>
                 <input type="hidden" name="hanh_dong" value="them_nhat_ky">
 
                 <p>
@@ -427,6 +428,7 @@ require __DIR__ . '/../../inc/header.php';
             <?php endif; ?>
 
             <form method="post" action="gioithieu.php#cong-viec">
+                <?= csrfField() ?>
                 <input type="hidden" name="hanh_dong" value="them_cong_viec">
 
                 <p>
@@ -459,6 +461,7 @@ require __DIR__ . '/../../inc/header.php';
                                 <span> — Chưa hoàn thành</span>
 
                                 <form
+                                <?= csrfField() ?>
                                     method="post"
                                     action="gioithieu.php#cong-viec"
                                 >

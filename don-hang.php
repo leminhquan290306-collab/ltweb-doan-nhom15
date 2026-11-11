@@ -27,13 +27,15 @@ $danhSachDonHang = $stmt->fetchAll();
 require_once __DIR__ . '/inc/header.php';
 ?>
 
+
 <main>
-    <section class="card">
+    <section class="card trang-don-hang">
         <h2>Lịch sử đơn hàng của tôi</h2>
 
         <?php if ($thanhCongId): ?>
-            <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
-                🎉 Đặt hàng thành công! Mã đơn hàng của bạn là: <strong>#<?= e((string)$thanhCongId) ?></strong>
+            <div class="trang-don-hang__thanh-cong">
+                🎉 Đặt hàng thành công! Mã đơn hàng của bạn là:
+                <strong>#<?= e((string)$thanhCongId) ?></strong>
             </div>
         <?php endif; ?>
 
@@ -41,17 +43,22 @@ require_once __DIR__ . '/inc/header.php';
             <p>Bạn chưa có đơn hàng nào.</p>
         <?php else: ?>
             <?php foreach ($danhSachDonHang as $donHang): ?>
-                <div style="border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-bottom: 15px;">
+                <div class="trang-don-hang__the">
                     <h3>Đơn hàng #<?= $donHang['id'] ?> - <small>Ngày đặt: <?= $donHang['ngay_tao'] ?></small></h3>
                     <p>Trạng thái: <strong><?= e(strtoupper($donHang['trang_thai'])) ?></strong></p>
-                    <p>Tổng tiền: <strong style="color: #e74c3c;"><?= number_format($donHang['tong_tien'], 0, ',', '.') ?> đ</strong></p>
+                    <p>
+                        Tổng tiền:
+                        <strong class="trang-don-hang__gia">
+                            <?= number_format($donHang['tong_tien'], 0, ',', '.') ?> đ
+                        </strong>
+                    </p>
 
                     <h4>Chi tiết sản phẩm:</h4>
                     <?php
                     $stmtCT = $pdo->prepare("
-                        SELECT ct.*, sp.ten 
-                        FROM chi_tiet_don ct 
-                        JOIN san_pham sp ON ct.san_pham_id = sp.id 
+                        SELECT ct.*, sp.ten
+                        FROM chi_tiet_don ct
+                        JOIN san_pham sp ON ct.san_pham_id = sp.id
                         WHERE ct.don_hang_id = ?
                     ");
                     $stmtCT->execute([$donHang['id']]);
@@ -67,5 +74,6 @@ require_once __DIR__ . '/inc/header.php';
         <?php endif; ?>
     </section>
 </main>
+
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

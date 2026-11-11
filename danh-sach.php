@@ -40,7 +40,7 @@ function lienKetTrang(int $so): string
     return '?' . http_build_query(array_merge($_GET, ['trang' => $so]));
 }
 
-$csrfToken = function_exists('taoCsrfToken') ? taoCsrfToken() : '';
+$csrfToken = csrfToken();
 
 require_once __DIR__ . '/inc/header.php';
 ?>
@@ -128,18 +128,18 @@ require_once __DIR__ . '/inc/header.php';
                         </p>
 
                         <!-- Đã thay thẻ <p> thành <div> để chuẩn cú pháp HTML5, tránh lỗi W3C -->
-                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <div class="danh-sach-thao-tac">
                             <a class="btn btn--chinh" href="chi-tiet.php?id=<?= e($sanPham->getId()) ?>">
                                 Xem chi tiết
                             </a>
 
-                            <form class="form-them-gio" method="POST" action="gio-hang.php" style="margin: 0;">
+                            <form class="form-them-gio" method="POST" action="gio-hang.php">
                                 <input type="hidden" name="ajax" value="1">
                                 <input type="hidden" name="hanh-dong" value="them">
                                 <input type="hidden" name="id" value="<?= e($sanPham->getId()) ?>">
                                 <input type="hidden" name="so-luong" value="1">
                                 <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
-                                <button type="submit" style="background: #27ae60; color: #fff; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: 500;">
+                                <button type="submit" class="nut-them-gio">
                                     🛒 Thêm vào giỏ
                                 </button>
                             </form>
@@ -149,65 +149,29 @@ require_once __DIR__ . '/inc/header.php';
             </div>
 
             <?php if ($tongSoTrang > 1): ?>
-                <nav aria-label="Phân trang danh sách" style="margin-top: 30px; display: flex; justify-content: center; gap: 5px;">
-                    <?php for ($i = 1; $i <= $tongSoTrang; $i++): ?>
-                        <a href="<?= lienKetTrang($i) ?>" style="padding: 8px 12px; border: 1px solid #ccc; background: <?= $i === $hienTai ? '#5a20cb' : '#fff' ?>; color: <?= $i === $hienTai ? '#fff' : '#333' ?>; text-decoration: none; border-radius: 4px;">
-                            <?= $i ?>
-                        </a>
-                    <?php endfor; ?>
-                </nav>
+                <nav class="phan-trang-danh-sach" aria-label="Phân trang danh sách">
+    <?php for ($i = 1; $i <= $tongSoTrang; $i++): ?>
+        <a
+            href="<?= lienKetTrang($i) ?>"
+            class="<?= $i === $hienTai ? 'dang-chon' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+</nav>
             <?php endif; ?>
         <?php endif; ?>
 
         <!-- BONG BÓNG GIỎ HÀNG NỔI (FLOATING CART BUBBLE) -->
-        <div id="bong-bong-gio-hang" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
-            <a href="gio-hang.php" style="background: #2c3e50; color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 26px; position: relative; transition: transform 0.2s;">
-                🛒
-                <span id="so-luong-bong-bong" style="position: absolute; top: -5px; right: -5px; background: #e74c3c; color: #fff; font-size: 14px; font-weight: bold; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
-                    <?= e($tongSoLuongGioHang) ?>
-                </span>
-            </a>
+        <div id="bong-bong-gio-hang" class="bong-bong-gio-hang">
+            <a href="gio-hang.php">
+    🛒
+    <span id="so-luong-bong-bong" class="so-luong-bong-bong">
+        <?= e($tongSoLuongGioHang) ?>
+    </span>
+</a>
         </div>
 
-        <!-- SCRIPT XỬ LÝ AJAX THÊM VÀO GIỎ HÀNG KHÔNG RELOAD TRANG -->
-        <script>
-            document.querySelectorAll('.form-them-gio').forEach(form => {
-                form.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(this);
-                    
-                    try {
-                        const response = await fetch('gio-hang.php', {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            const badge = document.getElementById('so-luong-bong-bong');
-                            if (badge) {
-                                badge.textContent = result.tongSoLuong;
-                            }
-                            
-                            const bubble = document.querySelector('#bong-bong-gio-hang a');
-                            if (bubble) {
-                                bubble.style.transform = 'scale(1.2)';
-                                setTimeout(() => {
-                                    bubble.style.transform = 'scale(1)';
-                                }, 200);
-                            }
-                        } else {
-                            alert('Có lỗi xảy ra: ' + (result.message || 'Không thể thêm vào giỏ'));
-                        }
-                    } catch (error) {
-                        console.error('Lỗi:', error);
-                        this.submit();
-                    }
-                });
-            });
-        </script>
+       <script src="js/danh-sach.js" defer></script>
 
         <noscript>
             <p>

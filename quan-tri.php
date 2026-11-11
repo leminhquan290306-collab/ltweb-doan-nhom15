@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/xac-thuc.php';
 
@@ -47,63 +43,75 @@ unset($_SESSION['quan_tri_tb']);
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<main class="container" style="max-width: 1100px; margin: 30px auto; padding: 0 15px;">
+<main class="container quan-tri-container">
 
     <!-- HEADER DASHBOARD -->
-    <section style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    <section class="quan-tri-header">
         <div>
             <h2>Khu vực Quản trị (Admin)</h2>
             <?php $nd = nguoiDung(); ?>
             <p>Xin chào: <strong><?= e($nd['ho_ten'] ?? $nd['email'] ?? 'Admin') ?></strong></p>
         </div>
         <div>
-            <a href="quan-tri.php?tab=san-pham" class="btn" style="padding: 8px 15px; background: <?= $tab === 'san-pham' ? '#5a20cb' : '#ccc' ?>; color: #fff; text-decoration: none; border-radius: 4px; margin-right: 5px;">Quản lý Sản phẩm</a>
-            <a href="quan-tri.php?tab=lien-he" class="btn" style="padding: 8px 15px; background: <?= $tab === 'lien-he' ? '#5a20cb' : '#ccc' ?>; color: #fff; text-decoration: none; border-radius: 4px; margin-right: 15px;">Quản lý Liên hệ (<?= count($danhSachLienHe) ?>)</a>
-            <a href="dang-xuat.php" style="color: #dc3545; text-decoration: none; font-weight: bold;">Đăng xuất</a>
+            <a href="quan-tri.php?tab=san-pham" class="btn quan-tri-tab <?= $tab === 'san-pham' ? 'dang-chon' : '' ?>">Quản lý Sản phẩm</a>
+            <a href="quan-tri.php?tab=lien-he" class="btn quan-tri-tab quan-tri-tab-lien-he <?= $tab === 'lien-he' ? 'dang-chon' : '' ?>">Quản lý Liên hệ (<?= count($danhSachLienHe) ?>)</a>
+            <<form method="POST" action="dang-xuat.php" class="form-dang-xuat-quan-tri">
+    <?= csrfField() ?>
+    <button type="submit" class="nut-dang-xuat-quan-tri">
+        Đăng xuất
+    </button>
+</form>
         </div>
     </section>
 
     <?php if ($thongBao !== ''): ?>
-        <p style="padding: 12px; background: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 20px;"><?= e($thongBao) ?></p>
+        <p class="quan-tri-thong-bao"><?= e($thongBao) ?></p>
     <?php endif; ?>
 
     <!-- TAB 1: QUẢN LÝ SẢN PHẨM -->
     <?php if ($tab === 'san-pham'): ?>
-        <section style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0;">Danh sách sản phẩm</h3>
-                <a href="them-san-pham.php" style="background: #27ae60; color: #fff; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;">+ Thêm sản phẩm mới</a>
+        <section class="quan-tri-khung">
+            <div class="quan-tri-tieu-de">
+                <h3 class="quan-tri-tieu-de-chinh">Danh sách sản phẩm</h3>
+                <a href="them-san-pham.php" class="nut-them-san-pham">+ Thêm sản phẩm mới</a>
             </div>
 
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <div class="quan-tri-bang-cuon">
+                <table class="quan-tri-bang">
                     <thead>
-                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                            <th style="padding: 10px;">ID</th>
-                            <th style="padding: 10px;">Ảnh</th>
-                            <th style="padding: 10px;">Tên sản phẩm</th>
-                            <th style="padding: 10px;">Danh mục</th>
-                            <th style="padding: 10px;">Giá</th>
-                            <th style="padding: 10px;">Tồn kho</th>
-                            <th style="padding: 10px; text-align: center;">Hành động</th>
+                        <tr class="quan-tri-bang-dau">
+                            <th>ID</th>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th class="quan-tri-can-giua">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($danhSachSanPham)): ?>
-                            <tr><td colspan="7" style="padding: 15px; text-align: center;">Chưa có sản phẩm nào.</td></tr>
+                            <tr><td colspan="7" class="quan-tri-bang-trong">Chưa có sản phẩm nào.</td></tr>
                         <?php else: ?>
                             <?php foreach ($danhSachSanPham as $sp): ?>
-                                <tr style="border-bottom: 1px solid #dee2e6;">
-                                    <td style="padding: 10px;"><?= e((string)$sp->getId()) ?></td>
-                                    <td style="padding: 10px;"><img src="<?= e($sp->getHinhAnh()) ?>" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;"></td>
-                                    <td style="padding: 10px; font-weight: 500;"><?= e($sp->getTen()) ?></td>
-                                    <td style="padding: 10px;"><?= e($sp->getDanhMuc()) ?></td>
-                                    <td style="padding: 10px; color: #e74c3c; font-weight: bold;"><?= number_format($sp->getGia(), 0, ',', '.') ?> đ</td>
-                                    <td style="padding: 10px;"><?= e((string)$sp->getSoLuong()) ?></td>
-                                    <td style="padding: 10px; text-align: center;">
-                                        <a href="sua-san-pham.php?id=<?= e((string)$sp->getId()) ?>" style="background: #f39c12; color: #fff; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 13px; margin-right: 5px;">Sửa</a>
-                                        <a href="xoa-san-pham.php?id=<?= e((string)$sp->getId()) ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');" style="background: #e74c3c; color: #fff; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 13px;">Xóa</a>
+                                <tr class="quan-tri-bang-dong">
+                                    <td><?= e((string)$sp->getId()) ?></td>
+                                    <td>
+                                    <img src="<?= e($sp->getHinhAnh()) ?>" alt="" class="quan-tri-anh-san-pham">
                                     </td>
+                                    <td class="quan-tri-ten-san-pham"><?= e($sp->getTen()) ?></td>
+                                    <td><?= e($sp->getDanhMuc()) ?></td>
+                                    <td class="quan-tri-gia-san-pham"><?= number_format($sp->getGia(), 0, ',', '.') ?> đ</td>
+                                    <td><?= e((string)$sp->getSoLuong()) ?></td>
+                                    <td class="quan-tri-can-giua">
+                                        <a href="sua-san-pham.php?id=<?= e((string)$sp->getId()) ?>" class="nut-sua-san-pham">Sửa</a>
+                                        <form action="xoa-san-pham.php" method="POST" class="form-xoa-san-pham">
+    <?= csrfField() ?>
+    <input type="hidden" name="id" value="<?= e((string)$sp->getId()) ?>">
+    <button type="submit" class="nut-xoa-san-pham">
+        Xóa
+    </button>
+</form>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -113,9 +121,9 @@ require_once __DIR__ . '/inc/header.php';
 
             <!-- Phân trang quản trị -->
             <?php if ($tongSoTrang > 1): ?>
-                <nav style="margin-top: 20px; display: flex; justify-content: center; gap: 5px;">
+                <nav class="quan-tri-phan-trang">
                     <?php for ($i = 1; $i <= $tongSoTrang; $i++): ?>
-                        <a href="quan-tri.php?tab=san-pham&trang=<?= $i ?>" style="padding: 6px 12px; border: 1px solid #ccc; background: <?= $i === $hienTai ? '#5a20cb' : '#fff' ?>; color: <?= $i === $hienTai ? '#fff' : '#333' ?>; text-decoration: none; border-radius: 4px;">
+                        <a href="quan-tri.php?tab=san-pham&trang=<?= $i ?>" class="<?= $i === $hienTai ? 'dang-chon' : '' ?>">
                             <?= $i ?>
                         </a>
                     <?php endfor; ?>
@@ -125,7 +133,7 @@ require_once __DIR__ . '/inc/header.php';
 
     <!-- TAB 2: QUẢN LÝ LIÊN HỆ -->
     <?php else: ?>
-        <section style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <section class="quan-tri-khung">
             <h3>Danh sách liên hệ từ khách hàng</h3>
             <?php if (empty($danhSachLienHe)): ?>
                 <p>Chưa có thông tin liên hệ.</p>
@@ -137,12 +145,12 @@ require_once __DIR__ . '/inc/header.php';
                         $noiDung = $lienHe['noi_dung'] ?? $lienHe['noiDung'] ?? 'N/A';
                         $ngayTao = $lienHe['ngay_tao'] ?? $lienHe['ngayTao'] ?? 'N/A';
                     ?>
-                    <article style="border-bottom: 2px solid #eee; padding: 15px 0; margin-bottom: 15px;">
+                    <article class="quan-tri-lien-he">
                         <p><strong>Họ tên:</strong> <?= e((string)$hoTen) ?></p>
                         <p><strong>Email:</strong> <?= e((string)$email) ?></p>
                         <p><strong>Nội dung chi tiết:</strong></p>
-                        <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin: 5px 0; white-space: pre-wrap;"><?= nl2br(e((string)$noiDung)) ?></div>
-                        <p style="font-size: 13px; color: #666; margin-top: 8px;"><strong>Thời gian gửi:</strong> <?= e((string)$ngayTao) ?></p>
+                        <div class="quan-tri-noi-dung-lien-he"><?= nl2br(e((string)$noiDung)) ?></div>
+                        <p class="quan-tri-thoi-gian"><strong>Thời gian gửi:</strong> <?= e((string)$ngayTao) ?></p>
                     </article>
                 <?php endforeach; ?>
             <?php endif; ?>

@@ -92,3 +92,906 @@ th {
         animation-iteration-count: 1;
     }
 }
+/* =========================================
+   TRANG DANH SÁCH - PHỤC VỤ CSP
+   ========================================= */
+
+/* Nhóm nút thao tác sản phẩm */
+.danh-sach-thao-tac {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Form thêm giỏ hàng */
+.form-them-gio {
+    margin: 0;
+}
+
+/* Nút thêm vào giỏ hàng */
+.nut-them-gio {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Phân trang */
+.phan-trang-danh-sach {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Liên kết phân trang */
+.phan-trang-danh-sach a {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* Trang đang được chọn */
+.phan-trang-danh-sach a.dang-chon {
+    background: #5a20cb;
+    color: #fff;
+}
+
+/* Bong bóng giỏ hàng nổi */
+.bong-bong-gio-hang {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+}
+
+.bong-bong-gio-hang > a {
+    background: #2c3e50;
+    color: #fff;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 26px;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+/* Số lượng trên bong bóng giỏ hàng */
+.so-luong-bong-bong {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}/* =========================================
+   TRANG SỬA SẢN PHẨM - PHỤC VỤ CSP
+   ========================================= */
+
+.sua-san-pham-container {
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.sua-san-pham-khung {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sua-san-pham-loi {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.sua-san-pham-loi ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.sua-san-pham-form p {
+    margin-bottom: 15px;
+}
+
+.sua-san-pham-form input[type="text"],
+.sua-san-pham-form input[type="number"],
+.sua-san-pham-form select,
+.sua-san-pham-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.sua-san-pham-anh {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+
+.sua-san-pham-label-anh {
+    margin-top: 10px;
+    display: block;
+}
+
+.nut-cap-nhat-san-pham {
+    background: #f39c12;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* NÚT THÊM SẢN PHẨM */
+.sua-san-pham-file {
+    margin-top: 5px;
+}
+
+.nut-them-san-pham {
+    background: #27ae60;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* =========================================
+   TRANG QUẢN TRỊ - PHỤC VỤ CSP
+   ========================================= */
+
+.quan-tri-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.quan-tri-header {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.quan-tri-tab {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #ccc;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.quan-tri-tab.dang-chon {
+    background: #5a20cb;
+}
+
+.quan-tri-tab-lien-he {
+    margin-right: 15px;
+}
+
+.form-dang-xuat-quan-tri {
+    display: inline;
+}
+
+.nut-dang-xuat-quan-tri {
+    color: #dc3545;
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quan-tri-thong-bao {
+    padding: 12px;
+    background: #d4edda;
+    color: #155724;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.quan-tri-khung {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quan-tri-tieu-de {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.quan-tri-tieu-de-chinh {
+    margin: 0;
+}
+
+.nut-them-san-pham {
+    display: inline-block;
+    background: #27ae60;
+    color: #fff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.quan-tri-bang-cuon {
+    overflow-x: auto;
+}
+
+.quan-tri-bang {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.quan-tri-bang-dau {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.quan-tri-bang th,
+.quan-tri-bang td {
+    padding: 10px;
+}
+
+.quan-tri-can-giua {
+    text-align: center;
+}
+
+.quan-tri-bang-trong {
+    padding: 15px;
+    text-align: center;
+}
+
+.quan-tri-bang-dong {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.quan-tri-anh-san-pham {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.quan-tri-ten-san-pham {
+    font-weight: 500;
+}
+
+.quan-tri-gia-san-pham {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.nut-sua-san-pham {
+    display: inline-block;
+    background: #f39c12;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.form-xoa-san-pham {
+    display: inline;
+}
+
+.nut-xoa-san-pham {
+    background: #e74c3c;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.quan-tri-phan-trang {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.quan-tri-phan-trang a {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.quan-tri-phan-trang a.dang-chon {
+    background: #5a20cb;
+    color: #fff;
+}
+
+.quan-tri-lien-he {
+    border-bottom: 2px solid #eee;
+    padding: 15px 0;
+    margin-bottom: 15px;
+}
+
+.quan-tri-noi-dung-lien-he {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+    white-space: pre-wrap;
+}
+
+.quan-tri-thoi-gian {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+}
+/* TRANG ĐĂNG NHẬP */
+.dang-nhap-khung {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.dang-nhap-loi {
+    color: red;
+    font-weight: bold;
+}
+
+.dang-nhap-input {
+    width: 100%;
+    padding: 8px;
+}
+
+.nut-dang-nhap {
+    padding: 10px 20px;
+}
+
+.dang-nhap-dang-ky {
+    margin-top: 15px;
+}
+/* TRANG ĐĂNG KÝ */
+.dang-ky-khung {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.dang-ky-thanh-cong {
+    color: green;
+    font-weight: bold;
+}
+
+.dang-ky-loi {
+    color: red;
+}
+
+.dang-ky-input {
+    width: 100%;
+    padding: 8px;
+}
+
+.nut-dang-ky {
+    padding: 10px 20px;
+}
+
+.dang-ky-dang-nhap {
+    margin-top: 15px;
+}
+/* TRANG CHỦ - PHỤC VỤ CSP */
+.trang-chu-loi-csdl {
+    background: #fee;
+    color: #c00;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #fcc;
+    font-family: sans-serif;
+}
+
+.trang-chu-thong-tin-san-pham {
+    font-size: 13px;
+    margin: 4px 0;
+}
+
+.trang-chu-gia-san-pham {
+    color: #e74c3c;
+    font-weight: bold;
+    margin: 4px 0;
+}
+
+.trang-chu-het-hang {
+    color: red;
+}
+
+.trang-chu-xem-chi-tiet {
+    display: block;
+    text-align: center;
+    padding: 6px 12px;
+    background: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.trang-chu-san-pham-da-xem {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.trang-chu-san-pham-da-xem-item {
+    background: #f9f9f9;
+    padding: 12px;
+}
+
+.trang-chu-anh-da-xem {
+    height: 90px;
+}
+
+.trang-chu-ten-da-xem {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trang-chu-gia-da-xem {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 0;
+}
+
+.trang-chu-lien-ket-da-xem {
+    margin-top: 10px;
+}
+
+.trang-chu-lien-ket-da-xem a {
+    font-size: 12px;
+    color: #3498db;
+    text-decoration: underline;
+}
+/* CHI TIẾT SẢN PHẨM - PHỤC VỤ CSP */
+.chi-tiet-san-pham-cung-danh-muc {
+    margin-top: 30px;
+}
+
+.chi-tiet-luoi-cung-danh-muc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.chi-tiet-the-san-pham {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.chi-tiet-anh-cung-danh-muc {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.chi-tiet-ten-cung-danh-muc {
+    font-size: 14px;
+    margin: 10px 0 5px;
+}
+
+.chi-tiet-gia-cung-danh-muc {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.chi-tiet-nut-cung-danh-muc {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #3498db;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+/* Trang lỗi 403 */
+.trang-403 {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.trang-403__card {
+    padding: 30px;
+}
+
+.trang-403__tieu-de {
+    color: #e74c3c;
+    margin-top: 0;
+}
+
+.trang-403__lien-ket {
+    margin-top: 25px;
+}
+
+.trang-403__nut {
+    background: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Trang lỗi 500 */
+.trang-500 {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.trang-500__main {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.trang-500__card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trang-500__tieu-de {
+    color: #e74c3c;
+    margin-top: 0;
+}
+
+.trang-500__lien-ket {
+    margin-top: 20px;
+}
+
+.trang-500__nut {
+    display: inline-block;
+    background: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Liên kết tiến hành đặt hàng trong giỏ hàng */
+.gio-hang__lien-ket-dat-hang {
+    margin-top: 15px;
+}
+
+.gio-hang__nut-dat-hang {
+    background: #27ae60;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Trang liên hệ */
+.trang-lien-he {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.trang-lien-he__card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trang-lien-he__thong-bao {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.trang-lien-he__thong-bao--thanh-cong {
+    background: #d4edda;
+    color: #155724;
+}
+
+.trang-lien-he__thong-bao--loi {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.trang-lien-he__loi {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.trang-lien-he__danh-sach-loi {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.trang-lien-he__fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.trang-lien-he__legend {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.trang-lien-he__truong {
+    margin-bottom: 15px;
+}
+
+.trang-lien-he__truong input,
+.trang-lien-he__truong select,
+.trang-lien-he__truong textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.trang-lien-he__tep {
+    margin-top: 5px;
+}
+
+.trang-lien-he__dong-y {
+    margin-bottom: 20px;
+}
+
+.trang-lien-he__nhan-dong-y {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.trang-lien-he__nut-nhom {
+    display: flex;
+    gap: 10px;
+}
+
+.trang-lien-he__nut-gui,
+.trang-lien-he__nut-nhap-lai {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.trang-lien-he__nut-gui {
+    background: #5a20cb;
+}
+
+.trang-lien-he__nut-nhap-lai {
+    background: #6c757d;
+}
+
+/* Trang xác nhận đặt hàng */
+.trang-dat-hang {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.trang-dat-hang__loi {
+    color: red;
+    font-weight: bold;
+}
+
+.trang-dat-hang__danh-sach {
+    margin-bottom: 20px;
+}
+
+.trang-dat-hang__san-pham {
+    margin-bottom: 8px;
+}
+
+.trang-dat-hang__tong-tien {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.trang-dat-hang__gia {
+    color: #e74c3c;
+    font-size: 1.2em;
+}
+
+.trang-dat-hang__nut {
+    background: #27ae60;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.trang-dat-hang__quay-lai {
+    margin-left: 15px;
+    text-decoration: underline;
+}
+
+/* Trang lịch sử đơn hàng */
+.trang-don-hang {
+    padding: 20px;
+}
+
+.trang-don-hang__thanh-cong {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.trang-don-hang__the {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.trang-don-hang__gia {
+    color: #e74c3c;
+}
+
+/* Trang thông tin cá nhân */
+.trang-thong-tin-ca-nhan {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.trang-thong-tin-ca-nhan__card {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trang-thong-tin-ca-nhan__thong-tin {
+    margin-bottom: 30px;
+}
+
+.trang-thong-tin-ca-nhan__tieu-de {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.trang-thong-tin-ca-nhan__noi-dung {
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.trang-thong-tin-ca-nhan__dang-xuat {
+    margin-top: 15px;
+}
+
+.trang-thong-tin-ca-nhan__form-dang-xuat {
+    display: inline;
+}
+
+.trang-thong-tin-ca-nhan__nut-dang-xuat {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.trang-thong-tin-ca-nhan__chua-co-don {
+    padding: 15px 0;
+}
+
+.trang-thong-tin-ca-nhan__nut-kham-pha {
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.trang-thong-tin-ca-nhan__bang-wrapper {
+    overflow-x: auto;
+}
+
+.trang-thong-tin-ca-nhan__bang {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.trang-thong-tin-ca-nhan__bang-dau {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.trang-thong-tin-ca-nhan__bang th,
+.trang-thong-tin-ca-nhan__bang td {
+    padding: 12px;
+}
+
+.trang-thong-tin-ca-nhan__bang-dong {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.trang-thong-tin-ca-nhan__ma-don {
+    font-weight: bold;
+}
+
+.trang-thong-tin-ca-nhan__tong-tien {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.trang-thong-tin-ca-nhan__trang-thai {
+    background: #e2e3e5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}

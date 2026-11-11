@@ -315,11 +315,11 @@ require_once __DIR__ . '/inc/header.php';
                     </form>
 
                     <!-- Thêm liên kết dẫn nhanh tới giỏ hàng -->
-                    <p style="margin-top: 15px;">
-                        <a href="gio-hang.php" style="color: #3498db; text-decoration: underline; font-weight: bold;">
-                            🛒 Xem giỏ hàng & Tiến hành đặt hàng ➔
-                        </a>
-                    </p>
+                    <p class="chi-tiet-lien-ket-gio-hang">
+    <a href="gio-hang.php">
+        🛒 Xem giỏ hàng & Tiến hành đặt hàng ➔
+    </a>
+</p>
 
                 </section>
 
@@ -327,22 +327,37 @@ require_once __DIR__ . '/inc/header.php';
 
         </article>
 
-        <!-- KHỐI HIỂN THỊ 4 SẢN PHẨM CÙNG DANH MỤC (ĐÚNG YÊU CẦU BẢNG 1) -->
-        <?php if (!empty($sanPhamCungDanhMuc)): ?>
-            <section class="card" style="margin-top: 30px;">
-                <h3>Sản phẩm cùng danh mục</h3>
-                <div class="luoi-san-pham" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px;">
-                    <?php foreach ($sanPhamCungDanhMuc as $spCung): ?>
-                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; background: #fff;">
-                            <img src="<?= e($spCung->getHinhAnh()) ?>" alt="<?= e($spCung->getTen()) ?>" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px;">
-                            <h4 style="font-size: 14px; margin: 10px 0 5px;"><?= e($spCung->getTen()) ?></h4>
-                            <p style="color: #e74c3c; font-weight: bold; font-size: 13px;"><?= number_format($spCung->getGia(), 0, ',', '.') ?> đ</p>
-                            <a href="chi-tiet.php?id=<?= e($spCung->getId()) ?>" style="display: inline-block; padding: 4px 8px; background: #3498db; color: #fff; font-size: 12px; text-decoration: none; border-radius: 3px;">Xem chi tiết</a>
-                        </div>
-                    <?php endforeach; ?>
+        <!-- KHỐI HIỂN THỊ 4 SẢN PHẨM CÙNG DANH MỤC -->
+<?php if (!empty($sanPhamCungDanhMuc)): ?>
+    <section class="card chi-tiet-san-pham-cung-danh-muc">
+        <h3>Sản phẩm cùng danh mục</h3>
+
+        <div class="luoi-san-pham chi-tiet-luoi-cung-danh-muc">
+            <?php foreach ($sanPhamCungDanhMuc as $spCung): ?>
+                <div class="chi-tiet-the-san-pham">
+                    <img
+                        src="<?= e($spCung->getHinhAnh()) ?>"
+                        alt="<?= e($spCung->getTen()) ?>"
+                        class="chi-tiet-anh-cung-danh-muc">
+
+                    <h4 class="chi-tiet-ten-cung-danh-muc">
+                        <?= e($spCung->getTen()) ?>
+                    </h4>
+
+                    <p class="chi-tiet-gia-cung-danh-muc">
+                        <?= number_format($spCung->getGia(), 0, ',', '.') ?> đ
+                    </p>
+
+                    <a
+                        href="chi-tiet.php?id=<?= e($spCung->getId()) ?>"
+                        class="chi-tiet-nut-cung-danh-muc">
+                        Xem chi tiết
+                    </a>
                 </div>
-            </section>
-        <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
+<?php endif; ?>
 
     <?php endif; ?>
 

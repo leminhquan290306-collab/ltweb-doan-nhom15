@@ -65,10 +65,14 @@ function dangNhap(string $email, string $matKhau): bool
         }
 
         if ($dungMatKhau) {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            session_regenerate_id(true);
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        throw new RuntimeException('Session chưa được khởi tạo.');
+    }
+
+    session_regenerate_id(true);
+
+    // Cập nhật thời gian hoạt động sau đăng nhập
+    $_SESSION['last_activity'] = time();
 
             $userId = (int) $user['id'];
             $vaiTro = $user['vai_tro'] ?? 'khach_hang';
@@ -122,23 +126,25 @@ function laQuanTri(): bool
 
 function dangXuat(): void
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        return;
     }
+
+    // Xóa toàn bộ dữ liệu session
     $_SESSION = [];
 
+    // Xóa cookie session với đúng cấu hình hiện tại
     if (ini_get('session.use_cookies')) {
         $params = session_get_cookie_params();
 
-        setcookie(
-            session_name(),
-            '',
-            time() - 42000,
-            $params['path'],
-            $params['domain'],
-            $params['secure'],
-            $params['httponly']
-        );
+        setcookie(session_name(), '', [
+            'expires' => time() - 42000,
+            'path' => $params['path'],
+            'domain' => $params['domain'],
+            'secure' => $params['secure'],
+            'httponly' => $params['httponly'],
+            'samesite' => $params['samesite'] ?? 'Lax'
+        ]);
     }
 
     session_destroy();

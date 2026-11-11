@@ -43,12 +43,13 @@ $baseUrl = '';
 require_once __DIR__ . '/inc/header.php';
 ?>
 
+
 <main class="container">
-    <section class="card" style="max-width: 500px; margin: 30px auto; padding: 20px;">
+    <section class="card dang-nhap-khung">
         <h2>Đăng nhập tài khoản</h2>
 
         <?php if ($loi !== ''): ?>
-            <p role="alert" style="color: red; font-weight: bold;"><?= e($loi) ?></p>
+            <p role="alert" class="dang-nhap-loi"><?= e($loi) ?></p>
         <?php endif; ?>
 
         <form method="post" action="dang-nhap.php">
@@ -67,7 +68,7 @@ require_once __DIR__ . '/inc/header.php';
                     value="<?= e($email) ?>"
                     autocomplete="email"
                     required
-                    style="width: 100%; padding: 8px;"
+                    class="dang-nhap-input"
                 >
             </p>
 
@@ -79,20 +80,23 @@ require_once __DIR__ . '/inc/header.php';
                     name="mat-khau"
                     autocomplete="current-password"
                     required
-                    style="width: 100%; padding: 8px;"
+                    class="dang-nhap-input"
                 >
             </p>
 
             <p>
-                <button type="submit" class="btn btn--chinh" style="padding: 10px 20px;">Đăng nhập</button>
+                <button type="submit" class="btn btn--chinh nut-dang-nhap">
+                    Đăng nhập
+                </button>
             </p>
         </form>
 
-        <p style="margin-top: 15px;">
+        <p class="dang-nhap-dang-ky">
             Chưa có tài khoản?
             <a href="dang-ky.php">Đăng ký ngay</a>
         </p>
     </section>
 </main>
+
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

@@ -14,7 +14,7 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
 
     <meta name="description"
           content="Website tư vấn và mua sắm quà tặng thông minh, giúp người dùng tìm món quà phù hợp với người nhận, dịp tặng và ngân sách.">
-
+<meta name="csrf-token" content="<?= e(csrfToken()) ?>">
     <link rel="icon"
           type="image/jpeg"
           href="<?= e($baseUrl) ?>images/hop-qua.jpg">
@@ -61,7 +61,10 @@ $laTrangCaNhan = isset($trangCaNhan) && $trangCaNhan;
                 <a href="<?= e($baseUrl) ?>quan-tri.php">Quản trị</a>
             <?php endif; ?>
 
-            <a href="<?= e($baseUrl) ?>dang-xuat.php">Đăng xuất</a>
+            <form method="POST" action="<?= e($baseUrl) ?>dang-xuat.php">
+    <?= csrfField() ?>
+    <button type="submit">Đăng xuất</button>
+</form>
         <?php else: ?>
             <a href="<?= e($baseUrl) ?>dang-nhap.php">Đăng nhập</a>
             <a href="<?= e($baseUrl) ?>dang-ky.php">Đăng ký</a>

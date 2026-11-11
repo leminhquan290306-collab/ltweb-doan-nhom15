@@ -84,35 +84,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
+
 <main>
-    <section class="card" style="max-width: 700px; margin: 30px auto; padding: 20px;">
+    <section class="card trang-dat-hang">
         <h2>Xác nhận đặt hàng</h2>
 
         <?php if ($loi !== null): ?>
-            <p role="alert" style="color: red; font-weight: bold;"><?= e($loi) ?></p>
+            <p role="alert" class="trang-dat-hang__loi"><?= e($loi) ?></p>
         <?php endif; ?>
 
         <h3>Danh sách món quà đã chọn:</h3>
-        <ul style="margin-bottom: 20px;">
+        <ul class="trang-dat-hang__danh-sach">
             <?php foreach ($danhSach as $item): ?>
-                <li style="margin-bottom: 8px;">
-                    <strong><?= e($item['sanPham']->getTen()) ?></strong> - 
-                    Số lượng: <?= $item['soLuong'] ?> - 
+                <li class="trang-dat-hang__san-pham">
+                    <strong><?= e($item['sanPham']->getTen()) ?></strong> -
+                    Số lượng: <?= $item['soLuong'] ?> -
                     Thành tiền: <strong><?= number_format($item['thanhTien'], 0, ',', '.') ?> đ</strong>
                 </li>
             <?php endforeach; ?>
         </ul>
 
-        <p style="font-size: 1.1em; margin-bottom: 20px;">Tổng thành tiền: <strong style="color: #e74c3c; font-size: 1.2em;"><?= number_format($gioHang->tongTien(), 0, ',', '.') ?> đ</strong></p>
+        <p class="trang-dat-hang__tong-tien">
+            Tổng thành tiền:
+            <strong class="trang-dat-hang__gia">
+                <?= number_format($gioHang->tongTien(), 0, ',', '.') ?> đ
+            </strong>
+        </p>
 
         <form method="POST" action="dat-hang.php">
             <input type="hidden" name="csrf_token" value="<?= e(taoCsrfToken()) ?>">
-            <button type="submit" class="btn btn--chinh" style="background: #27ae60; color: #fff; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold;">
+            <button type="submit" class="btn btn--chinh trang-dat-hang__nut">
                 Xác nhận thanh toán & Đặt hàng
             </button>
-            <a href="gio-hang.php" style="margin-left: 15px; text-decoration: underline;">Quay lại giỏ hàng</a>
+            <a href="gio-hang.php" class="trang-dat-hang__quay-lai">Quay lại giỏ hàng</a>
         </form>
     </section>
 </main>
+
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

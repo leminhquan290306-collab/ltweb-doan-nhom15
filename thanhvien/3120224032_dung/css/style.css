@@ -209,3 +209,11 @@ a:focus-visible, button:focus-visible {
     flex: 1;
   }
 }
+.dung-loi-luu-but {
+    color: #dc2626;
+}
+
+.dung-thong-bao-luu-but {
+    color: #16a34a;
+    font-weight: bold;
+}

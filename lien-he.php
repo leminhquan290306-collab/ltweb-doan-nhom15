@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/inc/config.php';
 
 $tieuDeTrang = 'Liên hệ và tư vấn - Quà Tặng Thông Minh';
@@ -109,19 +105,20 @@ $csrfToken = function_exists('taoCsrfToken') ? taoCsrfToken() : '';
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<main class="container" style="max-width: 700px; margin: 30px auto; padding: 0 15px;">
-    <section class="form-lien-he" style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+
+<main class="container trang-lien-he">
+    <section class="form-lien-he trang-lien-he__card">
         <h2>Đăng ký tư vấn quà tặng</h2>
 
         <?php if ($thongBao !== ''): ?>
-            <p style="padding: 10px; background: <?= empty($loiForm) ? '#d4edda' : '#f8d7da' ?>; color: <?= empty($loiForm) ? '#155724' : '#721c24' ?>; border-radius: 4px; margin-bottom: 20px;">
+            <p class="trang-lien-he__thong-bao <?= empty($loiForm) ? 'trang-lien-he__thong-bao--thanh-cong' : 'trang-lien-he__thong-bao--loi' ?>">
                 <?= e($thongBao) ?>
             </p>
         <?php endif; ?>
 
         <?php if (!empty($loiForm)): ?>
-            <div class="thong-bao-loi" role="alert" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                <ul style="margin: 0; padding-left: 20px;">
+            <div class="thong-bao-loi trang-lien-he__loi" role="alert">
+                <ul class="trang-lien-he__danh-sach-loi">
                     <?php foreach ($loiForm as $loi): ?>
                         <li><?= e($loi) ?></li>
                     <?php endforeach; ?>
@@ -132,27 +129,27 @@ require_once __DIR__ . '/inc/header.php';
         <form id="form-lien-he" action="lien-he.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
 
-            <fieldset style="border: none; padding: 0; margin: 0;">
-                <legend style="font-weight: bold; font-size: 18px; margin-bottom: 15px;">Thông tin người gửi</legend>
+            <fieldset class="trang-lien-he__fieldset">
+                <legend class="trang-lien-he__legend">Thông tin người gửi</legend>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="ho-ten">Họ và tên:</label><br>
-                    <input type="text" id="ho-ten" name="ho-ten" value="<?= e($_POST['ho-ten'] ?? '') ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <input type="text" id="ho-ten" name="ho-ten" value="<?= e($_POST['ho-ten'] ?? '') ?>" required>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="email">Email:</label><br>
-                    <input type="email" id="email" name="email" value="<?= e($_POST['email'] ?? '') ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <input type="email" id="email" name="email" value="<?= e($_POST['email'] ?? '') ?>" required>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="so-dien-thoai">Số điện thoại (10 chữ số):</label><br>
-                    <input type="tel" id="so-dien-thoai" name="so-dien-thoai" value="<?= e($_POST['so-dien-thoai'] ?? '') ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <input type="tel" id="so-dien-thoai" name="so-dien-thoai" value="<?= e($_POST['so-dien-thoai'] ?? '') ?>" required>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="nguoi-nhan">Người nhận quà:</label><br>
-                    <select id="nguoi-nhan" name="nguoi-nhan" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <select id="nguoi-nhan" name="nguoi-nhan" required>
                         <option value="">-- Chọn người nhận --</option>
                         <option value="Bạn bè">Bạn bè</option>
                         <option value="Người yêu">Người yêu</option>
@@ -161,9 +158,9 @@ require_once __DIR__ . '/inc/header.php';
                     </select>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="dip-tang">Dịp tặng:</label><br>
-                    <select id="dip-tang" name="dip-tang" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <select id="dip-tang" name="dip-tang" required>
                         <option value="">-- Chọn dịp tặng --</option>
                         <option value="Sinh nhật">Sinh nhật</option>
                         <option value="Kỷ niệm">Kỷ niệm</option>
@@ -172,44 +169,45 @@ require_once __DIR__ . '/inc/header.php';
                     </select>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="ngan-sach">Ngân sách dự kiến (VNĐ):</label><br>
-                    <input type="number" id="ngan-sach" name="ngan-sach" min="5000" max="100000000" step="1000" value="<?= e($_POST['ngan-sach'] ?? '') ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <input type="number" id="ngan-sach" name="ngan-sach" min="5000" max="100000000" step="1000" value="<?= e($_POST['ngan-sach'] ?? '') ?>" required>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="ngay-can-qua">Ngày cần quà:</label><br>
-                    <input type="date" id="ngay-can-qua" name="ngay-can-qua" value="<?= e($_POST['ngay-can-qua'] ?? '') ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <input type="date" id="ngay-can-qua" name="ngay-can-qua" value="<?= e($_POST['ngay-can-qua'] ?? '') ?>" required>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="so-thich">Sở thích hoặc yêu cầu cụ thể:</label><br>
-                    <textarea id="so-thich" name="so-thich" rows="4" required style="width: 100%; padding: 8px; margin-top: 5px;"><?= e($_POST['so-thich'] ?? '') ?></textarea>
+                    <textarea id="so-thich" name="so-thich" rows="4" required><?= e($_POST['so-thich'] ?? '') ?></textarea>
                 </p>
 
-                <p style="margin-bottom: 15px;">
+                <p class="trang-lien-he__truong">
                     <label for="anh">Ảnh tham khảo (không bắt buộc):</label><br>
-                    <input type="file" id="anh" name="anh" accept="image/jpeg,image/png,image/webp" style="margin-top: 5px;">
+                    <input type="file" id="anh" name="anh" accept="image/jpeg,image/png,image/webp" class="trang-lien-he__tep">
                 </p>
 
-                <p style="margin-bottom: 20px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <p class="trang-lien-he__dong-y">
+                    <label class="trang-lien-he__nhan-dong-y">
                         <input type="checkbox" id="dong-y" name="dong-y" required>
                         <span>Tôi đồng ý cung cấp thông tin để được tư vấn.</span>
                     </label>
                 </p>
             </fieldset>
 
-            <div style="display: flex; gap: 10px;">
-                <button type="submit" style="background: #5a20cb; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            <div class="trang-lien-he__nut-nhom">
+                <button type="submit" class="trang-lien-he__nut-gui">
                     Gửi yêu cầu tư vấn
                 </button>
-                <button type="reset" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+                <button type="reset" class="trang-lien-he__nut-nhap-lai">
                     Nhập lại
                 </button>
             </div>
         </form>
     </section>
 </main>
+
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

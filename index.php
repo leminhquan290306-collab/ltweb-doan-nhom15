@@ -12,8 +12,8 @@ $baseUrl = '';
 try {
     $pdo = hamCSDL();
     $stmt = $pdo->query("
-        SELECT san_pham.*, danh_muc.ten AS ten_danh_muc 
-        FROM san_pham 
+        SELECT san_pham.*, danh_muc.ten AS ten_danh_muc
+        FROM san_pham
         JOIN danh_muc ON san_pham.danh_muc_id = danh_muc.id
         ORDER BY san_pham.ngay_tao DESC
     ");
@@ -27,8 +27,8 @@ try {
             $cookieIds = array_slice($cookieIds, 0, 4);
             $inQuery = implode(',', array_fill(0, count($cookieIds), '?'));
             $stmtDaXem = $pdo->prepare("
-                SELECT san_pham.*, danh_muc.ten AS ten_danh_muc 
-                FROM san_pham 
+                SELECT san_pham.*, danh_muc.ten AS ten_danh_muc
+                FROM san_pham
                 JOIN danh_muc ON san_pham.danh_muc_id = danh_muc.id
                 WHERE san_pham.id IN ($inQuery)
             ");
@@ -38,9 +38,9 @@ try {
     }
 
 } catch (PDOException $e) {
-    echo "<div style='background: #fee; color: #c00; padding: 20px; margin: 20px; border: 1px solid #fcc; font-family: sans-serif;'>";
-    echo "<strong>Lỗi truy vấn CSDL:</strong> " . $e->getMessage();
-    echo "</div>";
+    echo '<div class="trang-chu-loi-csdl">';
+    echo "<strong>Lỗi truy vấn CSDL:</strong> " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    echo '</div>';
     $danhSachSanPham = [];
     $danhSachDaXem = [];
 }
@@ -92,33 +92,41 @@ require_once __DIR__ . '/inc/header.php';
             <li>Quà dành cho đồng nghiệp</li>
         </ul>
     </section>
-    
+
     <!-- KHU VỰC DANH SÁCH SẢN PHẨM TỪ MYSQL CÓ THANH CUỘN GỌN GÀNG -->
     <section class="card">
         <h2 class="card__title">Danh sách sản phẩm từ MySQL</h2>
 
-        <div class="product-scroll-container">
-            <div class="product-grid">
-                <?php if (empty($danhSachSanPham)): ?>
-                    <p>Chưa có sản phẩm nào trong cơ sở dữ liệu.</p>
-                <?php else: ?>
-                    <?php foreach ($danhSachSanPham as $sp): ?>
-                        <div class="product-item">
-                            <div>
-                                <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="<?= htmlspecialchars($sp['ten']) ?>">
-                                <h3 title="<?= htmlspecialchars($sp['ten']) ?>"><?= htmlspecialchars($sp['ten']) ?></h3>
-                                <p style="font-size: 13px; margin: 4px 0;">Danh mục: <strong><?= htmlspecialchars($sp['ten_danh_muc']) ?></strong></p>
-                                <p style="color: #e74c3c; font-weight: bold; margin: 4px 0;">Giá: <?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
-                            </div>
-                            <div>
-                                <p style="font-size: 13px; margin: 4px 0;">Tồn kho: <?= $sp['ton_kho'] > 0 ? $sp['ton_kho'] : '<span style="color:red">Hết hàng</span>' ?></p>
-                                <a href="chi-tiet.php?id=<?= $sp['id'] ?>" style="display: block; text-align: center; padding: 6px 12px; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; margin-top: 10px;">Xem chi tiết</a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
+
+<div class="product-scroll-container">
+    <div class="product-grid">
+        <?php if (empty($danhSachSanPham)): ?>
+            <p>Chưa có sản phẩm nào trong cơ sở dữ liệu.</p>
+        <?php else: ?>
+            <?php foreach ($danhSachSanPham as $sp): ?>
+                <div class="product-item">
+                    <div>
+                        <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="<?= htmlspecialchars($sp['ten']) ?>">
+                        <h3 title="<?= htmlspecialchars($sp['ten']) ?>"><?= htmlspecialchars($sp['ten']) ?></h3>
+                        <p class="trang-chu-thong-tin-san-pham">Danh mục: <strong><?= htmlspecialchars($sp['ten_danh_muc']) ?></strong></p>
+                        <p class="trang-chu-gia-san-pham">Giá: <?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
+                    </div>
+                    <div>
+                        <p class="trang-chu-thong-tin-san-pham">
+                            Tồn kho:
+                            <?php if ($sp['ton_kho'] > 0): ?>
+                                <?= $sp['ton_kho'] ?>
+                            <?php else: ?>
+                                <span class="trang-chu-het-hang">Hết hàng</span>
+                            <?php endif; ?>
+                        </p>
+                        <a href="chi-tiet.php?id=<?= $sp['id'] ?>" class="trang-chu-xem-chi-tiet">Xem chi tiết</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>
     </section>
 
     <!-- KHỐI HIỂN THỊ SẢN PHẨM ĐÃ XEM GẦN ĐÂY TỪ COOKIE -->
@@ -126,20 +134,21 @@ require_once __DIR__ . '/inc/header.php';
         <section class="card">
             <h2 class="card__title">Sản phẩm bạn đã xem gần đây</h2>
 
-            <div class="product-grid" style="grid-template-columns: repeat(4, 1fr);">
-                <?php foreach ($danhSachDaXem as $sp): ?>
-                    <div class="product-item" style="background: #f9f9f9; padding: 12px;">
-                        <div>
-                            <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="" style="height: 90px;">
-                            <h3 title="<?= htmlspecialchars($sp['ten']) ?>" style="margin: 0 0 6px 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($sp['ten']) ?></h3>
-                            <p style="color: #e74c3c; font-weight: bold; font-size: 13px; margin: 0;"><?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <a href="chi-tiet.php?id=<?= $sp['id'] ?>" style="font-size: 12px; color: #3498db; text-decoration: underline;">Xem lại</a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+
+<div class="product-grid trang-chu-san-pham-da-xem">
+    <?php foreach ($danhSachDaXem as $sp): ?>
+        <div class="product-item trang-chu-san-pham-da-xem-item">
+            <div>
+                <img src="<?= htmlspecialchars($sp['anh'] ?? 'images/hop-qua.jpg') ?>" alt="" class="trang-chu-anh-da-xem">
+                <h3 title="<?= htmlspecialchars($sp['ten']) ?>" class="trang-chu-ten-da-xem"><?= htmlspecialchars($sp['ten']) ?></h3>
+                <p class="trang-chu-gia-da-xem"><?= number_format($sp['gia'], 0, ',', '.') ?> đ</p>
             </div>
+            <div class="trang-chu-lien-ket-da-xem">
+                <a href="chi-tiet.php?id=<?= $sp['id'] ?>">Xem lại</a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
         </section>
     <?php endif; ?>
 

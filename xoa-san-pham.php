@@ -1,20 +1,32 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/tai-khoan.php';
 
+// Chỉ cho phép POST
+yeuCauPost();
+
+// Kiểm tra quyền quản trị
 if (!laQuanTri()) {
-    redirect('dang-nhap.php');
+    http_response_code(403);
+    exit('403 - Bạn không có quyền thực hiện thao tác này.');
 }
 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+// Kiểm tra CSRF
+$csrfToken = $_POST['csrf_token'] ?? null;
 
-if ($id) {
+if (!csrfHopLe(
+    is_string($csrfToken) ? $csrfToken : null
+)) {
+    http_response_code(403);
+    exit('403 - Yêu cầu không hợp lệ.');
+}
+
+// Lấy ID sản phẩm từ POST
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+if ($id && $id > 0) {
     try {
         $pdo = hamCSDL();
         $stmt = $pdo->prepare("DELETE FROM san_pham WHERE id = ?");
@@ -22,11 +34,12 @@ if ($id) {
 
         $_SESSION['quan_tri_tb'] = 'Xóa sản phẩm thành công!';
     } catch (PDOException $e) {
-        // Bắt lỗi khóa ngoại (Mã lỗi 1451 khi sản phẩm đã nằm trong đơn hàng)
+        // Bắt lỗi khóa ngoại khi sản phẩm đã nằm trong đơn hàng
         if ($e->getCode() == 23000) {
             $_SESSION['quan_tri_tb'] = 'Không thể xóa sản phẩm này vì đã có trong lịch sử đơn hàng của khách!';
         } else {
-            $_SESSION['quan_tri_tb'] = 'Lỗi khi xóa sản phẩm: ' . $e->getMessage();
+            error_log($e->getMessage());
+            $_SESSION['quan_tri_tb'] = 'Không thể xóa sản phẩm. Vui lòng thử lại!';
         }
     }
 }

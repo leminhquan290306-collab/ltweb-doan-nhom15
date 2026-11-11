@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/xac-thuc.php';
 
@@ -30,6 +26,16 @@ $loiForm = [];
 $danhMucList = db()->query("SELECT id, ten FROM danh_muc ORDER BY ten")->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (!csrfHopLe(
+        is_string($_POST['csrf_token'] ?? null)
+            ? $_POST['csrf_token']
+            : null
+    )) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ.');
+    }
+
     $ten = trim((string)($_POST['ten'] ?? ''));
     $danhMucId = filter_input(INPUT_POST, 'danh_muc_id', FILTER_VALIDATE_INT);
     $gia = filter_input(INPUT_POST, 'gia', FILTER_VALIDATE_INT);
@@ -74,14 +80,14 @@ $baseUrl = '';
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<main class="container" style="max-width: 650px; margin: 30px auto; padding: 0 15px;">
-    <section style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+<main class="container sua-san-pham-container">
+    <section class="sua-san-pham-khung">
         <h2>Sửa thông tin sản phẩm</h2>
         <p><a href="quan-tri.php?tab=san-pham">← Quay lại danh sách quản trị</a></p>
 
         <?php if (!empty($loiForm)): ?>
-            <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
-                <ul style="margin: 0; padding-left: 20px;">
+            <div class="sua-san-pham-loi">
+    <ul>
                     <?php foreach ($loiForm as $loi): ?>
                         <li><?= e($loi) ?></li>
                     <?php endforeach; ?>
@@ -89,15 +95,16 @@ require_once __DIR__ . '/inc/header.php';
             </div>
         <?php endif; ?>
 
-        <form action="sua-san-pham.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
-            <p style="margin-bottom: 15px;">
+        <form class="sua-san-pham-form" action="sua-san-pham.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
+            <?= csrfField() ?>
+            <p>
                 <label for="ten">Tên sản phẩm:</label><br>
-                <input type="text" id="ten" name="ten" value="<?= e($_POST['ten'] ?? $sanPham->getTen()) ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <input type="text" id="ten" name="ten" value="<?= e($_POST['ten'] ?? $sanPham->getTen()) ?>" required>
             </p>
 
-            <p style="margin-bottom: 15px;">
+            <p>
                 <label for="danh_muc_id">Danh mục:</label><br>
-                <select id="danh_muc_id" name="danh_muc_id" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <select id="danh_muc_id" name="danh_muc_id" required>
                     <!-- Thêm option rỗng có value="" để pass hoàn toàn lỗi W3C Validator -->
                     <option value="">-- Chọn danh mục sản phẩm --</option>
                     <?php 
@@ -113,29 +120,29 @@ require_once __DIR__ . '/inc/header.php';
                 </select>
             </p>
 
-            <p style="margin-bottom: 15px;">
+           <p>
                 <label for="gia">Giá sản phẩm (VNĐ):</label><br>
-                <input type="number" id="gia" name="gia" min="1000" step="500" value="<?= e((string)(int)$sanPham->getGia()) ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <input type="number" id="gia" name="gia" min="1000" step="500" value="<?= e((string)(int)$sanPham->getGia()) ?>" required>
             </p>
 
-            <p style="margin-bottom: 15px;">
+            <p>
                 <label for="ton_kho">Số lượng tồn kho:</label><br>
-                <input type="number" id="ton_kho" name="ton_kho" min="0" value="<?= e((string)$sanPham->getSoLuong()) ?>" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <input type="number" id="ton_kho" name="ton_kho" min="0" value="<?= e((string)$sanPham->getSoLuong()) ?>" required>
             </p>
 
-            <p style="margin-bottom: 15px;">
+            <p>
                 <label>Ảnh hiện tại:</label><br>
-                <img src="<?= e($sanPham->getHinhAnh()) ?>" alt="" style="width: 80px; height: 80px; object-fit: cover; margin-top: 5px; border-radius: 4px;"><br>
-                <label for="anh" style="margin-top: 10px; display: block;">Thay đổi ảnh mới (không bắt buộc):</label>
+                <img src="<?= e($sanPham->getHinhAnh()) ?>" alt="" class="sua-san-pham-anh"><br>
+                <label for="anh" class="sua-san-pham-label-anh">Thay đổi ảnh mới (không bắt buộc):</label>
                 <input type="file" id="anh" name="anh" accept="image/*">
             </p>
 
-            <p style="margin-bottom: 15px;">
+            <p>
                 <label for="mo_ta">Mô tả sản phẩm:</label><br>
-                <textarea id="mo_ta" name="mo_ta" rows="4" style="width: 100%; padding: 8px; margin-top: 5px;"><?= e($sanPham->getMoTa()) ?></textarea>
+                <textarea id="mo_ta" name="mo_ta" rows="4"><?= e($sanPham->getMoTa()) ?></textarea>
             </p>
 
-            <button type="submit" style="background: #f39c12; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            <button type="submit" class="nut-cap-nhat-san-pham">
                 Cập nhật sản phẩm
             </button>
         </form>
