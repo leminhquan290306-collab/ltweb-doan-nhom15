@@ -1,9 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 use App\Data\KhoNguoiDung;
 
+/**
+ * Đăng ký tài khoản người dùng.
+ */
 function dangKyTaiKhoan(
     string $hoTen,
     string $email,
@@ -26,9 +28,12 @@ function dangKyTaiKhoan(
 
     try {
         $pdo = hamCSDL();
-        
-        $stmtCheck = $pdo->prepare("SELECT id FROM nguoi_dung WHERE email = ? LIMIT 1");
+
+        $stmtCheck = $pdo->prepare(
+            'SELECT id FROM nguoi_dung WHERE email = ? LIMIT 1'
+        );
         $stmtCheck->execute([$email]);
+
         if ($stmtCheck->fetch()) {
             return 'Email này đã được đăng ký.';
         }
@@ -45,95 +50,112 @@ function dangKyTaiKhoan(
     }
 }
 
+/**
+ * Đăng nhập tài khoản.
+ */
 function dangNhap(string $email, string $matKhau): bool
 {
     $email = strtolower(trim($email));
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $matKhau === '') {
+        return false;
+    }
+
     try {
         $pdo = hamCSDL();
-        
-        $stmt = $pdo->prepare("SELECT * FROM nguoi_dung WHERE email = ? LIMIT 1");
+
+        $stmt = $pdo->prepare(
+            'SELECT id, ho_ten, email, mat_khau, vai_tro
+             FROM nguoi_dung
+             WHERE email = ?
+             LIMIT 1'
+        );
         $stmt->execute([$email]);
+
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $dungMatKhau = false;
-        if ($user) {
-            $dbMatKhau = $user['mat_khau'];
-            if (password_verify($matKhau, $dbMatKhau) || $dbMatKhau === $matKhau || ($email === 'admin@ued.vn' && $matKhau === '123456')) {
-                $dungMatKhau = true;
-            }
+        if (!is_array($user)) {
+            return false;
         }
 
-        if ($dungMatKhau) {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        throw new RuntimeException('Session chưa được khởi tạo.');
-    }
+        $dbMatKhau = $user['mat_khau'] ?? '';
 
-    session_regenerate_id(true);
-
-    // Cập nhật thời gian hoạt động sau đăng nhập
-    $_SESSION['last_activity'] = time();
-
-            $userId = (int) $user['id'];
-            $vaiTro = $user['vai_tro'] ?? 'khach_hang';
-
-            $_SESSION['nguoi_dung_id'] = $userId;
-            $_SESSION['user_id'] = $userId;
-            $_SESSION['ho_ten'] = $user['ho_ten'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['vai_tro'] = $vaiTro;
-
-            $_SESSION['tai_khoan'] = [
-                'id' => $userId,
-                'email' => $user['email'],
-                'hoTen' => $user['ho_ten'],
-                'vai_tro' => $vaiTro,
-            ];
-
-            return true;
+        if (
+            !is_string($dbMatKhau)
+            || !password_verify($matKhau, $dbMatKhau)
+        ) {
+            return false;
         }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            throw new RuntimeException('Session chưa được khởi tạo.');
+        }
+
+        // Thay đổi session ID sau khi đăng nhập.
+        session_regenerate_id(true);
+
+        $_SESSION['last_activity'] = time();
+
+        $userId = (int) $user['id'];
+        $vaiTro = (string) ($user['vai_tro'] ?? 'khach_hang');
+
+        $_SESSION['nguoi_dung_id'] = $userId;
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['ho_ten'] = (string) $user['ho_ten'];
+        $_SESSION['email'] = (string) $user['email'];
+        $_SESSION['vai_tro'] = $vaiTro;
+
+        $_SESSION['tai_khoan'] = [
+            'id' => $userId,
+            'email' => (string) $user['email'],
+            'hoTen' => (string) $user['ho_ten'],
+            'vai_tro' => $vaiTro,
+        ];
+
+        return true;
     } catch (Throwable $e) {
         error_log('Lỗi đăng nhập: ' . $e->getMessage());
+        return false;
     }
-
-    return false;
 }
 
+/**
+ * Kiểm tra trạng thái đăng nhập.
+ */
 function daDangNhap(): bool
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    return isset($_SESSION['nguoi_dung_id']) 
-        || isset($_SESSION['user_id']) 
-        || (isset($_SESSION['tai_khoan']) && is_array($_SESSION['tai_khoan']));
+    return isset($_SESSION['tai_khoan'])
+        && is_array($_SESSION['tai_khoan'])
+        && isset($_SESSION['tai_khoan']['id']);
 }
 
+/**
+ * Kiểm tra quyền quản trị.
+ */
 function laQuanTri(): bool
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    $vaiTro = $_SESSION['vai_tro'] ?? $_SESSION['tai_khoan']['vai_tro'] ?? '';
-    $emailDangNhap = $_SESSION['email'] ?? $_SESSION['tai_khoan']['email'] ?? '';
-    
-    if ($emailDangNhap === 'admin@ued.vn' || $vaiTro === 'admin' || $vaiTro === 'quan_tri') {
-        return true;
+    if (!daDangNhap()) {
+        return false;
     }
 
-    return false;
+    $vaiTro = $_SESSION['tai_khoan']['vai_tro']
+        ?? $_SESSION['vai_tro']
+        ?? '';
+
+    return in_array($vaiTro, ['admin', 'quan_tri'], true);
 }
 
+/**
+ * Đăng xuất và hủy session.
+ */
 function dangXuat(): void
 {
     if (session_status() !== PHP_SESSION_ACTIVE) {
         return;
     }
 
-    // Xóa toàn bộ dữ liệu session
     $_SESSION = [];
 
-    // Xóa cookie session với đúng cấu hình hiện tại
     if (ini_get('session.use_cookies')) {
         $params = session_get_cookie_params();
 
@@ -143,7 +165,7 @@ function dangXuat(): void
             'domain' => $params['domain'],
             'secure' => $params['secure'],
             'httponly' => $params['httponly'],
-            'samesite' => $params['samesite'] ?? 'Lax'
+            'samesite' => $params['samesite'] ?? 'Lax',
         ]);
     }
 

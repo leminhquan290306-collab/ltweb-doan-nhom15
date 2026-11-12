@@ -1,3 +1,4 @@
+
 /*
  * canhan.js
  * Chức năng:
@@ -7,6 +8,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Tạo nút chuyển đổi giao diện.
     const nutGiaoDien = document.createElement('button');
     nutGiaoDien.type = 'button';
     nutGiaoDien.textContent = '🌙 Giao diện tối';
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tieuDe.insertAdjacentElement('afterend', nutGiaoDien);
     }
 
+    // 2. Khôi phục giao diện đã lưu.
     const giaoDienDaLuu = localStorage.getItem('giaoDien');
 
     if (giaoDienDaLuu === 'toi') {
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nutGiaoDien.textContent = '☀️ Giao diện sáng';
     }
 
+    // 3. Xử lý chuyển đổi giao diện.
     nutGiaoDien.addEventListener('click', () => {
         document.body.classList.toggle('giao-dien-toi');
 
@@ -37,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 4. Tạo bộ lọc kỹ năng.
     const khuKyNang = document.querySelector('.muc-noi-dung');
 
     if (khuKyNang) {
@@ -63,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cacKyNang = document.querySelectorAll('.the-ky-nang');
 
+        // 5. Xử lý lọc kỹ năng.
         cacNutLoc.addEventListener('click', (event) => {
             if (event.target.tagName !== 'BUTTON') {
                 return;
@@ -77,14 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     loai === 'tat-ca' ||
                     (loai === 'web' && noiDung.includes('web')) ||
                     (loai === 'lap-trinh' &&
-                        (noiDung.includes('python') || noiDung.includes('c++'))) ||
+                        (noiDung.includes('python') ||
+                         noiDung.includes('c++'))) ||
                     (loai === 'git' && noiDung.includes('git')) ||
                     (loai === 'csdl' &&
-                        (noiDung.includes('mạng') || noiDung.includes('cơ sở dữ liệu')))
+                        (noiDung.includes('mạng') ||
+                         noiDung.includes('csdl') ||
+                         noiDung.includes('cơ sở dữ liệu')))
                 ) {
-                    kyNang.style.display = '';
+                    kyNang.hidden = false;
                 } else {
-                    kyNang.style.display = 'none';
+                    kyNang.hidden = true;
                 }
             });
         });

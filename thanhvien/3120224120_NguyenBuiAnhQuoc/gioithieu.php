@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Trang giới thiệu cá nhân của Nguyễn Bùi Anh Quốc.
@@ -8,22 +7,33 @@
  * MSSV: 3120224120.
  */
 
-
-
-require __DIR__ . '/../../inc/config.php';
+require_once __DIR__ . '/../../inc/config.php';
 require_once __DIR__ . '/../../inc/db.php';
+require_once __DIR__ . '/../../inc/tai-khoan.php';
 
 $baseUrl = '../../';
 $tieuDeTrang = 'Giới thiệu cá nhân - Nguyễn Bùi Anh Quốc';
 $mssv = '3120224120';
 
 $loiMucTieu = '';
+$loiTienDo = '';
+$loiTaiDuLieu = '';
+
 $thongBaoMucTieu = $_SESSION['thong_bao_muc_tieu'] ?? '';
 unset($_SESSION['thong_bao_muc_tieu']);
 
-$loiTienDo = '';
 $thongBaoTienDo = $_SESSION['thong_bao_tien_do'] ?? '';
 unset($_SESSION['thong_bao_tien_do']);
+
+// Kiểm tra CSRF cho tất cả request POST.
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['csrf_token'] ?? null;
+
+    if (!is_string($token) || !kiemTraCsrfToken($token)) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ (CSRF).');
+    }
+}
 
 /*
  * Chức năng 1: thêm mục tiêu vào MySQL.
@@ -32,15 +42,13 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['muc_tieu'])
 ) {
-      if (!csrfHopLe(
-        is_string($_POST['csrf_token'] ?? null)
-            ? $_POST['csrf_token']
-            : null
-    )) {
+    // Chỉ quản trị viên được phép thêm mục tiêu.
+    if (!laQuanTri()) {
         http_response_code(403);
-        exit('403 - Yêu cầu không hợp lệ.');
+        exit('403 - Bạn cần đăng nhập với quyền quản trị để thêm mục tiêu.');
     }
-    $mucTieu = trim((string) ($_POST['muc_tieu'] ?? ''));
+
+    $mucTieu = chuoi($_POST['muc_tieu'] ?? '');
 
     if ($mucTieu === '') {
         $loiMucTieu = 'Vui lòng nhập mục tiêu.';
@@ -67,27 +75,18 @@ if (
             exit;
         } catch (Throwable $e) {
             error_log((string) $e);
-            $loiMucTieu =
-                'Không thể lưu mục tiêu. Vui lòng thử lại.';
+            $loiMucTieu = 'Không thể lưu mục tiêu. Vui lòng thử lại.';
         }
     }
 }
 
 /*
- * Chức năng tính tiến độ học tập.
+ * Chức năng 2: tính tiến độ học tập.
  */
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['tinh_tien_do'])
 ) {
-      if (!csrfHopLe(
-        is_string($_POST['csrf_token'] ?? null)
-            ? $_POST['csrf_token']
-            : null
-    )) {
-        http_response_code(403);
-        exit('403 - Yêu cầu không hợp lệ.');
-    }
     $tongSoBai = filter_var(
         $_POST['tong_so_bai'] ?? null,
         FILTER_VALIDATE_INT
@@ -105,8 +104,7 @@ if (
         || $soBaiHoanThanh < 0
         || $soBaiHoanThanh > $tongSoBai
     ) {
-        $loiTienDo =
-            'Số bài hoàn thành phải từ 0 đến tổng số bài.';
+        $loiTienDo = 'Số bài hoàn thành phải từ 0 đến tổng số bài.';
     } else {
         $phanTram = ($soBaiHoanThanh / $tongSoBai) * 100;
 
@@ -141,6 +139,7 @@ try {
          WHERE mssv = :mssv
          ORDER BY id DESC'
     );
+
     $stmtMucTieu->execute(['mssv' => $mssv]);
     $danhSachMucTieu = $stmtMucTieu->fetchAll();
 
@@ -150,12 +149,15 @@ try {
          WHERE mssv = :mssv
          ORDER BY id DESC'
     );
+
     $stmtDuAn->execute(['mssv' => $mssv]);
     $danhSachDuAn = $stmtDuAn->fetchAll();
 } catch (Throwable $e) {
     error_log((string) $e);
+
     $danhSachMucTieu = [];
     $danhSachDuAn = [];
+
     $loiTaiDuLieu =
         'Không thể tải mục tiêu hoặc dự án. Vui lòng kiểm tra cơ sở dữ liệu.';
 }
@@ -169,6 +171,7 @@ try {
 
     <section class="khoi-dau thong-tin-ca-nhan">
       <h2>Thông tin cá nhân</h2>
+
       <img
         class="anh-chan-dung"
         src="anh_the.jpg"
@@ -199,19 +202,23 @@ try {
       </p>
 
       <h3>2. Danh sách kỹ năng</h3>
+
       <div class="danh-sach-ky-nang">
         <div class="the-ky-nang">
           <h3>Lập trình Web</h3>
           <p>HTML5, CSS cơ bản</p>
         </div>
+
         <div class="the-ky-nang">
           <h3>Ngôn ngữ lập trình</h3>
           <p>Python, C++</p>
         </div>
+
         <div class="the-ky-nang">
           <h3>Quản lý mã nguồn</h3>
           <p>Git &amp; GitHub</p>
         </div>
+
         <div class="the-ky-nang">
           <h3>Mạng &amp; CSDL</h3>
           <p>Mạng máy tính, Cơ sở dữ liệu cơ bản</p>
@@ -229,7 +236,7 @@ try {
     <section class="muc-noi-dung">
       <h2>Danh sách dự án cá nhân</h2>
 
-      <?php if (isset($loiTaiDuLieu)): ?>
+      <?php if ($loiTaiDuLieu !== ''): ?>
         <p role="alert"><?= e($loiTaiDuLieu) ?></p>
       <?php endif; ?>
 
@@ -254,6 +261,7 @@ try {
 
     <section class="muc-noi-dung">
       <h2>Thời khóa biểu cá nhân tuần này</h2>
+
       <div class="khung-chua-bang" tabindex="0">
         <table>
           <caption>Thời khóa biểu học tập trong tuần</caption>
@@ -292,21 +300,26 @@ try {
     <section class="muc-noi-dung">
       <h2>Mục tiêu cá nhân</h2>
 
-      <form method="post">
-    <?= csrfField() ?>
+      <?php if (laQuanTri()): ?>
+        <form method="post">
+          <?= csrfField() ?>
 
-    <p>
-          <label for="muc_tieu">Nhập mục tiêu:</label>
-          <input
-            type="text"
-            id="muc_tieu"
-            name="muc_tieu"
-            maxlength="100"
-            required
-          >
-        </p>
-        <button type="submit">Ghi nhận mục tiêu</button>
-      </form>
+          <p>
+            <label for="muc_tieu">Nhập mục tiêu:</label>
+            <input
+              type="text"
+              id="muc_tieu"
+              name="muc_tieu"
+              maxlength="100"
+              required
+            >
+          </p>
+
+          <button type="submit">Ghi nhận mục tiêu</button>
+        </form>
+      <?php else: ?>
+        <p>Bạn cần đăng nhập với quyền quản trị để thêm mục tiêu.</p>
+      <?php endif; ?>
 
       <?php if ($loiMucTieu !== ''): ?>
         <p role="alert"><?= e($loiMucTieu) ?></p>
@@ -336,9 +349,9 @@ try {
       <h2>Tính tiến độ học tập</h2>
 
       <form method="post">
-    <?= csrfField() ?>
+        <?= csrfField() ?>
 
-    <p>
+        <p>
           <label for="tong_so_bai">Tổng số bài:</label>
           <input
             type="number"
@@ -348,6 +361,7 @@ try {
             required
           >
         </p>
+
         <p>
           <label for="so_bai_hoan_thanh">Số bài đã hoàn thành:</label>
           <input
@@ -358,7 +372,10 @@ try {
             required
           >
         </p>
-        <button type="submit" name="tinh_tien_do">Tính tiến độ</button>
+
+        <button type="submit" name="tinh_tien_do">
+          Tính tiến độ
+        </button>
       </form>
 
       <?php if ($loiTienDo !== ''): ?>

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 /**
@@ -48,40 +47,65 @@ function yeuCauPost(): void
 }
 
 /**
- * Kiểm tra CSRF token.
+ * Tạo CSRF token.
  */
 function taoCsrfToken(): string
 {
-    if (empty($_SESSION['csrf_token'])) {
+    if (
+        !isset($_SESSION['csrf_token'])
+        || !is_string($_SESSION['csrf_token'])
+    ) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 
     return $_SESSION['csrf_token'];
 }
 
-function kiemTraCsrfToken(?string $token): bool
-{
-    return is_string($token)
-        && isset($_SESSION['csrf_token'])
-        && hash_equals($_SESSION['csrf_token'], $token);
-}
-
-// Lấy mã CSRF
+/**
+ * Lấy CSRF token (tương thích mã nguồn cũ).
+ */
 function csrfToken(): string
 {
     return taoCsrfToken();
 }
 
-// In trường CSRF cho form POST (Đã sửa name="csrf" chuẩn xác)
-function csrfField(): string
+/**
+ * Kiểm tra CSRF token.
+ */
+function kiemTraCsrfToken(?string $token): bool
 {
-    return '<input type="hidden" name="csrf" value="' .
-        htmlspecialchars(csrfToken(), ENT_QUOTES, 'UTF-8') .
-        '">';
+    return is_string($token)
+        && isset($_SESSION['csrf_token'])
+        && is_string($_SESSION['csrf_token'])
+        && hash_equals($_SESSION['csrf_token'], $token);
 }
 
-// Kiểm tra mã CSRF
+/**
+ * Kiểm tra CSRF token (tương thích config.php).
+ */
 function csrfHopLe(?string $token): bool
 {
     return kiemTraCsrfToken($token);
+}
+
+/**
+ * Tạo trường ẩn CSRF cho form POST.
+ */
+function csrfField(): string
+{
+    return '<input type="hidden" name="csrf_token" value="'
+        . e(taoCsrfToken())
+        . '">';
+}
+
+/**
+ * Kiểm tra và lấy dữ liệu chuỗi an toàn.
+ */
+function chuoi(mixed $value): string
+{
+    if (!is_string($value)) {
+        return '';
+    }
+
+    return trim($value);
 }
