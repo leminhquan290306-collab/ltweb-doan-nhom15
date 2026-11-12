@@ -80,6 +80,17 @@ $duAnHienThi = $stmtDuAn->fetchAll();
 /* 5. Nhật ký học tập của Quân */
 $thongBaoNhatKy = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $csrfTokenGuiLen = $_POST['csrf_token'] ?? null;
+
+    if (!kiemTraCsrfToken(
+        is_string($csrfTokenGuiLen) ? $csrfTokenGuiLen : null
+    )) {
+        http_response_code(403);
+        exit('403 - Yêu cầu không hợp lệ.');
+    }
+}
+
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && ($_POST['hanh_dong'] ?? '') === 'them_nhat_ky'
@@ -97,26 +108,36 @@ if (
     );
 
     if (
-        $tieuDeNhatKy === ''
-        || mb_strlen($tieuDeNhatKy) > 200
-        || $noiDungNhatKy === ''
-    ) {
-        $_SESSION['thong_bao_nhat_ky'] =
-            'Vui lòng nhập tiêu đề và nội dung hợp lệ.';
-    } else {
-        $stmtThemNhatKy = $pdo->prepare(
-            'INSERT INTO tv_nhat_ky (mssv, tieu_de, noi_dung)
-             VALUES (:mssv, :tieu_de, :noi_dung)'
-        );
+    $tieuDeNhatKy === ''
+    || mb_strlen($tieuDeNhatKy) > 200
+    || $noiDungNhatKy === ''
+    || mb_strlen($noiDungNhatKy) > 5000
+) {
+    $_SESSION['thong_bao_nhat_ky'] =
+        'Tiêu đề không được vượt quá 200 ký tự và nội dung phải từ 1 đến 5.000 ký tự.';
+}else {
+        try {
+    $stmtThemNhatKy = $pdo->prepare(
+        'INSERT INTO tv_nhat_ky (mssv, tieu_de, noi_dung)
+         VALUES (:mssv, :tieu_de, :noi_dung)'
+    );
 
-        $stmtThemNhatKy->execute([
-            ':mssv' => $mssv,
-            ':tieu_de' => $tieuDeNhatKy,
-            ':noi_dung' => $noiDungNhatKy,
-        ]);
+    $stmtThemNhatKy->execute([
+        ':mssv' => $mssv,
+        ':tieu_de' => $tieuDeNhatKy,
+        ':noi_dung' => $noiDungNhatKy,
+    ]);
 
-        $_SESSION['thong_bao_nhat_ky'] =
-            'Đã lưu nhật ký học tập thành công.';
+    $_SESSION['thong_bao_nhat_ky'] =
+        'Đã lưu nhật ký học tập thành công.';
+} catch (Throwable $e) {
+    error_log(
+        'Lỗi thêm nhật ký học tập của Quân: ' . $e->getMessage()
+    );
+
+    $_SESSION['thong_bao_nhat_ky'] =
+        'Không thể lưu nhật ký lúc này. Vui lòng thử lại.';
+}
     }
 
     header('Location: gioithieu.php#nhat-ky');
@@ -155,18 +176,27 @@ if (
         $_SESSION['thong_bao_cong_viec'] =
             'Vui lòng nhập tên công việc hợp lệ.';
     } else {
-        $stmtThemCongViec = $pdo->prepare(
-            'INSERT INTO tv_cong_viec (mssv, ten_cong_viec)
-             VALUES (:mssv, :ten_cong_viec)'
-        );
+       try {
+    $stmtThemCongViec = $pdo->prepare(
+        'INSERT INTO tv_cong_viec (mssv, ten_cong_viec)
+         VALUES (:mssv, :ten_cong_viec)'
+    );
 
-        $stmtThemCongViec->execute([
-            ':mssv' => $mssv,
-            ':ten_cong_viec' => $tenCongViec,
-        ]);
+    $stmtThemCongViec->execute([
+        ':mssv' => $mssv,
+        ':ten_cong_viec' => $tenCongViec,
+    ]);
 
-        $_SESSION['thong_bao_cong_viec'] =
-            'Đã thêm công việc thành công.';
+    $_SESSION['thong_bao_cong_viec'] =
+        'Đã thêm công việc thành công.';
+} catch (Throwable $e) {
+    error_log(
+        'Lỗi thêm công việc của Quân: ' . $e->getMessage()
+    );
+
+    $_SESSION['thong_bao_cong_viec'] =
+        'Không thể thêm công việc lúc này. Vui lòng thử lại.';
+}
     }
 
     header('Location: gioithieu.php#cong-viec');
@@ -184,6 +214,7 @@ if (
     );
 
     if ($idCongViec !== false && $idCongViec !== null) {
+    try {
         $stmtHoanThanh = $pdo->prepare(
             'UPDATE tv_cong_viec
              SET hoan_thanh = 1
@@ -201,11 +232,19 @@ if (
             $stmtHoanThanh->rowCount() > 0
                 ? 'Đã đánh dấu công việc hoàn thành.'
                 : 'Không tìm thấy công việc cần cập nhật.';
-    } else {
-        $_SESSION['thong_bao_cong_viec'] =
-            'Mã công việc không hợp lệ.';
-    }
 
+    } catch (Throwable $e) {
+        error_log(
+            'Lỗi hoàn thành công việc của Quân: ' . $e->getMessage()
+        );
+
+        $_SESSION['thong_bao_cong_viec'] =
+            'Không thể cập nhật công việc lúc này. Vui lòng thử lại.';
+    }
+} else {
+    $_SESSION['thong_bao_cong_viec'] =
+        'Mã công việc không hợp lệ.';
+}
     header('Location: gioithieu.php#cong-viec');
     exit;
 }
@@ -389,6 +428,7 @@ require __DIR__ . '/../../inc/header.php';
                         id="noi_dung_nhat_ky"
                         name="noi_dung"
                         rows="4"
+                        maxlength="5000"
                         required
                     ></textarea>
                 </p>
@@ -458,7 +498,10 @@ require __DIR__ . '/../../inc/header.php';
                             <?php else: ?>
                                 <span> — Chưa hoàn thành</span>
 
-                                <form method="post" action="gioithieu.php#cong-viec">
+                                <form
+                                    method="post"
+                                    action="gioithieu.php#cong-viec"
+                                >
                                     <?= csrfField() ?>
                                     <input
                                         type="hidden"

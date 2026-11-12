@@ -48,7 +48,7 @@ try {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<main>
+<main class="trang-chu">
 
     <section class="hero">
         <h2>Tìm món quà phù hợp</h2>

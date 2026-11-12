@@ -26,22 +26,34 @@ if (!csrfHopLe(
 // Lấy ID sản phẩm từ POST
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
-if ($id && $id > 0) {
+if ($id !== false && $id !== null && $id > 0) {
     try {
         $pdo = hamCSDL();
-        $stmt = $pdo->prepare("DELETE FROM san_pham WHERE id = ?");
+
+        $stmt = $pdo->prepare(
+            'DELETE FROM san_pham WHERE id = ?'
+        );
+
         $stmt->execute([$id]);
 
-        $_SESSION['quan_tri_tb'] = 'Xóa sản phẩm thành công!';
+        $_SESSION['quan_tri_tb'] =
+            $stmt->rowCount() > 0
+                ? 'Xóa sản phẩm thành công!'
+                : 'Không tìm thấy sản phẩm cần xóa.';
+
     } catch (PDOException $e) {
-        // Bắt lỗi khóa ngoại khi sản phẩm đã nằm trong đơn hàng
-        if ($e->getCode() == 23000) {
-            $_SESSION['quan_tri_tb'] = 'Không thể xóa sản phẩm này vì đã có trong lịch sử đơn hàng của khách!';
+        if ($e->getCode() === '23000') {
+            $_SESSION['quan_tri_tb'] =
+                'Không thể xóa sản phẩm này vì đã có trong lịch sử đơn hàng của khách!';
         } else {
-            error_log($e->getMessage());
-            $_SESSION['quan_tri_tb'] = 'Không thể xóa sản phẩm. Vui lòng thử lại!';
+            error_log('Lỗi xóa sản phẩm: ' . $e->getMessage());
+
+            $_SESSION['quan_tri_tb'] =
+                'Không thể xóa sản phẩm. Vui lòng thử lại!';
         }
     }
+} else {
+    $_SESSION['quan_tri_tb'] = 'Mã sản phẩm không hợp lệ.';
 }
 
 redirect('quan-tri.php?tab=san-pham');

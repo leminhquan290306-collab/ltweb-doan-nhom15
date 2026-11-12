@@ -120,6 +120,7 @@ if (
     }
 
     if ($loiLuuBut === []) {
+    try {
         $stmt = $pdo->prepare(
             'INSERT INTO tv_luu_but (mssv, ten, noi_dung)
              VALUES (:mssv, :ten, :noi_dung)'
@@ -136,7 +137,15 @@ if (
 
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit;
+    } catch (Throwable $e) {
+        error_log(
+            'Lỗi gửi sổ lưu bút của Dũng: ' . $e->getMessage()
+        );
+
+        $thongBaoLuuBut =
+            'Không thể gửi lời nhắn lúc này. Vui lòng thử lại sau.';
     }
+}
 }
 
 /* 4. Lấy 5 lời nhắn mới nhất từ MySQL */

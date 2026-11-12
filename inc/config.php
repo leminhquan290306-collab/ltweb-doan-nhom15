@@ -67,6 +67,29 @@ if (session_status() === PHP_SESSION_NONE) {
 
     $_SESSION['last_activity'] = $thoiGianHienTai;
 }
+// HTTP Security Headers
+if (!headers_sent()) {
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+
+    // Content Security Policy (CSP)
+    header(
+        "Content-Security-Policy: "
+        . "default-src 'self'; "
+        . "base-uri 'self'; "
+        . "object-src 'none'; "
+        . "frame-ancestors 'self'; "
+        . "form-action 'self'; "
+        . "script-src 'self' https://cdn.jsdelivr.net; "
+        . "script-src-attr 'none'; "
+        . "style-src 'self' https://cdn.jsdelivr.net; "
+        . "style-src-attr 'none'; "
+        . "img-src 'self' data:; "
+        . "font-src 'self' data:; "
+        . "connect-src 'self' https://api.open-meteo.com;"
+    );
+}
 
 // Kiểm tra CSRF tập trung cho mọi yêu cầu POST.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

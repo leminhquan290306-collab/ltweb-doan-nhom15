@@ -70,8 +70,8 @@ function dangNhap(string $email, string $matKhau): bool
              WHERE email = ?
              LIMIT 1'
         );
-        $stmt->execute([$email]);
 
+        $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!is_array($user)) {
@@ -142,7 +142,7 @@ function laQuanTri(): bool
         ?? $_SESSION['vai_tro']
         ?? '';
 
-    return in_array($vaiTro, ['admin', 'quan_tri'], true);
+    return $vaiTro === 'quan_tri';
 }
 
 /**

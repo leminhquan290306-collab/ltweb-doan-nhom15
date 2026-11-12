@@ -33,16 +33,12 @@ function nguoiDung(): ?array {
         if ($res !== false) {
             return $res;
         }
-    } catch (Throwable $e) {
-        // Bỏ qua lỗi truy vấn ngầm, dùng fallback bên dưới
+        } catch (Throwable $e) {
+        error_log('Lỗi lấy thông tin người dùng: ' . $e->getMessage());
+        return null;
     }
 
-    return [
-        'id' => $uid,
-        'email' => $_SESSION['email'] ?? $_SESSION['tai_khoan']['email'] ?? 'admin@ued.vn',
-        'ho_ten' => $_SESSION['ho_ten'] ?? $_SESSION['tai_khoan']['hoTen'] ?? 'Quản trị viên',
-        'vai_tro' => $_SESSION['vai_tro'] ?? $_SESSION['tai_khoan']['vai_tro'] ?? 'quan_tri'
-    ];
+    return null;
 }
 
 /**

@@ -137,19 +137,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          */
         redirect('gio-hang.php');
 
-    } catch (Throwable $e) {
+        } catch (Throwable $e) {
+
+        error_log('Lỗi giỏ hàng: ' . $e->getMessage());
+
+        $thongBao = $e instanceof InvalidArgumentException
+            ? $e->getMessage()
+            : 'Đã xảy ra lỗi khi xử lý giỏ hàng. Vui lòng thử lại.';
 
         if (isset($_POST['ajax']) && $_POST['ajax'] === '1') {
-            header('Content-Type: application/json');
+            header('Content-Type: application/json; charset=utf-8');
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $thongBao
             ]);
             exit;
         }
 
-        $_SESSION['gio_hang_loi'] = $e->getMessage();
+        $_SESSION['gio_hang_loi'] = $thongBao;
 
         redirect('gio-hang.php');
     }

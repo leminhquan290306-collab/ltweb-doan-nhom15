@@ -13,6 +13,14 @@ $loiForm = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $csrfTokenGuiLen = $_POST['csrf_token'] ?? null;
+
+    if (!kiemTraCsrfToken(
+        is_string($csrfTokenGuiLen) ? $csrfTokenGuiLen : null
+    )) {
+        http_response_code(419);
+        exit('Phiên làm việc đã hết hạn hoặc mã xác thực không hợp lệ. Vui lòng tải lại trang.');
+    }
     $hoTen = trim((string) ($_POST['ho-ten'] ?? ''));
     $email = trim((string) ($_POST['email'] ?? ''));
     $soDienThoai = trim((string) ($_POST['so-dien-thoai'] ?? ''));
@@ -64,43 +72,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $loiForm[] = 'Bạn cần đồng ý cung cấp thông tin để được tư vấn.';
     }
 
-    $tenAnhDaLuu = null;
-    if (isset($_FILES['anh']) && $_FILES['anh']['error'] === UPLOAD_ERR_OK) {
-        $thuMucUploads = __DIR__ . '/uploads';
-        if (!is_dir($thuMucUploads)) {
-            mkdir($thuMucUploads, 0755, true);
+
+$tenAnhDaLuu = null;
+
+if (isset($_FILES['anh']) && $_FILES['anh']['error'] !== UPLOAD_ERR_NO_FILE) {
+
+    $fileAnh = $_FILES['anh'];
+
+    if ($fileAnh['error'] !== UPLOAD_ERR_OK) {
+        $loiForm[] = 'Không thể tải ảnh lên. Vui lòng thử lại.';
+    } elseif ($fileAnh['size'] > 5 * 1024 * 1024) {
+        $loiForm[] = 'Ảnh không được vượt quá 5MB.';
+    } else {
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->file($fileAnh['tmp_name']);
+
+        $dinhDangAnh = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp'
+        ];
+
+        if (!isset($dinhDangAnh[$mimeType])) {
+            $loiForm[] = 'Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP.';
+        } else {
+            $thuMucUploads = __DIR__ . '/uploads';
+
+            if (!is_dir($thuMucUploads)) {
+                if (!mkdir($thuMucUploads, 0755, true)) {
+                    $loiForm[] = 'Không thể tạo thư mục lưu ảnh.';
+                }
+            }
+
+            if (empty($loiForm)) {
+                $tenNgauNhien = bin2hex(random_bytes(16))
+                    . '.' . $dinhDangAnh[$mimeType];
+
+                if (move_uploaded_file(
+                    $fileAnh['tmp_name'],
+                    $thuMucUploads . '/' . $tenNgauNhien
+                )) {
+                    $tenAnhDaLuu = $tenNgauNhien;
+                } else {
+                    $loiForm[] = 'Không thể lưu ảnh. Vui lòng thử lại.';
+                }
+            }
         }
-        $phanMoRong = pathinfo($_FILES['anh']['name'], PATHINFO_EXTENSION);
-        $tenNgauNhien = bin2hex(random_bytes(8)) . '.' . $phanMoRong;
-        if (move_uploaded_file($_FILES['anh']['tmp_name'], $thuMucUploads . '/' . $tenNgauNhien)) {
-            $tenAnhDaLuu = $tenNgauNhien;
-        }
-    }
-
-    if (empty($loiForm)) {
-        // Gộp tất cả thông tin vào cột noi_dung
-        $noiDungChiTiet = "SĐT: {$soDienThoai} | Người nhận: {$nguoiNhan} | Dịp: {$dipTang} | Ngân sách: " . number_format((float)$nganSach, 0, ',', '.') . "đ | Ngày cần: {$ngayCanQua} | Yêu cầu: {$soThich}" . ($tenAnhDaLuu ? " | Ảnh: {$tenAnhDaLuu}" : "");
-
-        try {
-            $pdo = hamCSDL();
-            
-            // Dùng đúng tên cột 'noi_dung' theo cấu trúc bảng CSDL thực tế của ông
-            $stmt = $pdo->prepare("INSERT INTO lien_he (ten, email, noi_dung) VALUES (?, ?, ?)");
-            $stmt->execute([$hoTen, $email, $noiDungChiTiet]);
-
-            $_SESSION['thong_bao_lien_he'] = 'Gửi yêu cầu tư vấn thành công!';
-            redirect('lien-he.php');
-
-        } catch (Throwable $e) {
-            $loiForm[] = 'Lỗi CSDL: ' . $e->getMessage();
-        }
-    }
-
-    if (!empty($loiForm)) {
-        $thongBao = 'Vui lòng kiểm tra lại thông tin trong biểu mẫu.';
     }
 }
 
+if (empty($loiForm)) {
+    // Gộp tất cả thông tin vào cột noi_dung
+    $noiDungChiTiet = "SĐT: {$soDienThoai} | Người nhận: {$nguoiNhan} | Dịp: {$dipTang} | Ngân sách: " . number_format((float)$nganSach, 0, ',', '.') . "đ | Ngày cần: {$ngayCanQua} | Yêu cầu: {$soThich}" . ($tenAnhDaLuu ? " | Ảnh: {$tenAnhDaLuu}" : "");
+
+    try {
+        $pdo = hamCSDL();
+
+        $stmt = $pdo->prepare("INSERT INTO lien_he (ten, email, noi_dung) VALUES (?, ?, ?)");
+        $stmt->execute([$hoTen, $email, $noiDungChiTiet]);
+
+        $_SESSION['thong_bao_lien_he'] = 'Gửi yêu cầu tư vấn thành công!';
+        redirect('lien-he.php');
+
+    } catch (Throwable $e) {
+        error_log('Lỗi gửi liên hệ: ' . $e->getMessage());
+        $loiForm[] = 'Không thể gửi yêu cầu tư vấn lúc này. Vui lòng thử lại sau.';
+    }
+}
+
+if (!empty($loiForm)) {
+    $thongBao = 'Vui lòng kiểm tra lại thông tin trong biểu mẫu.';
+  }
+}
 $csrfToken = function_exists('taoCsrfToken') ? taoCsrfToken() : '';
 require_once __DIR__ . '/inc/header.php';
 ?>
@@ -208,6 +251,5 @@ require_once __DIR__ . '/inc/header.php';
         </form>
     </section>
 </main>
-
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

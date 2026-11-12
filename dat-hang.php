@@ -76,9 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect("don-hang.php?thanh-cong={$donHangId}");
 
     } catch (Throwable $e) {
-        $pdo->rollBack(); // HỦY GIAO DỊCH NẾU CÓ LỖI XẢY RA
-        $loi = $e->getMessage();
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
     }
+
+    error_log('Lỗi đặt hàng: ' . $e->getMessage());
+
+    $loi = 'Đặt hàng chưa thành công. Vui lòng thử lại sau.';
+}
 }
 
 require_once __DIR__ . '/inc/header.php';

@@ -29,9 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($ten === '' || mb_strlen($ten) > 200) {
         $loiForm[] = 'Tên sản phẩm không được để trống và tối đa 200 ký tự.';
     }
-    if ($danhMucId === false || $danhMucId === null) {
-        $loiForm[] = 'Vui lòng chọn danh mục hợp lệ.';
+    if ($danhMucId === false || $danhMucId === null || $danhMucId <= 0) {
+    $loiForm[] = 'Vui lòng chọn danh mục hợp lệ.';
+} else {
+    $stmtKiemTraDanhMuc = db()->prepare(
+        'SELECT 1 FROM danh_muc WHERE id = ? LIMIT 1'
+    );
+    $stmtKiemTraDanhMuc->execute([$danhMucId]);
+
+    if ($stmtKiemTraDanhMuc->fetchColumn() === false) {
+        $loiForm[] = 'Danh mục không tồn tại trong hệ thống.';
     }
+}
     if ($gia === false || $gia === null || $gia < 1000) {
         $loiForm[] = 'Giá sản phẩm phải là số nguyên và lớn hơn hoặc bằng 1.000 VNĐ.';
     }
@@ -40,18 +49,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Xử lý upload ảnh sản phẩm
-    $anhUrl = 'images/default.jpg';
-    if (isset($_FILES['anh']) && $_FILES['anh']['error'] === UPLOAD_ERR_OK) {
-        $thuMucUpload = __DIR__ . '/images';
-        if (!is_dir($thuMucUpload)) {
-            mkdir($thuMucUpload, 0755, true);
-        }
-        $ext = pathinfo($_FILES['anh']['name'], PATHINFO_EXTENSION);
-        $tenFile = 'sp_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-        if (move_uploaded_file($_FILES['anh']['tmp_name'], $thuMucUpload . '/' . $tenFile)) {
-            $anhUrl = 'images/' . $tenFile;
+$anhUrl = 'images/default.jpg';
+
+if (isset($_FILES['anh']) && $_FILES['anh']['error'] !== UPLOAD_ERR_NO_FILE) {
+    $fileAnh = $_FILES['anh'];
+
+    if ($fileAnh['error'] !== UPLOAD_ERR_OK) {
+        $loiForm[] = 'Tải ảnh lên thất bại.';
+    } elseif ($fileAnh['size'] > 5 * 1024 * 1024) {
+        $loiForm[] = 'Dung lượng ảnh không được vượt quá 5 MB.';
+    } else {
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($fileAnh['tmp_name']);
+
+        $dinhDangChoPhep = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+        ];
+
+        if (!isset($dinhDangChoPhep[$mime])) {
+            $loiForm[] = 'Ảnh chỉ được có định dạng JPG, PNG hoặc WEBP.';
+        } else {
+            $thuMucUpload = __DIR__ . '/images';
+
+            if (
+                !is_dir($thuMucUpload)
+                && !mkdir($thuMucUpload, 0755, true)
+                && !is_dir($thuMucUpload)
+            ) {
+                $loiForm[] = 'Không thể tạo thư mục lưu ảnh.';
+            } else {
+                try {
+                    $ext = $dinhDangChoPhep[$mime];
+
+                    $tenFile = 'sp_' . bin2hex(random_bytes(16)) . '.' . $ext;
+
+                    if (move_uploaded_file(
+                        $fileAnh['tmp_name'],
+                        $thuMucUpload . '/' . $tenFile
+                    )) {
+                        $anhUrl = 'images/' . $tenFile;
+                    } else {
+                        $loiForm[] = 'Không thể lưu ảnh lên máy chủ.';
+                    }
+                } catch (Throwable $e) {
+                    error_log('Lỗi upload ảnh sản phẩm: ' . $e->getMessage());
+                    $loiForm[] = 'Không thể tải ảnh lên. Vui lòng thử lại.';
+                }
+            }
         }
     }
+}
 
     if (empty($loiForm)) {
         try {
@@ -63,12 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: quan-tri.php?tab=san-pham');
             exit;
         } catch (PDOException $e) {
-            if ($e->getCode() === '23000') {
-                $loiForm[] = 'Sản phẩm này đã tồn tại trong hệ thống.';
-            } else {
-                $loiForm[] = 'Lỗi cơ sở dữ liệu: ' . $e->getMessage();
-            }
-        }
+    error_log('Lỗi thêm sản phẩm: ' . $e->getMessage());
+
+    if ($e->getCode() === '23000') {
+        $loiForm[] = 'Không thể thêm sản phẩm do dữ liệu bị trùng hoặc vi phạm ràng buộc.';
+    } else {
+        $loiForm[] = 'Không thể thêm sản phẩm. Vui lòng thử lại sau.';
+    }
+}
     }
 }
 

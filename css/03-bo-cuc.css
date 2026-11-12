@@ -399,5 +399,30 @@ DANH SÁCH SẢN PHẨM - ĐẢM BẢO TOÀN CHIỀU RỘNG
         justify-content: flex-start;
         flex-wrap: wrap;
     }
-    
+}
+
+/* =========================================
+   BỐ CỤC RIÊNG TRANG CHỦ
+========================================= */
+
+@media (min-width: 768px) {
+    .trang > main.trang-chu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    .trang > main.trang-chu > .hero,
+    .trang > main.trang-chu > section:nth-of-type(5),
+    .trang > main.trang-chu > section:nth-of-type(6),
+    .trang > main.trang-chu > section:last-of-type {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (min-width: 1024px) {
+    .trang > main.trang-chu {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+    }
 }
