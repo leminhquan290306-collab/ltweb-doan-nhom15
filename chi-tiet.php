@@ -87,7 +87,8 @@ if ($sanPham !== null) {
         json_encode($sanPhamDaXem),
         [
             'expires' => time() + (60 * 60 * 24 * 30),
-            'path' => '/',
+             'path' => '/',
+            'secure' => $isHttps,
             'httponly' => true,
             'samesite' => 'Lax',
         ]
