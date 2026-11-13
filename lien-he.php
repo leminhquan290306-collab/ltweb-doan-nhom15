@@ -21,6 +21,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         http_response_code(419);
         exit('Phiên làm việc đã hết hạn hoặc mã xác thực không hợp lệ. Vui lòng tải lại trang.');
     }
+
+    // Từ chối dữ liệu POST không đúng kiểu chuỗi.
+    $cacTruongChuoi = [
+        'ho-ten',
+        'email',
+        'so-dien-thoai',
+        'nguoi-nhan',
+        'dip-tang',
+        'ngan-sach',
+        'ngay-can-qua',
+        'so-thich',
+        'dong-y'
+    ];
+
+    foreach ($cacTruongChuoi as $truong) {
+        if (
+            array_key_exists($truong, $_POST)
+            && !is_string($_POST[$truong])
+        ) {
+            http_response_code(400);
+            exit('Dữ liệu biểu mẫu không hợp lệ.');
+        }
+    }
+
     $hoTen = trim((string) ($_POST['ho-ten'] ?? ''));
     $email = trim((string) ($_POST['email'] ?? ''));
     $soDienThoai = trim((string) ($_POST['so-dien-thoai'] ?? ''));

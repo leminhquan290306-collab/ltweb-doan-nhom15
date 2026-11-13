@@ -13,4 +13,4 @@ RewriteEngine On
 RewriteRule (^|/)\.(git|svn|hg)(/|$) - [F,L,NC]
 
 # Chan truy cap truc tiep vao cac thu muc noi bo
-RewriteRule ^(inc|database|src|storage|data|logs)(/|$) - [F,L,NC]
+RewriteRule ^(inc|database|src|storage|data|logs|vendor)(/|$) - [F,L,NC]
