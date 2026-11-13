@@ -99,6 +99,8 @@ if (!headers_sent()) {
 }
 
 // Kiểm tra CSRF tập trung cho mọi yêu cầu POST.
+
+// Central POST CSRF guard:
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $tokenGuiLen = $_POST['csrf']
         ?? $_POST['csrf_token']
@@ -110,12 +112,39 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         || !csrfHopLe($tokenGuiLen)
     ) {
         ghiNhatKyBaoMat('csrf_sai', [
-        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-    ]);
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        ]);
+
         http_response_code(403);
-        exit('403 - Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.');
+
+        $duongDan = parse_url(
+            $_SERVER['REQUEST_URI'] ?? '',
+            PHP_URL_PATH
+        ) ?: '';
+
+        $laApiJson = (
+            str_contains($duongDan, '/api/')
+            || stripos(
+                $_SERVER['CONTENT_TYPE'] ?? '',
+                'application/json'
+            ) !== false
+        );
+
+        if ($laApiJson) {
+            header('Content-Type: application/json; charset=UTF-8');
+
+            echo json_encode([
+                'thanh_cong' => false,
+                'loi' => 'Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.',
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            exit('403 - Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.');
+        }
+
+        exit;
     }
 }
+
 
 // Xử lý ngoại lệ và ghi log.
 set_exception_handler(function (Throwable $e): void {
