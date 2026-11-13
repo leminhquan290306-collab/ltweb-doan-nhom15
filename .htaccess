@@ -1,5 +1,8 @@
 Options -Indexes
-
+# Chan truy cap truc tiep vao file quan ly va cau hinh noi bo
+<FilesMatch "^(composer\.(json|lock)|phpunit\.xml(\.dist)?|README(\..*)?|CHANGELOG(\..*)?|LICENSE(\..*)?)$">
+    Require all denied
+</FilesMatch>
 # Chan truy cap file an va file cau hinh noi bo
 <FilesMatch "^\.">
     Require all denied
