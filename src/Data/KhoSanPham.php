@@ -79,9 +79,15 @@ class KhoSanPham
                 LIMIT ? OFFSET ?";
 
         $st = $this->db->prepare($sql);
-        
-        // Truyền các tham số lọc kèm theo số dòng và số bỏ qua cho LIMIT/OFFSET
-        $st->execute([...$ts, $soDong, $boQua]);
+
+foreach ($ts as $index => $value) {
+    $st->bindValue($index + 1, $value);
+}
+
+$st->bindValue(count($ts) + 1, max(1, $soDong), PDO::PARAM_INT);
+$st->bindValue(count($ts) + 2, max(0, $boQua), PDO::PARAM_INT);
+
+$st->execute();
         $duLieu = $st->fetchAll();
 
         return array_map(
@@ -134,7 +140,10 @@ class KhoSanPham
             ORDER BY RAND() 
             LIMIT ?
         ");
-        $stmt->execute([$danhMucId, $sanPhamIdHienTai, $gioiHan]);
+        $stmt->bindValue(1, $danhMucId, PDO::PARAM_INT);
+$stmt->bindValue(2, $sanPhamIdHienTai, PDO::PARAM_INT);
+$stmt->bindValue(3, max(1, min($gioiHan, 20)), PDO::PARAM_INT);
+$stmt->execute();
         $duLieu = $stmt->fetchAll();
 
         return array_map(

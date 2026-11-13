@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
 error_reporting(E_ALL);
 require_once __DIR__ . '/inc/config.php';
 require_once __DIR__ . '/inc/db.php';
@@ -22,25 +22,49 @@ try {
     // Đọc cookie sản phẩm đã xem gần đây
     $danhSachDaXem = [];
     if (isset($_COOKIE['san_pham_da_xem'])) {
-        $cookieIds = json_decode($_COOKIE['san_pham_da_xem'], true);
-        if (is_array($cookieIds) && !empty($cookieIds)) {
+    $cookieRaw = $_COOKIE['san_pham_da_xem'];
+
+    if (is_string($cookieRaw) && strlen($cookieRaw) <= 2048) {
+        $cookieIds = json_decode($cookieRaw, true);
+
+        if (is_array($cookieIds)) {
+            $cookieIds = array_slice($cookieIds, 0, 20);
+
+            $cookieIds = array_values(array_unique(array_filter(
+                $cookieIds,
+                static function ($item): bool {
+                    if (is_int($item)) {
+                        return $item > 0;
+                    }
+
+                    return is_string($item)
+                        && ctype_digit($item)
+                        && (int) $item > 0;
+                }
+            )));
+
             $cookieIds = array_slice($cookieIds, 0, 4);
-            $inQuery = implode(',', array_fill(0, count($cookieIds), '?'));
-            $stmtDaXem = $pdo->prepare("
-                SELECT san_pham.*, danh_muc.ten AS ten_danh_muc
-                FROM san_pham
-                JOIN danh_muc ON san_pham.danh_muc_id = danh_muc.id
-                WHERE san_pham.id IN ($inQuery)
-            ");
-            $stmtDaXem->execute($cookieIds);
-            $danhSachDaXem = $stmtDaXem->fetchAll();
+
+            if (!empty($cookieIds)) {
+                $inQuery = implode(',', array_fill(0, count($cookieIds), '?'));
+
+                $stmtDaXem = $pdo->prepare("
+                    SELECT san_pham.*, danh_muc.ten AS ten_danh_muc
+                    FROM san_pham
+                    JOIN danh_muc ON san_pham.danh_muc_id = danh_muc.id
+                    WHERE san_pham.id IN ($inQuery)
+                ");
+
+                $stmtDaXem->execute($cookieIds);
+                $danhSachDaXem = $stmtDaXem->fetchAll();
+            }
         }
     }
+}
 
 } catch (PDOException $e) {
-    echo '<div class="trang-chu-loi-csdl">';
-    echo "<strong>Lỗi truy vấn CSDL:</strong> " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-    echo '</div>';
+    error_log('[Trang chu] Loi truy van CSDL: ' . $e->getMessage());
+
     $danhSachSanPham = [];
     $danhSachDaXem = [];
 }

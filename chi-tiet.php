@@ -47,22 +47,26 @@ if ($sanPham !== null) {
     $sanPhamDaXem = [];
 
     if (isset($_COOKIE['san_pham_da_xem'])) {
-        $duLieuCookie = json_decode(
-            $_COOKIE['san_pham_da_xem'],
-            true
-        );
+    $cookieRaw = $_COOKIE['san_pham_da_xem'];
+
+    if (is_string($cookieRaw) && strlen($cookieRaw) <= 2048) {
+        $duLieuCookie = json_decode($cookieRaw, true);
 
         if (is_array($duLieuCookie)) {
-            foreach ($duLieuCookie as $item) {
-                if (
-                    is_int($item)
-                    || (is_string($item) && ctype_digit($item))
+            foreach (array_slice($duLieuCookie, 0, 20) as $item) {
+                if (is_int($item) && $item > 0) {
+                    $sanPhamDaXem[] = $item;
+                } elseif (
+                    is_string($item)
+                    && ctype_digit($item)
+                    && (int) $item > 0
                 ) {
                     $sanPhamDaXem[] = (int) $item;
                 }
             }
         }
     }
+}
 
     $sanPhamDaXem = array_values(
         array_filter(

@@ -14,21 +14,45 @@ $gioHang = new GioHang();
 $tongSoLuongGioHang = method_exists($gioHang, 'tongSoLuong') ? $gioHang->tongSoLuong() : 0;
 
 $duong = ['options' => ['min_range' => 1]];
+
+// Từ khóa tìm kiếm
+$tuKhoa = $_GET['tim-kiem'] ?? '';
+$tuKhoa = is_string($tuKhoa) ? trim($tuKhoa) : '';
+
+// Lọc danh mục
+$giaTriDanhMuc = $_GET['loc-danh-muc'] ?? '';
+$danhMucId = is_string($giaTriDanhMuc)
+    ? filter_var($giaTriDanhMuc, FILTER_VALIDATE_INT, $duong)
+    : false;
+
+// Lọc giá tối đa
+$giaTriGia = $_GET['gia-toi-da'] ?? '';
+$giaToiDa = is_string($giaTriGia)
+    ? filter_var($giaTriGia, FILTER_VALIDATE_INT, $duong)
+    : false;
+
 $loc = [
-    'q' => trim((string) ($_GET['tim-kiem'] ?? '')),
-    'dm' => filter_var($_GET['loc-danh-muc'] ?? '', FILTER_VALIDATE_INT, $duong),
-    'giaToiDa' => filter_var($_GET['gia-toi-da'] ?? '', FILTER_VALIDATE_INT, $duong),
+    'q' => mb_substr($tuKhoa, 0, 100, 'UTF-8'),
+    'dm' => $danhMucId ?: null,
+    'giaToiDa' => $giaToiDa ?: null,
 ];
 
-$sapXep = trim((string) ($_GET['sap-xep'] ?? 'moi'));
+// Sắp xếp
+$sapXep = $_GET['sap-xep'] ?? 'moi';
+$sapXep = is_string($sapXep) ? $sapXep : 'moi';
 
 $moiTrang = 8;
 $tongSoDong = $khoSanPham->dem($loc);
 $tongSoTrang = max(1, (int) ceil($tongSoDong / $moiTrang));
 
-$hienTai = filter_var($_GET['trang'] ?? 1, FILTER_VALIDATE_INT, [
-    'options' => ['min_range' => 1, 'default' => 1]
-]);
+// Số trang
+$giaTriTrang = $_GET['trang'] ?? 1;
+$hienTai = is_string($giaTriTrang)
+    ? filter_var($giaTriTrang, FILTER_VALIDATE_INT, [
+        'options' => ['min_range' => 1, 'default' => 1]
+    ])
+    : 1;
+
 $hienTai = min($hienTai, $tongSoTrang);
 $boQua = ($hienTai - 1) * $moiTrang;
 

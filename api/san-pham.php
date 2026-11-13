@@ -12,8 +12,17 @@ try {
     $khoSanPham = new KhoSanPham(hamCSDL());
     
     // Xem chi tiết 1 sản phẩm qua API (VD: api/san-pham.php?id=1)
+    if (isset($_GET['id'])) {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    if ($id && $id > 0) {
+
+    if ($id === false || $id === null || $id <= 0) {
+        http_response_code(400);
+        echo json_encode([
+            'thanh_cong' => false,
+            'loi' => 'ID sản phẩm không hợp lệ.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
         $sp = $khoSanPham->timTheoId($id);
         if (!$sp) {
             http_response_code(404);
@@ -36,8 +45,11 @@ try {
     }
 
     // Tìm kiếm hoặc lấy danh sách (VD: api/san-pham.php?q=tu-khoa)
-    $tuKhoa = trim((string)($_GET['q'] ?? ''));
-    $danhSach = $khoSanPham->trang(['q' => $tuKhoa], 'moi', 20, 0);
+    $tuKhoa = $_GET['q'] ?? '';
+$tuKhoa = is_string($tuKhoa) ? trim($tuKhoa) : '';
+$tuKhoa = mb_substr($tuKhoa, 0, 100, 'UTF-8');
+
+$danhSach = $khoSanPham->trang(['q' => $tuKhoa], 'moi', 20, 0);
 
     $ketQua = [];
     foreach ($danhSach as $sp) {
@@ -58,6 +70,11 @@ try {
     ], JSON_UNESCAPED_UNICODE);
 
 } catch (Throwable $e) {
+    error_log('[API san-pham] ' . $e->getMessage());
+
     http_response_code(500);
-    echo json_encode(['thanh_cong' => false, 'loi' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'thanh_cong' => false,
+        'loi' => 'Đã xảy ra lỗi máy chủ. Vui lòng thử lại sau.'
+    ], JSON_UNESCAPED_UNICODE);
 }
