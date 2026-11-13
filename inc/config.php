@@ -6,10 +6,15 @@
 
 declare(strict_types=1);
 
-// Cấu hình lỗi và ghi log.
+// Cấu hình lỗi theo môi trường.
+$appDebug = filter_var(
+    $_ENV['APP_DEBUG'] ?? 'false',
+    FILTER_VALIDATE_BOOLEAN
+);
+
 error_reporting(E_ALL);
-ini_set('display_errors', '0');
-ini_set('display_startup_errors', '0');
+ini_set('display_errors', $appDebug ? '1' : '0');
+ini_set('display_startup_errors', $appDebug ? '1' : '0');
 ini_set('log_errors', '1');
 
 ini_set(

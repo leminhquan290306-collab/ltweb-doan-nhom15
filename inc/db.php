@@ -18,9 +18,14 @@ function hamCSDL(): PDO
     }
 
     $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
-$dbname = $_ENV['DB_NAME'] ?? '';
-$username = $_ENV['DB_USER'] ?? '';
-$password = $_ENV['DB_PASS'] ?? '';
+    $dbname = $_ENV['DB_DATABASE'] ?? '';
+    $username = $_ENV['DB_USERNAME'] ?? '';
+    $password = $_ENV['DB_PASSWORD'] ?? '';
+
+// Kiểm tra các thông tin kết nối bắt buộc.
+if ($dbname === '' || $username === '' || $password === '') {
+    throw new RuntimeException('Thiếu cấu hình kết nối cơ sở dữ liệu trong file .env.');
+}
 
 // Đọc danh sách port từ .env.
 $ports = array_filter(
