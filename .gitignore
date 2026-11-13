@@ -3,3 +3,12 @@
 /uploads/*
 !.gitkeep
 /storage/*.jsonl
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+/database/backup.sql
+# Security logs
+/logs/*
+!/logs/.gitkeep
+!/logs/.htaccess

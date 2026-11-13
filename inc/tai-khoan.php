@@ -53,7 +53,14 @@ function dangKyTaiKhoan(
 /**
  * Đăng nhập tài khoản.
  */
-function dangNhap(string $email, string $matKhau): bool
+/**
+ * Đăng nhập tài khoản.
+ *
+ * true  = đăng nhập thành công.
+ * false = email hoặc mật khẩu không đúng.
+ * null  = lỗi hệ thống.
+ */
+function dangNhapKetQua(string $email, string $matKhau): ?bool
 {
     $email = strtolower(trim($email));
 
@@ -91,7 +98,6 @@ function dangNhap(string $email, string $matKhau): bool
             throw new RuntimeException('Session chưa được khởi tạo.');
         }
 
-        // Thay đổi session ID sau khi đăng nhập.
         session_regenerate_id(true);
 
         $_SESSION['last_activity'] = time();
@@ -114,9 +120,17 @@ function dangNhap(string $email, string $matKhau): bool
 
         return true;
     } catch (Throwable $e) {
-        error_log('Lỗi đăng nhập: ' . $e->getMessage());
-        return false;
+        error_log('Lỗi hệ thống khi xử lý đăng nhập.');
+        return null;
     }
+}
+
+/**
+ * Hàm tương thích với các nơi đang gọi dangNhap().
+ */
+function dangNhap(string $email, string $matKhau): bool
+{
+    return dangNhapKetQua($email, $matKhau) === true;
 }
 
 /**

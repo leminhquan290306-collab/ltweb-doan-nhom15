@@ -55,7 +55,7 @@ require_once __DIR__ . '/inc/header.php';
         <div>
             <a href="quan-tri.php?tab=san-pham" class="btn quan-tri-tab <?= $tab === 'san-pham' ? 'dang-chon' : '' ?>">Quản lý Sản phẩm</a>
             <a href="quan-tri.php?tab=lien-he" class="btn quan-tri-tab quan-tri-tab-lien-he <?= $tab === 'lien-he' ? 'dang-chon' : '' ?>">Quản lý Liên hệ (<?= count($danhSachLienHe) ?>)</a>
-            <<form method="POST" action="dang-xuat.php" class="form-dang-xuat-quan-tri">
+            <form method="POST" action="dang-xuat.php" class="form-dang-xuat-quan-tri">
     <?= csrfField() ?>
     <button type="submit" class="nut-dang-xuat-quan-tri">
         Đăng xuất

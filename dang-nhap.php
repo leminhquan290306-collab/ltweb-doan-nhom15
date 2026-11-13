@@ -20,20 +20,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim((string) ($_POST['email'] ?? ''));
     $matKhau = (string) ($_POST['mat-khau'] ?? '');
     $csrfToken = $_POST['csrf_token'] ?? null;
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 
     if (!kiemTraCsrfToken(is_string($csrfToken) ? $csrfToken : null)) {
         $loi = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng tải lại trang.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $loi = 'Email không hợp lệ.';
+        $loi = 'Email hoặc mật khẩu không đúng.';
     } elseif ($matKhau === '') {
-        $loi = 'Vui lòng nhập mật khẩu.';
-    } elseif (!dangNhap($email, $matKhau)) {
         $loi = 'Email hoặc mật khẩu không đúng.';
     } else {
-        if (laQuanTri()) {
-            redirect('quan-tri.php');
+        try {
+            $soLanSai = demLanDangNhapThatBai($ip);
+
+            if ($soLanSai >= 5) {
+                http_response_code(429);
+                $loi = 'Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.';
+            } else {
+                $ketQuaDangNhap = dangNhapKetQua($email, $matKhau);
+
+                if ($ketQuaDangNhap === true) {
+                    if (laQuanTri()) {
+                        redirect('quan-tri.php');
+                    }
+
+                    redirect('index.php');
+                } elseif ($ketQuaDangNhap === false) {
+                    $soLanSai = ghiNhanDangNhapThatBai($ip);
+
+                    ghiNhatKyBaoMat('dang_nhap_sai', [
+                        'ip' => $ip,
+                        'email_hash' => hash('sha256', strtolower($email)),
+                    ]);
+
+                    if ($soLanSai >= 5) {
+                        http_response_code(429);
+                        $loi = 'Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.';
+                    } else {
+                        $loi = 'Email hoặc mật khẩu không đúng.';
+                    }
+                } else {
+                    http_response_code(503);
+                    $loi = 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.';
+                }
+            }
+        } catch (Throwable $e) {
+            error_log('Lỗi xử lý giới hạn đăng nhập.');
+            http_response_code(503);
+            $loi = 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.';
         }
-        redirect('index.php');
     }
 }
 

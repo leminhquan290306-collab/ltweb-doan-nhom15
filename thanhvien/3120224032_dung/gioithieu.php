@@ -329,7 +329,7 @@ $danhSachLuuBut = $stmt->fetchAll();
         </p>
 
         <?php if (isset($loiLuuBut['ten'])): ?>
-          <p role="alert" class="dung-loi-luu-but" style="color: #e53e3e; font-weight: bold;">
+          <p role="alert" class="dung-loi-luu-but">
             <?= e($loiLuuBut['ten']) ?>
           </p>
         <?php endif; ?>
@@ -345,7 +345,7 @@ $danhSachLuuBut = $stmt->fetchAll();
         </p>
 
         <?php if (isset($loiLuuBut['noiDung'])): ?>
-          <p role="alert" class="dung-loi-luu-but" style="color: #e53e3e; font-weight: bold;">
+          <p role="alert" class="dung-loi-luu-but">
             <?= e($loiLuuBut['noiDung']) ?>
           </p>
         <?php endif; ?>
@@ -357,7 +357,7 @@ $danhSachLuuBut = $stmt->fetchAll();
       </form>
 
       <?php if ($thongBaoLuuBut !== ''): ?>
-        <p class="dung-thong-bao-luu-but" style="color: #38a169; font-weight: bold;">
+        <p class="dung-thong-bao-luu-but">
           <?= e($thongBaoLuuBut) ?>
         </p>
       <?php endif; ?>

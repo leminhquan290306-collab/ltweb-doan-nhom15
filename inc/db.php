@@ -17,13 +17,16 @@ function hamCSDL(): PDO
         return $pdo;
     }
 
-    $host = '127.0.0.1';
-    $dbname = 'ltweb_doan_nhom15';
-    $username = 'root';
-    $password = '';
+    $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
+$dbname = $_ENV['DB_NAME'] ?? '';
+$username = $_ENV['DB_USER'] ?? '';
+$password = $_ENV['DB_PASS'] ?? '';
 
-    // Mảng các port phổ biến trên XAMPP để tự động dò tìm
-    $ports = ['3307', '3306'];
+// Đọc danh sách port từ .env.
+$ports = array_filter(
+    array_map('trim', explode(',', $_ENV['DB_PORTS'] ?? '3307,3306')),
+    static fn($port) => ctype_digit($port)
+);
     $pdo = null;
     $lastError = null;
 

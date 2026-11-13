@@ -18,25 +18,7 @@
     <!-- CSS tùy biến của nhóm -->
     <link rel="stylesheet" href="css/bootstrap-custom.css">
 
-    <style>
-        /* Hiển thị đầy đủ 6 ảnh, không bị cắt */
-        .card-img-top {
-            display: block;
-            width: 100%;
-            height: 200px;
-            object-fit: contain;
-            background-color: #ffffff;
-        }
 
-        @media (max-width: 359px) {
-            .card-img-top {
-                width: 100%;
-                height: 180px;
-                object-fit: contain;
-                background-color: #ffffff;
-            }
-        }
-    </style>
 </head>
 
 <body>

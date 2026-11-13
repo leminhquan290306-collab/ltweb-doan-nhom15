@@ -210,10 +210,11 @@ a:focus-visible, button:focus-visible {
   }
 }
 .dung-loi-luu-but {
-    color: #dc2626;
+    color: #e53e3e;
+    font-weight: bold;
 }
 
 .dung-thong-bao-luu-but {
-    color: #16a34a;
+    color: #38a169;
     font-weight: bold;
 }

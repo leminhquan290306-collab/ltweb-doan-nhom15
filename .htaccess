@@ -1,0 +1,13 @@
+Options -Indexes
+
+# Chan truy cap file an va file cau hinh noi bo
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Chan truy cap thu muc Git va cac thu muc quan ly phien ban
+RewriteEngine On
+RewriteRule (^|/)\.(git|svn|hg)(/|$) - [F,L,NC]
+
+# Chan truy cap truc tiep vao cac thu muc noi bo
+RewriteRule ^(inc|database|src|storage|data|logs)(/|$) - [F,L,NC]

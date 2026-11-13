@@ -19,7 +19,14 @@ ini_set(
 
 // Nạp các thành phần hệ thống.
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+// Nạp biến môi trường từ file .env.
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
+
 require_once __DIR__ . '/ham.php';
+require_once __DIR__ . '/bao-mat.php';
+require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/xac-thuc.php';
 
@@ -92,7 +99,7 @@ if (!headers_sent()) {
 }
 
 // Kiểm tra CSRF tập trung cho mọi yêu cầu POST.
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $tokenGuiLen = $_POST['csrf']
         ?? $_POST['csrf_token']
         ?? $_SERVER['HTTP_X_CSRF_TOKEN']
@@ -102,6 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         !is_string($tokenGuiLen)
         || !csrfHopLe($tokenGuiLen)
     ) {
+        ghiNhatKyBaoMat('csrf_sai', [
+        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+    ]);
         http_response_code(403);
         exit('403 - Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.');
     }

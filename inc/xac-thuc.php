@@ -42,22 +42,36 @@ function nguoiDung(): ?array {
 }
 
 /**
- * Kiểm tra quyền quản trị, nếu chưa đăng nhập hoặc không phải admin -> chuyển hướng hoặc 403
+ * Kiểm tra quyền quản trị, nếu chưa đăng nhập hoặc không phải admin -> chuyển hướng hoặc 403.
  */
-function yeuCauQuyen(string $vaiTruYeuCau): void {
+function yeuCauQuyen(string $vaiTruYeuCau): void
+{
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
     if (!daDangNhap()) {
+        ghiNhatKyBaoMat('cam_truy_cap', [
+            'ip' => $ip,
+        ]);
+
         header('Location: dang-nhap.php');
         exit;
     }
 
     if ($vaiTruYeuCau === 'quan_tri' && !laQuanTri()) {
+        ghiNhatKyBaoMat('cam_truy_cap', [
+            'ip' => $ip,
+        ]);
+
         http_response_code(403);
+
         $trang403 = __DIR__ . '/../403.php';
+
         if (file_exists($trang403)) {
             require $trang403;
         } else {
             echo '<h1>403 Forbidden</h1><p>Bạn không có quyền truy cập trang quản trị này.</p>';
         }
+
         exit;
     }
 }
