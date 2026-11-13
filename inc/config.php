@@ -76,9 +76,15 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // HTTP Security Headers
 if (!headers_sent()) {
+    header_remove('X-Powered-By');
+
     header('X-Content-Type-Options: nosniff');
-    header('X-Frame-Options: SAMEORIGIN');
+    header('X-Frameq-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
+
+    if ($isHttps) {
+         header('Strict-Transport-Security: max-age=31536000');
+    }
 
     // Content Security Policy (CSP)
     header(
